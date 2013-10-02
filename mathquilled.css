@@ -1,0 +1,208 @@
+/*****  CSS for IMathAS MathQuill editor ****/
+
+#mqee {
+	position: absolute;
+	width: 500px;
+	left: -400px;
+	background: #F7F7F7;
+	border: 2px solid #009;
+	margin:0; padding: 0;
+	display: none;
+	z-index: 10;
+}
+#mqeetopbar {
+	background: #006;
+	width: 100%;
+	color: #fff;
+	cursor: pointer;
+	height: 26px;
+	line-height: 26px;
+	cursor: move;
+}
+#mqeetopbar>span {
+	padding-left: 5px;
+}
+#mqeeclosebutton {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	float: right;
+	text-align: center;
+	background: #fff;
+	color: #000;
+	margin: 2px;
+	border: 1px solid #009;
+	font-family: sans-serif;
+	font-size: 70%;
+	cursor: pointer;
+}
+#mqeeclosebutton:hover {
+	color: #f00;
+}
+#mqeeinsides {
+	padding: 5px;
+}
+#mqholder {
+	margin: 10px 5px;
+}
+#mqarea {
+	width: 475px;
+	background: #fff;
+	min-height: 2em;
+	font-size: 120%;
+}
+.mqeebtn {
+	font-family: "Times New Roman", Times, serif;
+	color: #000;
+	cursor: pointer;
+	padding: 0 0.5em 0;
+	height: 44px;
+	/*border: 1px solid #000;*/
+	text-align: center;
+	background: #fff;
+	vertical-align: middle;
+}
+
+#tabs-functions .mqeebtn, #tabs-trig .mqeebtn {
+	vertical-align: baseline;
+	height: 32px;
+	padding-top: 5px;
+}
+
+.mqeetab { 
+	cursor: pointer;
+	height: 35px;
+	padding: 0px 1em;
+	border: 1px solid #000;
+	text-align: center;
+	background: #fff;
+	vertical-align: middle;
+	color: #000;
+}
+.mqeeactive {
+	background: #cfc;
+}
+.mqeehighlight {
+	/*background: #ccf;*/
+	color: #00f;
+}
+.mqeeclick {
+	background: #aaf;
+}
+.mqeedd {
+	cursor: pointer;
+	font-family: sans-serif;
+	position: absolute; 
+	height: 8px; 
+	/*background: #ff0 url('tinyarrow.gif') no-repeat center;*/
+	display:none; 
+	text-align:center; 
+	background: #ff0;
+	color: #930;
+	/*font-size: 6px;*/
+	border: 1px solid #fa0;
+	border-left: 0;
+	width: 10px;
+}
+
+.tab_container {
+	border: 1px solid #999;
+	border-top: none;
+	clear: both;
+	float: left; 
+	width: 100%;
+	height: 50px;
+	background: #fff;
+	margin-bottom: 5px;
+}
+ul.tabs {
+	margin: 0;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 32px;
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+	width: 100%;
+}
+ul.tabs li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 31px; 
+	line-height: 31px; 
+	border: 1px solid #999;
+	border-left: none;
+	margin-bottom: -1px; 
+	overflow: hidden;
+	position: relative;
+	background: #e0e0e0;
+}
+ul.tabs li a {
+	text-decoration: none;
+	color: #000;
+	display: block;
+	padding: 0 20px;
+	border: 1px solid #fff; 	
+	outline: none;
+}
+ul.tabs li a:hover {
+	background: #ccc;
+}
+html ul.tabs li.active, html ul.tabs li.active a:hover  { 
+	background: #fff;
+	border-bottom: 1px solid #fff; 
+}
+.numerator > .emptybox, .numerator > .emptybox.wide  {
+	margin-bottom: .2em;
+}
+.emptybox {
+	display: inline-block;
+	width: .5em;
+	height: .7em;
+	margin: .1em 0;
+	border: 1px solid #999;
+	vertical-align: bottom;
+}
+.emptybox.brack {
+	margin: .1em 0 .2em 0;
+}
+.emptybox.wide {
+	margin: .1em;
+}
+.mqeehighlight .emptybox {
+	border: 1px solid #99f;
+}
+.mqeebtn span {
+	cursor: pointer;
+}
+
+#mqeeclosebutton {
+	font-family: sans-serif;
+	cursor: pointer;
+}
+
+#mqeeinsides {
+	font-size: medium;
+}
+
+table.cursor-icons td.mqeebtn {
+	height: auto;
+	width: auto;
+	background: transparent;
+	padding: 0px;
+}
+table.cursor-icons td.mqeebtn div {
+	background-repeat:no-repeat;
+	width: 24px;height: 25px;
+	background-image:url('mq_cursor_sprites.png');
+}
+
+table.cursor-icons td.mqeebtn .left{ background-position: 0 -60px;}
+table.cursor-icons td.mqeebtn .left:hover{ background-position: 0 -90px;}
+table.cursor-icons td.mqeebtn .right{ background-position: 0 -120px;}
+table.cursor-icons td.mqeebtn .right:hover{ background-position: 0 -150px;}
+table.cursor-icons td.mqeebtn .up{ background-position: 0 -180px;}
+table.cursor-icons td.mqeebtn .up:hover{ background-position: 0 -210px;}
+table.cursor-icons td.mqeebtn .down{ background-position: 0 0;} 
+table.cursor-icons td.mqeebtn .down:hover{ background-position: 0 -30px;}
