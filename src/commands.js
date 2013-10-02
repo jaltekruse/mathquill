@@ -210,6 +210,23 @@ LatexCmds.fraction = P(MathCommand, function(_, _super) {
     this.up = this.ends[R].up = this.ends[L];
     this.down = this.ends[L].down = this.ends[R];
   };
+  _.redraw = function() {
+	  // Fixes display in IE7 - where each numerator/denominator pair aren't set to equal widths
+	 if (jQuery.browser.msie  && parseInt(jQuery.browser.version, 10) <= 7) {
+		var $self = this.jQ,
+		$num = $self.children('.numerator'),
+		$denom = $self.children('.denominator'),
+		maxWidth;
+		    // Remove any forced width styles, so we can measure natural width of elements
+		$num.css('width', 'auto');
+		$denom.css('width', 'auto');
+		    // Find width that can fit both elements
+		maxWidth = Math.max($num.width(), $denom.width());
+		    // Apply this width to both elements
+		$num.css('width', maxWidth+'px');
+		$denom.css('width', maxWidth+'px');
+	 }
+  };
 });
 
 var LiveFraction =
@@ -365,6 +382,9 @@ LatexCmds.right = P(MathCommand, function(_) {
     return Parser.fail('unmatched \\right');
   };
 });
+
+LatexCmds.intervalopenleft = bind(Bracket, '(', ']', '(', ']');
+LatexCmds.intervalopenright = bind(Bracket, '[', ')', '[', ')');
 
 LatexCmds.lbrace =
 CharCmds['{'] = bind(Bracket, '{', '}', '\\{', '\\}');

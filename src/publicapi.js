@@ -70,6 +70,80 @@ jQuery.fn.mathquill = function(cmd, latex) {
           cursor.hide().parent.blur();
         }
       });
+  case 'writesimpfunc':
+      if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+
+          if (cursor) {
+          	  if (cursor.selection) {
+          	  	  cursor.writeLatex(latex+'{'+cursor.selection.latex()+'}').parent.blur();
+          	  } else {
+          	  	  cursor.writeLatex(latex+'{}').parent.blur();
+          	  }
+          	  cursor.moveLeft();
+          }
+      });
+  case 'writefunc':
+      if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+
+          if (cursor) {
+          	  if (cursor.selection) {
+          	  	  cursor.writeLatex(latex+'\\left('+cursor.selection.latex()+'\\right)').parent.blur();
+          	  } else {
+          	  	  cursor.writeLatex(latex+'\\left(\\right)').parent.blur();
+          	  }
+          	  cursor.moveLeft();
+          }
+      });
+  case 'movecursor':
+      if (arguments.length > 1)
+      return this.each(function() {
+          var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+          if (cursor) {
+          	  cursor.clearSelection().show();
+          	  if (latex=='l') { cursor.moveLeft();}
+          	  else if (latex=='r') {cursor.moveRight();}
+          	  else if (latex=='u') { cursor.moveUp();} 
+          	  else if (latex=='d') {cursor.moveDown();}
+          }
+      });
+  case 'writeint':
+    if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+
+        if (cursor) {
+          var hascomma = false;
+          var seln = cursor.prepareWrite();
+          if (seln && seln.latex().match(/,/)) {
+            	    hascomma = true;    
+          }
+          cursor.show();
+          if (/^\\[a-z]+$/i.test(latex)) {
+            cursor.insertCmd(latex.slice(1), seln);
+          } else {
+            cursor.insertCh(latex, seln);
+          }
+          if (!hascomma) {
+            	    cursor.insertCh(',');
+            	    if (!seln || seln.latex().length==0) {
+            	    	    cursor.moveLeft();
+            	    }
+            }
+          cursor.hide().parent.blur();
+        }
+      });
   default:
     var textbox = cmd === 'textbox',
       editable = textbox || cmd === 'editable',

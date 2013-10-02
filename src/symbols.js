@@ -18,6 +18,36 @@ var Variable = P(Symbol, function(_, _super) {
       text += '*';
     return text;
   };
+  _.createLeftOf = function(c) {
+	  var lookback = this.ctrlSeq;
+	  d = c[L];
+	  while (d && d instanceof Variable) {
+		  lookback = d.ctrlSeq + lookback;
+		  d = d[L];
+	  }
+	  var m;
+	  if (m = lookback.match(/(sqrt|root|arcsin|arccos|arctan|sin|cos|tan|sec|csc|cot|log|ln)/)) {
+
+	  	  for (var i=0;i<m[0].length-1;i++) {
+	  	  	  c.selectLeft();
+	  	  }
+	  	  if (m[0]=='root') {
+	  	  	  m[0] = 'nthroot{3}';
+	  	  }
+	  	  if (m[0].match(/(sqrt|root)/)) {
+	  	  	  c.writeLatex('\\'+m[0]+'{}').parent.blur();;
+	  	  } else {
+	  	  	  c.writeLatex('\\'+m[0]+'\\left(\\right)').parent.blur();; 
+	  	  }
+	  	  c.moveLeft();
+	  } else if (m = lookback.match(/(pi|^oo)$/)) {
+		  if (m[0]=='oo') { m[0] = 'infty';}
+		  c.selectLeft();
+		  c.writeLatex('\\'+m[0]).parent.blur();
+	  } else {
+	  	  MathCommand.prototype.createLeftOf.apply(this,arguments);
+	  }
+  }
 });
 
 var VanillaSymbol = P(Symbol, function(_, _super) {

@@ -257,7 +257,6 @@ var Cursor = P(Point, function(_) {
 
     var all = Parser.all;
     var eof = Parser.eof;
-
     var block = latexMathParser.skip(eof).or(all.result(false)).parse(latex);
 
     if (block) {

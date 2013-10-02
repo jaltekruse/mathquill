@@ -262,8 +262,11 @@ var RootMathBlock = P(MathBlock, function(_, _super) {
       break;
 
     // Prevent newlines from showing up
-    case 'Enter': break;
-
+    case 'Enter': 
+    	    if (typeof savemathquill === 'function') {
+          	savemathquill();
+            }
+    	    break;
 
     // End -> move to the end of the current block.
     case 'End':
