@@ -7,9 +7,12 @@
  * This file is automatically included by mathquill.js
  *
  */
+ 
+
 @font-face {
   font-family: Symbola;
   src: url(font/Symbola.eot);
+  
   src: local("Symbola Regular"), local("Symbola"), url(font/Symbola.ttf) format("truetype"), url(font/Symbola.otf) format("opentype"), url(font/Symbola.svg#Symbola) format("svg");
 }
 .mathquill-editable {
@@ -337,8 +340,8 @@
   -moz-user-select: text;
   user-select: text;
 }
-.mathquill-editable .textarea textarea,
-.mathquill-rendered-math .textarea textarea,
+.mathquill-editable .textarea *,
+.mathquill-rendered-math .textarea *,
 .mathquill-editable .selectable,
 .mathquill-rendered-math .selectable {
   -webkit-user-select: text;
@@ -346,6 +349,8 @@
   user-select: text;
   position: absolute;
   clip: rect(1em 1em 1em 1em);
+  border: none;
+  height: 1px;
 }
 .mathquill-rendered-math .matrixed {
   background: white;

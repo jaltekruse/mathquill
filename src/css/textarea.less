@@ -8,11 +8,13 @@
     .user-select(text);
   }
 
-  .textarea textarea, .selectable {
+  .textarea *, .selectable {
     .user-select(text);
     // the only way to hide the textarea
     // *and the blinking insertion point* in IE
     position: absolute;
     clip: rect(1em 1em 1em 1em);
+    border: none;
+    height: 1px;
   }
 }
