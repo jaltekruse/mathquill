@@ -90,7 +90,7 @@ var manageTextarea = (function() {
   // and exports useful public methods
   return function manageTextarea(el, opts) {
     var keydown = null;
-    var keypress = null;
+    //var keypress = null;
 
     if (!opts) opts = {};
     var textCallback = opts.text || noop;
@@ -156,9 +156,10 @@ var manageTextarea = (function() {
     // -*- event handlers -*- //
     function onKeydown(e) {
       keydown = e;
-      keypress = null;
+      //keypress = null;
 
-      handleKey();
+      //handleKey();
+      onKeypress();
     }
 
     function onKeypress(e) {
@@ -166,9 +167,10 @@ var manageTextarea = (function() {
       // This excludes keypresses that happen directly
       // after keydown.  In that case, there will be
       // no previous keypress, so we skip it here
-      if (keydown && keypress) handleKey();
+      //if (keydown && keypress) handleKey();
+      if (keydown) handleKey();
 
-      keypress = e;
+      //keypress = e;
 
       checkTextareaFor(typedText);
     }
@@ -195,7 +197,10 @@ var manageTextarea = (function() {
       popText(textCallback);
     }
 
-    function onBlur() { keydown = keypress = null; }
+    function onBlur() { 
+    	//keydown = keypress = null; 
+    	keydown  = null; 
+    }
 
     function onPaste(e) {
       // browsers are dumb.
