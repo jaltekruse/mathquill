@@ -90,7 +90,7 @@ var manageTextarea = (function() {
   // and exports useful public methods
   return function manageTextarea(el, opts) {
     var keydown = null;
-    //var keypress = null;
+    var keypress = null;
 
     if (!opts) opts = {};
     var textCallback = opts.text || noop;
@@ -139,7 +139,15 @@ var manageTextarea = (function() {
     function hasSelection() {
       var dom = textarea[0];
 
-      if (!('selectionStart' in dom)) return false;
+      if (!('selectionStart' in dom)) {   //this prevents ctrl-C mess in IE 7-8
+      	  if (
+	      document.selection
+	      && document.selection.type === 'Text'
+	      && document.selection.createRange
+	      && document.selection.createRange().parentElement() === textarea[0]
+	 ) {return true;} else { return false;}
+      	   
+      }
       return dom.selectionStart !== dom.selectionEnd;
     }
 
@@ -156,10 +164,15 @@ var manageTextarea = (function() {
     // -*- event handlers -*- //
     function onKeydown(e) {
       keydown = e;
-      //keypress = null;
-
-      //handleKey();
-      onKeypress();
+      keypress = null;
+      var which = keydown.which || keydown.keyCode;
+      
+      if (which===0) { //Android Chrome
+      	      onKeypress();
+      } else {
+      	      handleKey();
+      }
+      
     }
 
     function onKeypress(e) {
@@ -167,11 +180,12 @@ var manageTextarea = (function() {
       // This excludes keypresses that happen directly
       // after keydown.  In that case, there will be
       // no previous keypress, so we skip it here
-      //if (keydown && keypress) handleKey();
-      if (keydown) handleKey();
-
-      //keypress = e;
-
+      var which = keydown.which || keydown.keyCode;
+      
+      if (keydown && (keypress || which===0)) handleKey();
+      
+      keypress = e;
+      
       checkTextareaFor(typedText);
     }
     function typedText() {
@@ -193,14 +207,11 @@ var manageTextarea = (function() {
       // If anything like #40 or #71 is reported in IE < 9, see
       // b1318e5349160b665003e36d4eedd64101ceacd8
       if (hasSelection()) return;
-
+     
       popText(textCallback);
     }
 
-    function onBlur() { 
-    	//keydown = keypress = null; 
-    	keydown  = null; 
-    }
+    function onBlur() { keydown = keypress = null; }
 
     function onPaste(e) {
       // browsers are dumb.
