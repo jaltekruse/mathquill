@@ -116,34 +116,82 @@ jQuery.fn.mathquill = function(cmd, latex) {
           	  else if (latex=='d') {cursor.moveDown();}
           }
       });
-  case 'writeint':
+   case 'writefrac':
+    if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+          
+           if (cursor) {
+          	  if (cursor.selection) {
+          	  	  cursor.writeLatex('\\frac{'+cursor.selection.latex()+'}{}').parent.blur();
+          	  } else {
+          	  	  cursor.writeLatex('\\frac{}{}').parent.blur();
+          	  	  cursor.moveLeft();
+          	  }
+          	  cursor.moveLeft();
+          }
+      });
+   case 'writeint':
     if (arguments.length > 1)
       return this.each(function() {
         var blockId = $(this).attr(mqBlockId),
           block = blockId && MathElement[blockId],
           cursor = block && block.cursor;
 
+        if (latex=='[') {
+        	var left = '\\left[';
+        	var right = '\\right]';
+        } else if (latex=='(') {
+        	var left = '\\left(';
+        	var right = '\\right)';
+        } else {
+        	var left = latex+'{';
+        	var right = '}';
+        }
         if (cursor) {
-          var hascomma = false;
-          var seln = cursor.prepareWrite();
-          if (seln && seln.latex().match(/,/)) {
-            	    hascomma = true;    
-          }
-          cursor.show();
-          if (/^\\[a-z]+$/i.test(latex)) {
-            cursor.insertCmd(latex.slice(1), seln);
-          } else {
-            cursor.insertCh(latex, seln);
-          }
-          if (!hascomma) {
-            	    cursor.insertCh(',');
-            	    if (!seln || seln.latex().length==0) {
-            	    	    cursor.moveLeft();
-            	    }
-            }
-          cursor.hide().parent.blur();
+        	if (cursor.selection) {
+        		  if (cursor.selection.latex().match(/,/)) {
+        		  	  cursor.writeLatex(left+cursor.selection.latex()+right).parent.blur();
+        		  } else {
+        		  	  cursor.writeLatex(left+cursor.selection.latex()+','+right).parent.blur();
+        		  }
+          	} else {
+          	  	  cursor.writeLatex(left+','+right).parent.blur();
+          	  	  cursor.moveLeft();
+          	}
+          	cursor.moveLeft();
         }
       });
+  case 'writebracket':
+  	if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+
+        if (latex=='[') {
+        	var left = '\\left[';
+        	var right = '\\right]';
+        } else if (latex=='(') {
+        	var left = '\\left(';
+        	var right = '\\right)';
+        } else if (latex=='|') {
+        	var left = '\\left|';
+        	var right = '\\right|';
+        }
+        if (cursor) {
+        	if (cursor.selection) {
+        		  cursor.writeLatex(left+cursor.selection.latex()+right).parent.blur();
+          	} else {
+          	
+          	  	  cursor.writeLatex(left+right).parent.blur();
+          	}
+          	cursor.moveLeft();
+        }  
+     });  
+  	  
   default:
     var textbox = cmd === 'textbox',
       editable = textbox || cmd === 'editable',
