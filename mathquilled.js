@@ -7,7 +7,7 @@ $(function() {
         var hasTouch = 'ontouchstart' in document.documentElement;
         mqarea = $('.mathquill-editable');
 	$('.mathquill-rendered-math').mathquill('redraw');
-  	mqarea.find('textarea').focus();
+  	mqarea.find('input,textarea').focus();
   	$('input,textarea').attr('autocapitalize', 'off');
 
   	
@@ -156,17 +156,21 @@ function mqeeinsert(e) {
         var type = $(this).attr("btntype");
         t = t.replace('\\\\','\\');
         if (type==0) {
-		mqarea.mathquill('cmd', t).find('textarea').focus();
+		mqarea.mathquill('cmd', t).find('input,textarea').focus();
 	} else if (type==1) {
-		mqarea.mathquill('write', t).find('textarea').focus();
+		mqarea.mathquill('write', t).find('input,textarea').focus();
 	} else if (type==2) {
-		mqarea.mathquill('writesimpfunc', t).find('textarea').focus();
+		mqarea.mathquill('writesimpfunc', t).find('input,textarea').focus();
 	} else if (type==3) {
-		mqarea.mathquill('writefunc', t).find('textarea').focus();
+		mqarea.mathquill('writefunc', t).find('input,textarea').focus();
 	} else if (type==4) {
-		mqarea.mathquill('writeint', t).find('textarea').focus();
+		mqarea.mathquill('writeint', t).find('input,textarea').focus();
 	} else if (type==5) {
-		mqarea.mathquill('movecursor', t).find('textarea').focus();
+		mqarea.mathquill('movecursor', t).find('input,textarea').focus();
+	} else if (type==6) {
+		mqarea.mathquill('writebracket', t).find('input,textarea').focus();
+	} else if (type==7) {
+		mqarea.mathquill('writefrac', t).find('input,textarea').focus();
 	}
 	return false;
 }
@@ -203,7 +207,7 @@ function mqeetoggleactive(n) {
 		}
 	}
 	mqeeactivetab = n;
-	mqarea.find('textarea').focus();
+	mqarea.find('input,textarea').focus();
 }
 
 function showee() {
@@ -223,7 +227,7 @@ function showee() {
 	}
 	mqee.css('left',lasteepos.left).css('top',lasteepos.top).show();
 	mqarea.mathquill('latex', AMtoMQ($("#"+cureedd.id).val()));
-	mqarea.find('textarea').focus();
+	mqarea.find('input,textarea').focus();
 	
 }
 function hideee() {
