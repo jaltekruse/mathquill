@@ -109,11 +109,15 @@ jQuery.fn.mathquill = function(cmd, latex) {
           block = blockId && MathElement[blockId],
           cursor = block && block.cursor;
           if (cursor) {
-          	  cursor.clearSelection().show();
-          	  if (latex=='l') { cursor.moveLeft();}
-          	  else if (latex=='r') {cursor.moveRight();}
-          	  else if (latex=='u') { cursor.moveUp();} 
-          	  else if (latex=='d') {cursor.moveDown();}
+          	  if (latex=='b') {
+          	  	  cursor.backspace();
+          	  } else {
+			  cursor.clearSelection().show();
+			  if (latex=='l') { cursor.moveLeft();}
+			  else if (latex=='r') {cursor.moveRight();}
+			  else if (latex=='u') { cursor.moveUp();} 
+			  else if (latex=='d') {cursor.moveDown();}
+          	  }
           }
       });
    case 'writefrac':

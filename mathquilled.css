@@ -186,6 +186,12 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
 	font-size: medium;
 }
 
+div#mqee, .unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
 table.cursor-icons td.mqeebtn {
 	height: auto;
 	width: auto;
@@ -195,14 +201,18 @@ table.cursor-icons td.mqeebtn {
 table.cursor-icons td.mqeebtn div {
 	background-repeat:no-repeat;
 	width: 24px;height: 25px;
-	background-image:url('mq_cursor_sprites.png');
+	background-image:url('mq_cursor_sprites2.png');
 }
 
-table.cursor-icons td.mqeebtn .left{ background-position: 0 -60px;}
-table.cursor-icons td.mqeebtn .left:hover{ background-position: 0 -90px;}
-table.cursor-icons td.mqeebtn .right{ background-position: 0 -120px;}
-table.cursor-icons td.mqeebtn .right:hover{ background-position: 0 -150px;}
-table.cursor-icons td.mqeebtn .up{ background-position: 0 -180px;}
-table.cursor-icons td.mqeebtn .up:hover{ background-position: 0 -210px;}
-table.cursor-icons td.mqeebtn .down{ background-position: 0 0;} 
-table.cursor-icons td.mqeebtn .down:hover{ background-position: 0 -30px;}
+table.cursor-icons td.mqeebtn .down{ background-position: 0 -60px;}
+table.cursor-icons td.mqeebtn .down:hover{ background-position: 0 -90px;}
+table.cursor-icons td.mqeebtn .left{ background-position: 0 -120px;}
+table.cursor-icons td.mqeebtn .left:hover{ background-position: 0 -150px;}
+table.cursor-icons td.mqeebtn .right{ background-position: 0 -180px;}
+table.cursor-icons td.mqeebtn .right:hover{ background-position: 0 -210px;}
+table.cursor-icons td.mqeebtn .back{ background-position: 0 0;} 
+table.cursor-icons td.mqeebtn .back:hover{ background-position: 0 -30px;}
+table.cursor-icons td.mqeebtn .up{ background-position: 0 -240px;} 
+table.cursor-icons td.mqeebtn .up:hover{ background-position: 0 -270px;}
+
+

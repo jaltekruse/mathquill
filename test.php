@@ -20,13 +20,9 @@
 <script src="mathquilled.js" type="text/javascript"></script>
 </head>
 <body>
+<p>Click in the box, click the yellow arrow to open MathQuill</p>
 <p><input type="text" class="use-mathquill" id="qn01" onfocus="showeedd('qn01',3,'int');" onblur="hideeedd()" />  </p>
-<span class="mathquill-rendered-math">
-<span class="fraction">
-<span class="numerator"><span>3</span></span>
-<span class="denominator"><span>4</span></span>
-<span style="display:inline-block;width:0">&nbsp;</span>
-</span></span>
+<p style="font-family: Symbola">Whee</p>
 <?php
 require("mathquilled.html");
 ?>

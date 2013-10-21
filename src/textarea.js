@@ -152,8 +152,8 @@ var manageTextarea = (function() {
     }
 
     function popText(callback) {
-      var text = textarea.val();
-      textarea.val('');
+      var text = textarea.val().trim();
+      textarea.val(' ');
       if (text) callback(text);
     }
 
@@ -167,7 +167,7 @@ var manageTextarea = (function() {
       keypress = null;
       var which = keydown.which || keydown.keyCode;
       
-      if (which===0) { //Android Chrome
+      if (isAndroid) { //Android Chrome
       	      onKeypress();
       } else {
       	      handleKey();
@@ -182,7 +182,7 @@ var manageTextarea = (function() {
       // no previous keypress, so we skip it here
       var which = keydown.which || keydown.keyCode;
       
-      if (keydown && (keypress || which===0)) handleKey();
+      if (keydown && (keypress || isAndroid)) handleKey();
       
       keypress = e;
       

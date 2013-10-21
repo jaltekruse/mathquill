@@ -20,11 +20,14 @@ $(function() {
 			$(this).addClass("mqeeclick");	
 		}).bind('mouseout', function () {
 			$(this).removeClass("mqeehighlight");
+			$(this).removeClass("mqeeclick");
 		}).bind('mouseup', function () {
 			$(this).removeClass("mqeeclick");
 		}).bind('click',mqeeinsert);
 		$('#mqeeclosebutton').bind('click',hideee);
   		$('#mqeetopbar').mousedown(function(evt) {
+  			if (evt.preventDefault) {evt.preventDefault()};
+  			$("body").addClass("unselectable");
 			mqmousebase = {left:evt.pageX, top: evt.pageY};
 			$("body").bind('mousemove',mqeemousemove);
 			$("body").mouseup(function(event) {
@@ -32,6 +35,7 @@ $(function() {
 				lasteepos.left = p.left;
 				lasteepos.top = p.top;
 				$("body").unbind('mousemove',mqeemousemove);
+				$("body").removeClass("unselectable");
 				$(this).unbind(event);
 			});
 		});
@@ -48,12 +52,14 @@ $(function() {
 			if (evt.preventDefault) {evt.preventDefault()};
 			var touch = evt.originalEvent.changedTouches[0] || evt.originalEvent.touches[0];
 			mqmousebase = {left:touch.pageX, top: touch.pageY};
+			$("body").addClass("unselectable");
 			$("body").bind('touchmove',mqeetouchmove);
 			$("body").bind('touchend', function(event) {
 				var p = $('#mqee').offset();
 				lasteepos.left = p.left;
 				lasteepos.top = p.top;
 				$("body").unbind('touchmove',mqeetouchmove);
+				$("body").removeClass("unselectable");
 				$(this).unbind(event);
 			});	
 		});
