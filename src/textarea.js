@@ -152,7 +152,7 @@ var manageTextarea = (function() {
     }
 
     function popText(callback) {
-      var text = textarea.val().trim();
+      var text = jQuery.trim(textarea.val());
       textarea.val(' ');
       if (text) callback(text);
     }
