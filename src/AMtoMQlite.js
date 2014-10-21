@@ -732,7 +732,10 @@ function MQtoAM(tex) {
 	tex = tex.replace(/\\infty/g,'oo');
 	tex = tex.replace(/\\nthroot/g,'root');
 	tex = tex.replace(/\\varnothing/g,'DNE');
-	tex = tex.replace(/\\/g,'');
+	//tex = tex.replace(/\\([^\{\}])/g,'$1');  //don't replace '\{' or '\}'
+        tex = tex.replace(/\\{/g,'@L');
+        tex = tex.replace(/\\}/g,'@R');
+        tex = tex.replace(/\\/g,''); 
 	tex = tex.replace(/sqrt\[(.*?)\]/g,'root($1)');
 	tex = tex.replace(/(\d)frac/g,'$1 frac');
 	while ((i=tex.indexOf('frac{'))!=-1) { //found a fraction start
@@ -750,8 +753,15 @@ function MQtoAM(tex) {
 			tex = tex.substring(0,i) + tex.substring(i+4);
 		}
 	}
-	tex = tex.replace(/{/g,'(');
-	tex = tex.replace(/}/g,')');
+	//tex = tex.replace(/([^\\]){/g,'$1('); //don't replace '\{' or '\}'
+	//tex = tex.replace(/([^\\])}/g,'$1)');
+        //tex = tex.replace(/^{/,'(');
+        //tex = tex.replace(/\\{/g,'{');
+        //tex = tex.replace(/\\}/g,'}');
+        tex = tex.replace(/{/g,'(');
+        tex = tex.replace(/}/g,')');
+        tex = tex.replace(/@L/g,'{');
+        tex = tex.replace(/@R/g,'}');
 	tex = tex.replace(/\(([\d\.]+)\)\/\(([\d\.]+)\)/g,'$1/$2');  //change (2)/(3) to 2/3
 	tex = tex.replace(/_{(\d+)}/g,'_$1');
 	tex = tex.replace(/\^\(-1\)/g,'^-1');

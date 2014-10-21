@@ -623,7 +623,8 @@ function bindCharBracketPair(open, ctrlSeq) {
   CharCmds[close] = bind(Bracket, R, open, close, ctrlSeq, end);
 }
 bindCharBracketPair('(');
-bindCharBracketPair('[');
+//mslo: don't apply bracket matching on square bracket to allow interval notation like [2, 3>
+//bindCharBracketPair('[');
 bindCharBracketPair('{', '\\{');
 LatexCmds.langle = bind(Bracket, L, '&lang;', '&rang;', '\\langle ', '\\rangle ');
 LatexCmds.rangle = bind(Bracket, R, '&lang;', '&rang;', '\\langle ', '\\rangle ');
