@@ -15,6 +15,7 @@ BASE_SOURCES = \
   $(SRC_DIR)/cursor.js \
   $(SRC_DIR)/controller.js \
   $(SRC_DIR)/publicapi.js \
+  $(SRC_DIR)/AMtoMQlite.js \
   $(SRC_DIR)/services/*.util.js \
   $(SRC_DIR)/services/*.js
 
