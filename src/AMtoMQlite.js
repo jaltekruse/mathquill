@@ -731,6 +731,7 @@ function MQtoAM(tex) {
 	tex = tex.replace(/\\cdot/g,'*');
 	tex = tex.replace(/\\infty/g,'oo');
 	tex = tex.replace(/\\nthroot/g,'root');
+	tex = tex.replace(/\\log_([^\(]+)\s?\(([^\)])\)/g,'log($2;$1)');
 	tex = tex.replace(/\\varnothing/g,'DNE');
 	//tex = tex.replace(/\\([^\{\}])/g,'$1');  //don't replace '\{' or '\}'
         tex = tex.replace(/\\{/g,'@L');

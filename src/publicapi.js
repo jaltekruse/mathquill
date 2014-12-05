@@ -83,11 +83,12 @@ var AbstractMathQuill = P(function(_) {
     }
     return this.controller.exportLatex();
   };
+  //Created by AlgebraKIT
   _.asciiMath = function() {
       var latex = this.controller.exportLatex();
       var amStr = MQtoAM(latex);
       return amStr;
-  }
+  };
   _.html = function() {
     return this.controller.root.jQ.html()
       .replace(/ mathquill-(?:command|block)-id="?\d+"?/g, '')
