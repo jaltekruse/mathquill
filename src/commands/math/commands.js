@@ -456,15 +456,15 @@ LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
 var logBase =
 LatexCmds.logBase = P(MathCommand, function(_, super_) {
   _.htmlTemplate =
-      '<sup class="mq-nthroot mq-non-leaf">&1</sup>'
+      '<sup class="mq-non-leaf">&0</sup>'
     + '<span class="mq-scaled">'
     +   '<span class="mq-scaled">log</span>'
-    +   '<span class="mq-non-leaf">&0</span>'
+    +   '<span class="mq-non-leaf">&1</span>'
     + '</span>'
   ;
   _.textTemplate = ['log_', '(', ')'];
   _.latex = function() {
-    return '\\log_'+this.ends[R].latex()+'('+this.ends[L].latex()+')';
+    return '\\log_'+this.ends[L].latex()+'{'+this.ends[R].latex()+'}';
   };
 });
 

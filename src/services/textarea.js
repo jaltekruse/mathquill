@@ -5,6 +5,7 @@
 
 Controller.open(function(_) {
   Options.p.substituteTextarea = function() { return $('<textarea>')[0]; };
+  
   _.createTextarea = function() {
     var textareaSpan = this.textareaSpan = $('<span class="mq-textarea"></span>'),
       textarea = this.API.__options.substituteTextarea();

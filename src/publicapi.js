@@ -42,11 +42,20 @@ function APIFnFor(APIClass) {
   return APIFn;
 }
 
-var Options = P(), optionProcessors = {};
+var Options = P();
 MathQuill.__options = Options.p;
+
+//optionProcessors is used for
+//- autoOperatorNames, autoCommands: check input and store in basicSymbols.js
+//- leftRightIntoCmdGoes (keystroke.js): check input 
+var optionProcessors = {};
 
 var AbstractMathQuill = P(function(_) {
   _.init = function() { throw "wtf don't call me, I'm 'abstract'"; };
+  
+    //the root DOM element represents the MathQuill object.
+    //- create Options from given config
+    //- create Controller for this MathQuill instance
   _.initRoot = function(root, el, opts) {
     this.__options = Options();
     this.config(opts);
@@ -54,6 +63,7 @@ var AbstractMathQuill = P(function(_) {
     var ctrlr = Controller(this, root, el);
     ctrlr.createTextarea();
 
+    //inject any latex in the existing object into the MathField instance
     var contents = el.contents().detach();
     root.jQ =
       $('<span class="mq-root-block"/>').attr(mqBlockId, root.id).appendTo(el);
@@ -75,6 +85,8 @@ var AbstractMathQuill = P(function(_) {
   };
   _.el = function() { return this.controller.container[0]; };
   _.text = function() { return this.controller.exportText(); };
+  
+  //if argument exist: render latex, otherwise export latex
   _.latex = function(latex) {
     if (arguments.length > 0) {
       this.controller.renderLatexMath(latex);
@@ -83,12 +95,19 @@ var AbstractMathQuill = P(function(_) {
     }
     return this.controller.exportLatex();
   };
-  //Created by AlgebraKIT
+  
+  //export content as ASCIIMathML
   _.asciiMath = function() {
       var latex = this.controller.exportLatex();
       var amStr = MQtoAM(latex);
       return amStr;
   };
+  
+  //export content as AlgebraKIT syntax
+  _.algebrakit =  function() {
+      return this.controller.exportAlgebraKIT();
+  };
+  
   _.html = function() {
     return this.controller.root.jQ.html()
       .replace(/ mathquill-(?:command|block)-id="?\d+"?/g, '')

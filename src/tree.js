@@ -84,6 +84,8 @@ var Node = P(function(_) {
 
   var id = 0;
   function uniqueNodeId() { return id += 1; }
+  
+  //static dictionary of all nodes. 
   this.byId = {};
 
   _.init = function() {
