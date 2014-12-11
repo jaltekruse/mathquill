@@ -120,6 +120,36 @@ var Node = P(function(_) {
     for (var i = 0; i < jQ.length; i += 1) jQadd(jQ[i]);
     return jQ;
   };
+  
+  _.containsPoint = function(x, y) {
+      var rect = {
+        x: this.jQ.offset().left,
+        y: this.jQ.offset().top,
+        width: this.jQ.innerWidth(),
+        height: this.jQ.innerHeight()
+      };
+
+      var pointInsideLeft = rect.x <= x;
+      var pointInsideRight = x <= rect.x + rect.width;
+      var pointAboveBottom = rect.y <= y;
+      var pointBelowTop = y <= rect.y + rect.height;
+
+      return pointInsideLeft && pointInsideRight && pointAboveBottom && pointBelowTop;  
+  };
+  
+  _.childForPoint = function(x, y) {
+    var nodeForPoint;
+    if (this.containsPoint(x, y)) {
+      this.eachChild(function() {
+        nodeForPoint = this.containsPoint(x, y);
+        if (nodeForPoint) {
+          return false;
+        }
+      });
+      nodeForPoint = nodeForPoint || this;
+    }
+    return nodeForPoint;
+  };
 
   _.createDir = function(dir, cursor) {
     prayDirection(dir);
