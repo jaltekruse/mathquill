@@ -103,11 +103,6 @@ var AbstractMathQuill = P(function(_) {
       return amStr;
   };
   
-  //export content as AlgebraKIT syntax
-  _.algebrakit =  function() {
-      return this.controller.exportAlgebraKIT();
-  };
-  
   _.html = function() {
     return this.controller.root.jQ.html()
       .replace(/ mathquill-(?:command|block)-id="?\d+"?/g, '')
