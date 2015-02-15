@@ -40,6 +40,8 @@ code span {
 
 <p>Math textbox with initial LaTeX: <span id="editable-math" class="mathquill-editable">\frac{d}{dx}\sqrt{x}=</span></p>
 
+<div id="demoBasic"></div>
+
 <p><small>Try typing <code>1/2\sqrt x</code> and using the arrow keys to move around. Shortcut: use the tab key instead of arrow keys to get &quot;out&quot; of a command, like <code>a_n<span>[tab]</span>x^n</code>. Many LaTeX-style symbols and commands preceded by a backslash are supported, such as <code>\forall</code> or <code>n\choose k</code>.</small></p>
 
 <p>Latex source: <textarea id="latex-source" style="width:80%;vertical-align:top"></textarea></p>
@@ -64,6 +66,50 @@ code span {
 <script type="text/javascript" src="support/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../build/mathquill.js"></script>
 <script type="text/javascript">
+
+//Dropdown plugin data
+var ddData = [
+    {
+        text: "Facebook",
+        value: 1,
+        selected: false,
+        description: "Description with Facebook",
+        imageSrc: "http://dl.dropbox.com/u/40036711/Images/facebook-icon-32.png"
+    },
+    {
+        text: "Twitter",
+        value: 2,
+        selected: false,
+        description: "Description with Twitter",
+        imageSrc: "http://dl.dropbox.com/u/40036711/Images/twitter-icon-32.png"
+    },
+    {
+        text: "LinkedIn",
+        value: 3,
+        selected: true,
+        description: "Description with LinkedIn",
+        imageSrc: "http://dl.dropbox.com/u/40036711/Images/linkedin-icon-32.png"
+    },
+    {
+        text: "Foursquare",
+        value: 4,
+        selected: false,
+        description: "Description with Foursquare",
+        imageSrc: "http://dl.dropbox.com/u/40036711/Images/foursquare-icon-32.png"
+    }
+];
+
+//ddslick init code
+$('#demoBasic').ddslick({
+    data: ddData,
+    width: 300,
+    imagePosition: "left",
+    selectText: "Select your favorite social network",
+    onSelected: function (data) {
+        console.log(data);
+    }
+});
+
 $('#show-html-source').toggle(function() {
   $(this).html('Hide Semantically Meaningful HTML Source').parent().next().show();
 }, function() {

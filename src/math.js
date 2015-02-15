@@ -24,6 +24,7 @@ var MathElement = P(Node, function(_, _super) {
     return '[MathElement '+this.id+']';
   };
 
+  // visitor?
   _.bubble = function(event /*, args... */) {
     var args = __slice.call(arguments, 1);
 
@@ -35,6 +36,7 @@ var MathElement = P(Node, function(_, _super) {
     return this;
   };
 
+  // post order traversal of tree, 
   _.postOrder = function(fn /*, args... */) {
     var args = __slice.call(arguments, 1);
 

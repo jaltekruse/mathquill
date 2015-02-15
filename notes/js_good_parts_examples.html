@@ -1,0 +1,226 @@
+<html>
+<body><pre>
+<script>
+    /* */
+    // comments with stars are not recoomended, they cannot be used to 
+    // comment out blocks with common regular expressions
+
+    // ALWAYS DECLARE VARIABLES WITH THE var KEYWORD
+    //      - variables not declared with the var keyword are *implied global*
+
+    // watch out for semicolon insertion
+    // can cause unexpecte behavior
+    // boo bad comment!
+    var returns_undefined = function() {
+        // semi-colon insertion makes this return undefined
+        return
+        {
+            status:true
+        }
+    }
+
+    document.writeln("semi-colon insertion can can dangerous: " + returns_undefined());
+
+    var returns_object = function() {
+        // semi-colon insertion makes this return undefined
+        return {
+            status:true
+        }
+    }
+
+    document.writeln("Fixed it: " + JSON.stringify(returns_object()));
+
+    // chater 3 - Objects
+    // object literals - like json, no need for double quoted keys
+    // associateive array, or preferred dot notation for property access
+    // objects are passed by reference
+
+    var empty_object = {};
+
+    var stooge = {
+        first_name : "jeronme",
+        last_name : "Howard"
+    };
+
+    document.writeln("first name: " + stooge.first_name + " last name: " + stooge.last_name);
+
+    // undefined is returned if a property does not exist
+    // defense:
+    //      - property accesss, use || to set defaults
+    var middle = stooge.middle_name || "(none)";
+
+    // attempting to retrieve values from undefined with throw a TypeError
+    // defense: &&
+    var inner_val = stooge.not_definded && stooge.not_defined.inner_fieldl;
+
+    // objects created with literals are linked to the default object
+    // prototype, Object.prototype
+
+    //Prototype:
+    // when you make an object, you can select its prototype
+    // JS mechanism is messy, can be hidden in a method
+    // book sys the method is added to the Object *function*
+    // is it supposed to say object instead?
+    if (typeof Object.create !== 'function') {
+        Object.create = function(o) {
+            var F = function() {};
+            // this is confusing, the default object is accessible as
+            // Object.prototype
+            // other objects can set a prototype property
+            F.prototype = o;
+            return new F();
+        };
+    }
+
+    // can check from properties of an object with typeof
+    document.writeln("type of stooge.first_name: " + typeof stooge.first_name);
+
+    // can use hasOwnProperty method to check for properties
+    // passed a string returns boolean, does not go up the prototype chain
+    document.writeln("stooge has first name?: " + stooge.hasOwnProperty("first_name"));
+
+    // loop over all properties, including those up the prototype chain
+    // for ( prop in stooge ) {}
+
+    // properties can deleted to reveal values from above in the prototype hierarchy
+
+    // all JS programs have a root object, best to wrap your code
+    // in a single object stored inside of the default global object
+    // to avoid creating any implementation in the default global scope
+    
+    // function in global name-space, 
+    var add = function(a,b) {
+        return a+b;
+    }
+
+    // not recommended constructor pattern for object creation
+    var Quo = function(status) {
+        this.status = status;
+    }
+    // why do I need to have prototype here?
+    Quo.prototype.get_status = function() {
+        return this.status;
+    }
+
+    var myQuo = new Quo("confused");
+    document.writeln(myQuo.get_status());
+
+    var numbers = [3,4];
+    // applies a given function to an object bound in first paramter
+    // arguments give in an array as the second parameter
+    // can be used to 
+    var result = add.apply(null, numbers);
+    document.writeln(result);
+
+    // make a new object with status member, can use apply to share function
+    // from Quo object, without creating the new object as deerived from the
+    // Quo object as a prototype
+    var statusObject = {
+        status : 'A-ok'
+    };
+
+    var status = Quo.prototype.get_status.apply(statusObject); 
+
+    document.writeln(status);
+
+    // bonus parameter arguments is always available within a function
+    // gives all arguments, even those not bound to named parameters
+    //  - not particularly useful
+    //  - arguments not really an array
+    //      - has length
+    //      - lacks array methods
+
+    // functions always return a value, if no return called, returns undefined
+    
+    // when function is called with 'new', if an object is not returned explicitly
+    // then this (the new object) is returned instead
+
+    // basic types in language can be augmented
+    // example given in book: integer function for numbers, trim for strings using regex
+    // this can be dangerous mixing libraries, can avoid by only redefining methods if
+    // they do not exist, or entire library can just be in one object, different
+    // libraries get their own scope
+
+    //Recursion:
+
+    // tail recursion, when a method returns the result of calling itself
+    // can be optimized into a loop
+
+    // book doe not define the function as anonymous, recursion seems to work fine without
+    // the name given after the 'function' keyword
+
+    //var factorial = function factorial(i,a) {
+    var factorial = function (i,a) {
+        a = a || 1;
+        if (i < 2) {
+            return a;
+        }
+        return factorial(i-1, a*i);
+    }
+
+    document.writeln("factorial of 5 is: " + factorial(5));
+
+    // scope:
+    // JS does not have block scope
+    // it does have functions scope
+    //      - it is accessible if defined anywhere in  the function
+    // most languages recommend declaring as late as possible, without
+    // block scope it is best to define all variables at the top of a function
+
+    // Function scope is the single most important feature in javascript
+    // function scope gives the ability to allow encapsulation
+    
+    // Closure
+
+    // inside of functions, inner functions and objects have access
+    // to all of the variables defined in the outer function
+    // nothing outside of the function has access to this data directly
+    //      - however the function can return a function or object that
+    //        exposes it
+    //          - even though the returned function/object is the only thing
+    //            that is accessible, the function scaope and all variables
+    //            persist
+
+    var counter = (function () {
+        var value = 0;
+
+        return {
+            increment : function(inc) {
+                value += typeof inc === 'number' ? inc : 1;
+            },
+            getValue : function() {
+                return value;
+            }
+        };
+    }());
+
+    counter.increment();
+    document.writeln("after increment with default 1: " + counter.getValue());
+
+    counter.increment(3);
+    document.writeln("after incrementing by another 3 : " + counter.getValue());
+
+    // encapsulation for previous example of Quo object
+    // here the message is private and can only be reteived
+    var quo = function(status) {
+        return {
+            get_status : function() {
+                // this was only ever declared in the outer functions parameters
+                // but it is in function scope and will always be available in this
+                // inner scope to return the value
+                return status;
+            }
+        };
+    };
+
+    // the call above assigned the function, so I can create an instance of the object
+    // by calling it, could have called it immediately to make it a once time use construct
+    var myBetterStatus = quo("this is my status!");
+
+    document.writeln("I can read this but not change it: " + myBetterStatus.get_status());
+
+
+
+</script>
+</pre>
+</html>

@@ -20,6 +20,7 @@ SOURCES = \
   $(SRC_DIR)/symbols.js \
   $(SRC_DIR)/latex.js \
   $(SRC_DIR)/cursor.js \
+  $(SRC_DIR)/ddslick.js \
   $(SRC_DIR)/publicapi.js
 
 CSS_DIR = $(SRC_DIR)/css

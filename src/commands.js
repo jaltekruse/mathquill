@@ -24,18 +24,26 @@ var scale, // = function(jQ, x, y) { ... }
   },
   transformPropName;
 
+// set browser specific transformation for scaling symbols like square root
 for (var prop in transformPropNames) {
   if (prop in div_style) {
     transformPropName = prop;
     break;
   }
 }
-
+   
+// newer browsers can just use CSS 2D transforms to scale parens and square roots
 if (transformPropName) {
   scale = function(jQ, x, y) {
     jQ.css(transformPropName, 'scale('+x+','+y+')');
   };
 }
+// IE provides Matrix filters to stretch symbols
+//    - issues
+//      - aliasing, can be solved by giving a larger font size to start with more pixels to scale with
+//      - anti-aliasing can be really good if the background is opaque
+//          - to allow selection to look good need transparent background
+//          - achieved desired effect (nearly) by using chromachey to remove the background color
 else if ('filter' in div_style) { //IE 6, 7, & 8 fallback, see https://github.com/laughinghan/mathquill/wiki/Transforms
   forceIERedraw = function(el){ el.className = el.className; };
   scale = function(jQ, x, y) { //NOTE: assumes y > x
@@ -60,6 +68,7 @@ else if ('filter' in div_style) { //IE 6, 7, & 8 fallback, see https://github.co
     });
   };
 }
+// else fall back to just using fontSize to approximate scaling
 else {
   scale = function(jQ, x, y) {
     jQ.css('fontSize', y + 'em');
