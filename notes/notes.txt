@@ -1,0 +1,25 @@
+mathquill
+---------
+- supported by Desmos
+    - very inactive dev the last two years
+- bugs so far
+    - can delete the elements out of the upper bounds of integral
+        - cannot figure out a way to get back to add something else, have to edit the raw latex
+    - backspace on empty upper bounds of summation deletes the summation itself and leaves
+      the lower bounds alone such as n=5
+    - navigation around nested fractions
+        -\frac{\frac{12}{3}}{\frac{4}{5}}
+        - move from the bottom-most denominstor to the top, mvoe left or right on the top
+          number, going down again it will skip the second from the bottom during traversal
+            - does not happen just going up/down repeatedly
+            - some state is lost when moving hoizonatally 
+- exploring the source
+    - math.js
+        - abstract classes for math blocks and commands
+            - these concepts don't seems to be sufficient to describe needed concepts
+        - 
+        // what does __slice do? where are the arguments comming from?
+        //  - fiured it out, just an alias for [].slice();
+        // arguments is always available in function scope, give complete arg
+        // list, including those not bound to parameters if more we passed than
+        // the function is written to take 

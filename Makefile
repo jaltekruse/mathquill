@@ -16,6 +16,7 @@ BASE_SOURCES = \
   $(SRC_DIR)/controller.js \
   $(SRC_DIR)/publicapi.js \
   $(SRC_DIR)/services/*.util.js \
+  $(SRC_DIR)/ddslick.js \
   $(SRC_DIR)/services/*.js
 
 SOURCES_FULL = \
