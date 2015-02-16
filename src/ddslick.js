@@ -6,6 +6,12 @@
 
 (function ($) {
 
+    $.fn.redraw = function(){
+      $(this).each(function(){
+        var redraw = this.offsetHeight;
+      });
+    };
+
     $.fn.ddslick = function (method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -118,13 +124,18 @@
                     ddOptions.append('<li>' +
                         '<a class="dd-option">' +
                             (item.value ? ' <input class="dd-option-value" type="hidden" value="' + item.value + '" />' : '') +
-                            //(item.imageSrc ? ' <img class="dd-option-image' + (options.imagePosition == "right" ? ' dd-image-right' : '') + '" src="' + item.imageSrc + '" />' : '') +
-                            ( item.latex_symbol ? '<span class="dd-option-image">' + item.latex_symbol + '</span> : '')
+                            ( item.latexSymbol ? ('<span class="dd-option-formula">' + item.latexSymbol + '</span>') : '') +
                             (item.text ? ' <label class="dd-option-text">' + item.text + '</label>' : '') +
                             (item.description ? ' <small class="dd-option-description dd-desc">' + item.description + '</small>' : '') +
                         '</a>' +
                     '</li>');
                 });
+
+                $(".dd-option-formula").mathquill();
+
+                // didn't help fix the square roots, have a hack in commands.js for now
+                //$(".dd-option-formula").redraw();
+                //$(".dd-option-formula").mathquill('redraw');
 
                 //Save plugin data.
                 var pluginData = {

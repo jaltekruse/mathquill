@@ -35,7 +35,9 @@ for (var prop in transformPropNames) {
 // newer browsers can just use CSS 2D transforms to scale parens and square roots
 if (transformPropName) {
   scale = function(jQ, x, y) {
-    jQ.css(transformPropName, 'scale('+x+','+y+')');
+    // hacxk to make quare roots render properly after being added to the dom
+    //jQ.css(transformPropName, 'scale('+x+','+y+')');
+    jQ.css(transformPropName, 'scale(1,1)');
   };
 }
 // IE provides Matrix filters to stretch symbols
