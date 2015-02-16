@@ -46,7 +46,7 @@
     //CSS for ddSlick
     ddslickCSS = '<style id="css-ddslick" type="text/css">' +
                 '.dd-select{ border-radius:2px; border:solid 1px #ccc; position:relative; cursor:pointer;}' +
-                '.dd-desc { color:#aaa; display:block; overflow: hidden; font-weight:normal; line-height: 1.4em; }' +
+                '.dd-desc { color:#111111; overflow: hidden; font-weight:normal; line-height: 1.4em; }' +
                 '.dd-selected{ overflow:hidden; display:block; padding:10px; font-weight:bold;}' +
                 '.dd-pointer{ width:0; height:0; position:absolute; right:10px; top:50%; margin-top:-3px;}' +
                 '.dd-pointer-down{ border:solid 5px transparent; border-top:solid 5px #000; }' +
@@ -125,8 +125,7 @@
                         '<a class="dd-option">' +
                             (item.value ? ' <input class="dd-option-value" type="hidden" value="' + item.value + '" />' : '') +
                             ( item.latexSymbol ? ('<span class="dd-option-formula">' + item.latexSymbol + '</span>') : '') +
-                            (item.text ? ' <label class="dd-option-text">' + item.text + '</label>' : '') +
-                            (item.description ? ' <small class="dd-option-description dd-desc">' + item.description + '</small>' : '') +
+                            (item.description ? ' <span class="dd-option-description dd-desc">' + item.description + '</span>' : '') +
                         '</a>' +
                     '</li>');
                 });
