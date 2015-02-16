@@ -32,65 +32,221 @@ mathquill
         // list, including those not bound to parameters if more we passed than
         // the function is written to take 
 
+added a new public API to get all supported symbols
+    - looks to be returning duplicates
+        - there are multiple aliases mapped to one latx symbol
+    - not actually filtering out all of the letters that are not rendering in
+      the dropdown
+        - looking at the hosted demo, it looks like it doesn't support symbols
+          like capital \Mu
+            - either my code is broken, or this symbol is registered with MAthquill
+              but having difficulty rendering even outside of the dropdown
+                - typing \Mu in the hosted offical demo creates a non-italics word literal
+                    - can produce the same thing by putting \hello
+
+- symbol list
+    - giant list on web with descriptions
+        - http://mirror.hmc.edu/ctan/macros/latex/contrib/unicode-math/unimath-symbols.pdf
+
+    - single entry
+    {
+        value: 1,
+        selected: false,
+        description: "square root",
+        latexSymbol: "\\sqrt{}"
+    },
+
+From website: http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 latex symbols:
-\alpha    lower case alpha 
-\beta     lower case beta 
-\gamma    lower case gamma 
-\delta    lower case delta 
-\epsilon  lower case epsilon 
-          
-\zeta     lower case zeta 
-\eta      lower case eta 
-\theta    lower case theta 
-\iota     lower case iota 
-\kappa    lower case kappa 
-\lambda   lower case lambda 
-\mu       lower case mu 
-          
-\nu       lower case nu 
-\xi       lower case xi 
-\omicron  lower case omicron 
-\pi       lower case pi 
-\rho      lower case rho 
-\sigma    lower case sigma 
-\tau      lower case tau 
-\upsilon  lower case upsilon 
-\phi      lower case phi 
-\chi      lower case chi 
-\psi      lower case psi 
-\omega    lower case omega   
+\alpha             
+\beta              
+\gamma             
+\delta             
+\epsilon           
+                   
+\zeta              
+\eta               
+\theta             
+\iota              
+\kappa             
+\lambda            
+\mu                
+                   
+\nu                
+\xi                
+\omicron           
+\pi                
+\rho               
+\sigma             
+\tau               
+\upsilon           
+\phi               
+\chi               
+\psi               
+\omega             
 
-\Alpha      capital alpha 
-\Beta       capital beta 
-\gamma      capital gamma 
-\Delta      capital delta 
-\Epsilon    capital epsilon 
+\Alpha             
+\Beta              
+\gamma             
+\Delta             
+\Epsilon           
 
-\Zeta       capital zeta 
-\Eta        capital eta 
-\Theta,     capital theta 
-\Iota       capital iota 
-\Kappa,     capital kappa 
-\Lambda     capital lambda 
-\Mu         capital mu 
+\Zeta              
+\Eta               
+\Theta,            
+\Iota              
+\Kappa,            
+\Lambda            
+\Mu                
 
-\Nu         capital nu 
-\Xi         capital xi 
-\omicron    capital omicron 
-\Pi         capital pi 
-\Rho        capital rho 
-\Sigma      capital sigma 
-\Tau        capital tau 
-\Upsilon    capital upsilon 
-\Phi        capital phi 
-\Chi        capital chi 
-\Psi        capital psi 
-\Omega      capital omega
+\Nu                
+\Xi                
+\omicron           
+\Pi                
+\Rho               
+\Sigma             
+\Tau               
+\Upsilon           
+\Phi               
+\Chi               
+\Psi               
+\Omega             
 
-\varepsilon  varepsilon  
-\vartheta    vartheta 
-\varkappa    varkappa 
-\varpi       varpi
-\varrho      varrho 
-\varsigma    varsigma 
-\varphi      varphi     
+\varepsilon        
+\vartheta          
+\varkappa          
+\varpi             
+\varrho            
+\varsigma          
+\varphi            
+
+<                  
+>                  
+\nless             
+\ngtr              
+\leq               
+\geq               
+\nleq              
+\ngeq              
+\prec              
+\succ              
+\nprec             
+\nsucc             
+\preceq            
+\succeq            
+\npreceq           
+\nsucceq           
+\ll                
+\gg                
+
+\lll               
+\ggg     
+\subset            
+\supset            
+\not\subset        
+\not\supset        
+\subseteq          
+\supseteq          
+\nsubseteq         
+\nsupseteq         
+\sqsubset          
+\sqsupset          
+\sqsubseteq        
+\sqsupseteq        
+
+
+lowercase alpha 
+lowercase beta 
+lowercase gamma 
+lowercase delta 
+lowercase epsilon 
+
+lowercase zeta 
+lowercase eta 
+lowercase theta 
+lowercase iota 
+lowercase kappa 
+lowercase lambda 
+lowercase mu 
+
+lowercase nu 
+lowercase xi 
+lowercase omicron 
+lowercase pi 
+lowercase rho 
+lowercase sigma 
+lowercase tau 
+lowercase upsilon 
+lowercase phi 
+lowercase chi 
+lowercase psi 
+lowercase omega   
+                                          
+capital alpha 
+capital beta 
+capital gamma 
+capital delta 
+capital epsilon 
+                                          
+capital zeta 
+capital eta 
+capital theta 
+capital iota 
+capital kappa 
+capital lambda 
+capital mu 
+                                          
+capital nu 
+capital xi 
+capital omicron 
+capital pi 
+capital rho 
+capital sigma 
+capital tau 
+capital upsilon 
+capital phi 
+capital chi 
+capital psi 
+capital omega
+                                          
+varepsilon  
+vartheta 
+varkappa 
+varpi
+varrho 
+varsigma 
+varphi     
+                                          
+is less than
+is greater than
+is not less than    
+is not greater than
+is less than or equal to    
+is greater than or equal to
+is neither less than nor equal to
+is neither greater than nor equal to
+precedes
+succeeds
+doesn't precede
+doesn't succeed
+precedes or equals
+succeeds or equals
+neither precedes nor equals
+neither succeeds nor equals
+much less than
+much greater than
+                                          
+
+                                          
+is a proper subset of   
+is a proper superset of
+is not a proper subset of   
+is not a proper superset of
+is a subset of  
+is a superset of
+is not a subset of  
+is not a superset of
+sqsubset       
+sqsupset    
+sqsubseteq         
+sqsupseteq                                           

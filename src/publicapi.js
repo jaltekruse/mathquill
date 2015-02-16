@@ -152,6 +152,34 @@ var EditableField = MathQuill.EditableField = P(AbstractMathQuill, function(_) {
     this.__controller.cursor.clearSelection();
     return this;
   };
+  // get a list of supported latex symbols
+  // this was going to be an API to check for a single symbol, but
+  // to check a large number this would have required a lot of extra computation
+  // while this does build up a fairly large list, it limits the computational complexity
+  // of checking the supported symbols against an external list to a single loop to gather
+  // them inside of mathquill, and then eitehr a single iteration through the list, to check
+  // against the external list, assuming that either both are sorted (to do an operation 
+  // like a merge join) or that the external list has been put in a hashmap like structure
+  // to make looking up a symbol efficient
+  /*
+  case 'supportedSymbols':
+    if (arguments.length == 1) {
+        var symbolList = [];
+        var symbolName;
+        var currSymbol;
+        for ( symbolName in LatexCmds) {
+            // filter out properties from up the prototype chain
+            if (LatexCmds.hasOwnProperty(symbolName) && typeof LatexCmds[symbolName] == 'function') {
+                currSymbol = LatexCmds[symbolName]();
+                if (currSymbol.hasOwnProperty('ctrlSeq')) {
+                    symbolList.push(currSymbol['ctrlSeq']);
+                    console.log("added symbol");
+                }
+            }
+        }
+        return symbolList;
+    } 
+    */
 
   _.moveToDirEnd = function(dir) {
     this.__controller.notify('move').cursor.insAtDirEnd(dir, this.__controller.root);
