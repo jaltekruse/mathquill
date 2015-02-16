@@ -56,6 +56,46 @@ jQuery.fn.mathquill = function(cmd, latex) {
         if (cursor)
           cursor.writeLatex(latex).parent.blur();
       });
+  // get a list of supported latex symbols
+  // this was going to be an API to check for a single symbol, but
+  // to check a large number this would have required a lot of extra computation
+  // while this does build up a fairly large list, it limits the computational complexity
+  // of checking the supported symbols against an external list to a single loop to gather
+  // them inside of mathquill, and then eitehr a single iteration through the list, to check
+  // against the external list, assuming that either both are sorted (to do an operation 
+  // like a merge join) or that the external list has been put in a hashmap like structure
+  // to make looking up a symbol efficient
+  case 'supportedSymbols':
+    if (arguments.length == 1) {
+        var symbolList = [];
+        var symbolName;
+        var currSymbol;
+        for ( symbolName in LatexCmds) {
+            // filter out properties from up the prototype chain
+            if (LatexCmds.hasOwnProperty(symbolName) && typeof LatexCmds[symbolName] == 'function') {
+                currSymbol = LatexCmds[symbolName]();
+                if (currSymbol.hasOwnProperty('ctrlSeq')) {
+                    symbolList.push(currSymbol['ctrlSeq']);
+                    console.log("added symbol");
+                }
+            }
+        }
+        return symbolList;
+    } 
+  case 'cmd':
+    if (arguments.length > 1)
+      return this.each(function() {
+        var blockId = $(this).attr(mqBlockId),
+          block = blockId && MathElement[blockId],
+          cursor = block && block.cursor;
+
+        if (cursor) {
+          var seln = cursor.prepareWrite();
+          if (/^\\[a-z]+$/i.test(latex)) cursor.insertCmd(latex.slice(1), seln);
+          else cursor.insertCh(latex, seln);
+          cursor.hide().parent.blur();
+        }
+      });
   case 'cmd':
     if (arguments.length > 1)
       return this.each(function() {

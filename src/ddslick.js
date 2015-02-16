@@ -118,8 +118,13 @@
                 if (options.height != null)
                     ddOptions.css({ height: options.height, overflow: 'auto' });
 
+                var latexSymbols = $('<span>x^{-1}</span>').mathquill().mathquill('supportedSymbols');
+
                 //Add ddOptions to the container. Replace with template engine later.
                 $.each(options.data, function (index, item) {
+                    if ( ! $.inArray(item.latexSymbol, latexSymbols)) {
+                        return; 
+                    }
                     if (item.selected) options.defaultSelectedIndex = index;
                     ddOptions.append('<li>' +
                         '<a class="dd-option">' +
