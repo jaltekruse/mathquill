@@ -13,6 +13,14 @@ mathquill
           number, going down again it will skip the second from the bottom during traversal
             - does not happen just going up/down repeatedly
             - some state is lost when moving hoizonatally 
+- testing
+    - combining mathquill with dd-slick fancy dropdown
+        - issues with styles wrong on square roots
+        - style for transform is applied by mathquill, seems to be dependant on
+          font size, I think I'm not handling its relationship to the dom correclty
+            - can fix it on the page by getting rid of the transform property
+            - fixed for now with hardcoded valeus fro scaling
+    - \\frac{\\frac{\\sqrt5}{5x^2}}{\\int_{0}^{5} x dx}
 - exploring the source
     - math.js
         - abstract classes for math blocks and commands
@@ -23,3 +31,66 @@ mathquill
         // arguments is always available in function scope, give complete arg
         // list, including those not bound to parameters if more we passed than
         // the function is written to take 
+
+latex symbols:
+\alpha    lower case alpha 
+\beta     lower case beta 
+\gamma    lower case gamma 
+\delta    lower case delta 
+\epsilon  lower case epsilon 
+          
+\zeta     lower case zeta 
+\eta      lower case eta 
+\theta    lower case theta 
+\iota     lower case iota 
+\kappa    lower case kappa 
+\lambda   lower case lambda 
+\mu       lower case mu 
+          
+\nu       lower case nu 
+\xi       lower case xi 
+\omicron  lower case omicron 
+\pi       lower case pi 
+\rho      lower case rho 
+\sigma    lower case sigma 
+\tau      lower case tau 
+\upsilon  lower case upsilon 
+\phi      lower case phi 
+\chi      lower case chi 
+\psi      lower case psi 
+\omega    lower case omega   
+
+\Alpha      capital alpha 
+\Beta       capital beta 
+\gamma      capital gamma 
+\Delta      capital delta 
+\Epsilon    capital epsilon 
+
+\Zeta       capital zeta 
+\Eta        capital eta 
+\Theta,     capital theta 
+\Iota       capital iota 
+\Kappa,     capital kappa 
+\Lambda     capital lambda 
+\Mu         capital mu 
+
+\Nu         capital nu 
+\Xi         capital xi 
+\omicron    capital omicron 
+\Pi         capital pi 
+\Rho        capital rho 
+\Sigma      capital sigma 
+\Tau        capital tau 
+\Upsilon    capital upsilon 
+\Phi        capital phi 
+\Chi        capital chi 
+\Psi        capital psi 
+\Omega      capital omega
+
+\varepsilon  varepsilon  
+\vartheta    vartheta 
+\varkappa    varkappa 
+\varpi       varpi
+\varrho      varrho 
+\varsigma    varsigma 
+\varphi      varphi     
