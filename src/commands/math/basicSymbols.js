@@ -50,6 +50,9 @@ var Letter = P(Variable, function(_, super_) {
       while (l instanceof Letter && i < maxLength) {
         str = l.letter + str, l = l[L], i += 1;
       }
+      // TODO - find a better way to share this with the outside world, for now
+      // throw it into global scope
+      funcSearchString = str;
       // check for an autocommand, going thru substrings longest to shortest
       while (str.length) {
         if (autoCmds.hasOwnProperty(str)) {
