@@ -454,6 +454,49 @@ suite('Public API', function() {
 
       $(mq.el()).remove();
     });
+    test('space behaves like tab when spaceBehavesLikeTab is exceptRootBlock', function() {
+      var opts = { 'spaceBehavesLikeTab': 'exceptRootBlock' };
+      mq = MathQuill.MathField( $('<span></span>').appendTo('#mock')[0], opts);
+      rootBlock = mq.__controller.root;
+      cursor = mq.__controller.cursor;
+
+      mq.typedText('1 1/2');
+      assert.equal(mq.latex(), '1\\ \\frac{1}{2}', 'latex is ' + mq.latex());
+
+      mq.typedText(' ');
+      assert.equal(cursor[R], 0, 'right cursor is ' + cursor[R]);
+
+      $(mq.el()).remove();
+    });
+    test('space behaves like tab when globally set to exceptRootBlock', function() {
+      MathQuill.config({ spaceBehavesLikeTab: 'exceptRootBlock' });
+
+      mq = MathQuill.MathField( $('<span></span>').appendTo('#mock')[0]);
+      rootBlock = mq.__controller.root;
+      cursor = mq.__controller.cursor;
+
+      mq.typedText('1 1/2');
+      assert.equal(mq.latex(), '1\\ \\frac{1}{2}', 'latex is ' + mq.latex());
+
+      mq.typedText(' ');
+      assert.equal(cursor[R], 0, 'right cursor is ' + cursor[R]);
+
+      $(mq.el()).remove();
+    });
+    test('compare latex for space behaves like tab true to exceptRootBlock', function() {
+      var opts = { 'spaceBehavesLikeTab': 'exceptRootBlock' };
+      mq = MathQuill.MathField( $('<span></span>').appendTo('#mock')[0], opts);
+      mq.typedText('1/2 ');
+
+      var opts2 = { 'spaceBehavesLikeTab': true };
+      var mq2 = MathQuill.MathField( $('<span></span>').appendTo('#mock')[0], opts2);
+      mq2.typedText('1/2 ');
+
+      assert.equal(mq.latex(), mq2.latex(), 'latex should be the same ' + '\'' + mq.latex() + '\' and \'' + mq2.latex() + '\'');
+
+      $(mq.el()).remove();
+      $(mq2.el()).remove();
+    });
   });
 
   suite('statelessClipboard option', function() {
