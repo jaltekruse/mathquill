@@ -6,6 +6,15 @@
 
 (function ($) {
 
+    // Define shorthand utility method
+    $.extend({
+        el: function(el, props) {
+            var $el = $(document.createElement(el));
+            $el.attr(props);
+            return $el;
+        }
+    });
+
     $.fn.redraw = function(){
       $(this).each(function(){
         var redraw = this.offsetHeight;
@@ -24,6 +33,8 @@
 
     var methods = {},
 
+    currentTextInput = '',
+
     //Set defauls for the control
     defaults = {
         data: [],
@@ -40,7 +51,7 @@
         onSelected: function () { }
     },
 
-    ddSelectHtml = '<div class="dd-select"><input class="dd-selected-value" type="hidden" /><a class="dd-selected"></a><span class="dd-pointer dd-pointer-down"></span></div>',
+    ddSelectHtml = '<input type="text" id="text-input-dropdown" class="dd-select"></input>',
     ddOptionsHtml = '<ul class="dd-options"></ul>',
 
     //CSS for ddSlick
@@ -76,7 +87,7 @@
             var obj = $(this),
                 data = obj.data('ddslick');
             //If the plugin has not been initialized yet
-            if (!data) {
+            if (true || !data) {
 
                 var ddSelect = [], ddJson = options.data;
 
@@ -118,24 +129,31 @@
                 if (options.height != null)
                     ddOptions.css({ height: options.height, overflow: 'auto' });
 
-                var latexSymbols = $('<span>x^{-1}</span>').mathquill().mathquill('supportedSymbols');
+                //var latexSymbols = $('<span>x^{-1}</span>').mathquill().mathquill('supportedSymbols');
+                console.log(currentTextInput);
 
                 //Add ddOptions to the container. Replace with template engine later.
                 $.each(options.data, function (index, item) {
+                    /*
                     if ( ! $.inArray(item.latexSymbol, latexSymbols)) {
                         return; 
                     }
-                    if (item.selected) options.defaultSelectedIndex = index;
-                    ddOptions.append('<li>' +
-                        '<a class="dd-option">' +
-                            (item.value ? ' <input class="dd-option-value" type="hidden" value="' + item.value + '" />' : '') +
-                            ( item.latexSymbol ? ('<span class="dd-option-formula">' + item.latexSymbol + '</span>') : '') +
-                            (item.description ? ' <span class="dd-option-description dd-desc">' + item.description + '</span>' : '') +
-                        '</a>' +
-                    '</li>');
+                    */
+                    if ( currentTextInput == '' || item.description.startsWith(currentTextInput)) {
+                        if (item.selected) options.defaultSelectedIndex = index;
+                        var listElm = $.el('li', {});
+                        var anchor = $.el('a', { class : 'dd-option'});
+                        ddOptions.append(listElm);
+                        listElm.append(anchor);
+                        anchor.append($.el('input', { class : 'dd-option-value', type : 'hidden', value : item.value }));
+                        var latexSym = $.el('span', { class : 'dd-option-formula' }).html(item.latexSymbol);
+                        anchor.append(latexSym);
+                        anchor.append($.el('span', {class:"dd-option-description dd-desc"}).html(item.description));
+                        MathQuill.StaticMath(latexSym[0]);
+                    }
                 });
 
-                $(".dd-option-formula").mathquill();
+                //$(".dd-option-formula").mathquill();
 
                 // didn't help fix the square roots, have a hack in commands.js for now
                 //$(".dd-option-formula").redraw();
@@ -165,6 +183,11 @@
                 //EVENTS
                 //Displaying options
                 obj.find('.dd-select').on('click.ddslick', function () {
+                    toggle(obj);
+                });
+
+                obj.find('.dd-select').on('input propertychange paste', function () {
+                    currentTextInput = $('#text-input-dropdown').attr('value');
                     open(obj);
                 });
 
@@ -289,7 +312,24 @@
 
     //Private: Close the drop down options
     function open(obj) {
+        open_helper(obj, false);
+    }
 
+    function toggle(obj) {
+        open_helper(obj, true);
+    }
+
+    function open_helper(obj, toggle) {
+
+        $('#demoBasic').ddslick({
+            data: ddData,
+            width: 300,
+            imagePosition: "left",
+            selectText: "Select your favorite social network",
+            onSelected: function (data) {
+                console.log(data);
+            }
+        });
         var $this = obj.find('.dd-select'),
             ddOptions = $this.siblings('.dd-options'),
             ddPointer = $this.find('.dd-pointer'),
@@ -300,8 +340,12 @@
         $('.dd-pointer').removeClass('dd-pointer-up');
 
         if (wasOpen) {
-            ddOptions.hide();
-            ddPointer.removeClass('dd-pointer-up');
+            if (toggle) {
+                ddOptions.hide();
+                ddPointer.removeClass('dd-pointer-up');
+            } else {
+                return;
+            }
         }
         else {
             //ddOptions.slideDown('fast');
