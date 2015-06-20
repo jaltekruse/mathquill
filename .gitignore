@@ -1,5 +1,8 @@
 /tmp
 
+#ctags file
+/tags
+
 # build tools
 /node_modules
 
