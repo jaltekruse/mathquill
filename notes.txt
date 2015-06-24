@@ -1,0 +1,267 @@
+mathquill
+---------
+- supported by Desmos
+    - very inactive dev the last two years
+    - was wrong about this, the master branch is out of data but there is an active dev branch
+- bugs so far - these were all recorded before I found the dev branch, should confirm if any are still valid
+    - comment on this chrome issue with a minal repro some day
+        - reports as an incorrect end of input on line 1
+        - current repro, in demo.html
+        - delete the last line below - });
+            $(function() {
+              $('.mathquill-static-math').each(function() { MathQuill.StaticMath(this); });
+              $('.mathquill-math-field').each(function() { MathQuill.MathField(this); });
+              $('.mathquill-text-field').each(function() { MathQuill.TextField(this); });
+            });
+    - can delete the elements out of the upper bounds of integral
+        - cannot figure out a way to get back to add something else, have to edit the raw latex
+    - backspace on empty upper bounds of summation deletes the summation itself and leaves
+      the lower bounds alone such as n=5
+    - navigation around nested fractions
+        -\frac{\frac{12}{3}}{\frac{4}{5}}
+        - move from the bottom-most denominstor to the top, mvoe left or right on the top
+          number, going down again it will skip the second from the bottom during traversal
+            - does not happen just going up/down repeatedly
+            - some state is lost when moving hoizonatally
+- bugs on dev branch
+    - alignment of integral bounds when the integral is in an exponent
+        - repro - 5 ^ \int ( _ to get into subscript) 3 (type right to get out of subscript) (^ to get to superscript)
+          add a superscript which will be show out of alignment from the integral
+- testing
+    - combining mathquill with dd-slick fancy dropdown
+        - issues with styles wrong on square roots
+        - style for transform is applied by mathquill, seems to be dependant on
+          font size, I think I'm not handling its relationship to the dom correclty
+            - can fix it on the page by getting rid of the transform property
+            - fixed for now with hardcoded valeus fro scaling
+    - \\frac{\\frac{\\sqrt5}{5x^2}}{\\int_{0}^{5} x dx}
+- exploring the source
+    - math.js
+        - abstract classes for math blocks and commands
+            - these concepts don't seems to be sufficient to describe needed concepts
+        - 
+        // what does __slice do? where are the arguments comming from?
+        //  - fiured it out, just an alias for [].slice();
+        // arguments is always available in function scope, give complete arg
+        // list, including those not bound to parameters if more we passed than
+        // the function is written to take 
+
+added a new public API to get all supported symbols
+    - looks to be returning duplicates
+        - there are multiple aliases mapped to one latx symbol
+    - not actually filtering out all of the letters that are not rendering in
+      the dropdown
+        - looking at the hosted demo, it looks like it doesn't support symbols
+          like capital \Mu
+            - either my code is broken, or this symbol is registered with MAthquill
+              but having difficulty rendering even outside of the dropdown
+                - typing \Mu in the hosted offical demo creates a non-italics word literal
+                    - can produce the same thing by putting \hello
+
+- symbol list
+    - giant list on web with descriptions
+        - http://mirror.hmc.edu/ctan/macros/latex/contrib/unicode-math/unimath-symbols.pdf
+
+    - single entry
+    {
+        value: 1,
+        selected: false,
+        description: "square root",
+        latexSymbol: "\\sqrt{}"
+    },
+
+From website: http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
+latex symbols:
+\alpha             
+\beta              
+\gamma             
+\delta             
+\epsilon           
+                   
+\zeta              
+\eta               
+\theta             
+\iota              
+\kappa             
+\lambda            
+\mu                
+                   
+\nu                
+\xi                
+\omicron           
+\pi                
+\rho               
+\sigma             
+\tau               
+\upsilon           
+\phi               
+\chi               
+\psi               
+\omega             
+
+\Alpha             
+\Beta              
+\gamma             
+\Delta             
+\Epsilon           
+
+\Zeta              
+\Eta               
+\Theta,            
+\Iota              
+\Kappa,            
+\Lambda            
+\Mu                
+
+\Nu                
+\Xi                
+\omicron           
+\Pi                
+\Rho               
+\Sigma             
+\Tau               
+\Upsilon           
+\Phi               
+\Chi               
+\Psi               
+\Omega             
+
+\varepsilon        
+\vartheta          
+\varkappa          
+\varpi             
+\varrho            
+\varsigma          
+\varphi            
+
+<                  
+>                  
+\nless             
+\ngtr              
+\leq               
+\geq               
+\nleq              
+\ngeq              
+\prec              
+\succ              
+\nprec             
+\nsucc             
+\preceq            
+\succeq            
+\npreceq           
+\nsucceq           
+\ll                
+\gg                
+
+\lll               
+\ggg     
+\subset            
+\supset            
+\not\subset        
+\not\supset        
+\subseteq          
+\supseteq          
+\nsubseteq         
+\nsupseteq         
+\sqsubset          
+\sqsupset          
+\sqsubseteq        
+\sqsupseteq        
+
+
+lowercase alpha 
+lowercase beta 
+lowercase gamma 
+lowercase delta 
+lowercase epsilon 
+
+lowercase zeta 
+lowercase eta 
+lowercase theta 
+lowercase iota 
+lowercase kappa 
+lowercase lambda 
+lowercase mu 
+
+lowercase nu 
+lowercase xi 
+lowercase omicron 
+lowercase pi 
+lowercase rho 
+lowercase sigma 
+lowercase tau 
+lowercase upsilon 
+lowercase phi 
+lowercase chi 
+lowercase psi 
+lowercase omega   
+                                          
+capital alpha 
+capital beta 
+capital gamma 
+capital delta 
+capital epsilon 
+                                          
+capital zeta 
+capital eta 
+capital theta 
+capital iota 
+capital kappa 
+capital lambda 
+capital mu 
+                                          
+capital nu 
+capital xi 
+capital omicron 
+capital pi 
+capital rho 
+capital sigma 
+capital tau 
+capital upsilon 
+capital phi 
+capital chi 
+capital psi 
+capital omega
+                                          
+varepsilon  
+vartheta 
+varkappa 
+varpi
+varrho 
+varsigma 
+varphi     
+                                          
+is less than
+is greater than
+is not less than    
+is not greater than
+is less than or equal to    
+is greater than or equal to
+is neither less than nor equal to
+is neither greater than nor equal to
+precedes
+succeeds
+doesn't precede
+doesn't succeed
+precedes or equals
+succeeds or equals
+neither precedes nor equals
+neither succeeds nor equals
+much less than
+much greater than
+                                          
+
+                                          
+is a proper subset of   
+is a proper superset of
+is not a proper subset of   
+is not a proper superset of
+is a subset of  
+is a superset of
+is not a subset of  
+is not a superset of
+sqsubset       
+sqsupset    
+sqsubseteq         
+sqsupseteq                                           
+
