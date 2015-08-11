@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=624">
+
+<title>MathQuill Demo</title>
+
+<link rel="stylesheet" type="text/css" href="support/home.css">
+<link rel="stylesheet" type="text/css" href="../build/mathquill.css">
+</head>
+<body>
+    <!-- these seem to work without it at least for static rendering, but the live edited equation
+         inserts another span node below mq-supsub with a class of mq-sup and/or mq-sub -->
+    <!-- 3+5_4 -->
+    Subscript without inner mq-sub span: <span class="mq-math-mode">
+        3
+        <span class="mq-binary-operator"> + </span>
+        5 
+        <span class="mq-supsub">4</span></span>
+    <br>
+    <!-- this works here with just the mq0sup-only class, but the live editor adds the superscript
+         in another tag with a mq-sup class -->
+    <!-- 3+5^4 -->
+    Superscript without inner mq-sup span: <span class="mq-math-mode">
+        3
+        <span class="mq-binary-operator">+</span>
+        5
+            <span class="mq-supsub mq-sup-only">4</span>
+    </span>
+    <br>
+    Missing non-leaf class on mq-supsub span: <span class="mq-math-mode">
+        3
+        <span class="mq-binary-operator">+</span>
+        5
+        <!-- need missing non-leaf here to make this work, see below -->
+        <span class="mq-supsub">
+            <span class="mq-sub">4</span>
+            <span class="mq-sup">3</span>
+        </span>
+    </span>
+    <br>
+    Proper super/subscript: <span class="mq-math-mode">
+        3
+        <span class="mq-binary-operator">+</span>
+        5
+        <!-- need non-leaf here to make this work -->
+        <span class="mq-supsub mq-non-leaf">
+            <span class="mq-sub">4</span>
+            <span class="mq-sup">3</span>
+        </span>
+    </span>
+    <br>
+    Proper super/subscript: 
+    <span class="mq-math-mode">
+        3
+        <span class="mq-binary-operator">+</span>
+        5
+        <!-- need non-leaf here to make this work -->
+        <span class="mq-supsub mq-sup-only mq-non-leaf">
+            <span class="mq-sup">
+                8
+                <span class="mq-supsub mq-non-leaf">
+                    <span class="mq-sup">3</span>
+                    <span class="mq-sub">4</span>
+                </span>
+            </span>
+        </span>
+    </span>
+    <br>
+    </body>
+</html>
