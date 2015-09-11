@@ -227,15 +227,17 @@ var Cursor = P(Point, function(_) {
     if (leftEnd instanceof Point) leftEnd = leftEnd[R];
     if (rightEnd instanceof Point) rightEnd = rightEnd[L];
 
-		// adjust selections to be mathematically meaningful
-    if (this.options.strictOperatorSelection) {
+		// adjust selections for strict operators
+		var strictOperators = this.options.strictOperatorSelection;
+    if (strictOperators !== undefined) {
       var isPrefixOp = function(ctrlSeq) {
-        // different dashes can be used for the minus sign
-        return ctrlSeq === '–' || ctrlSeq === '-' || ctrlSeq === '\\pm ';
+        return strictOperators.prefixOperators &&
+          strictOperators.prefixOperators.indexOf(ctrlSeq) > -1;
       };
 
       var isBinaryOp = function(ctrlSeq) {
-        return ctrlSeq === '+' || ctrlSeq === '\\div ' || ctrlSeq === '\\cdot ' || ctrlSeq === '=';
+        return strictOperators.binaryOperators &&
+          strictOperators.binaryOperators.indexOf(ctrlSeq) > -1;
       };
 
       var isStrictOp = function(ctrlSeq) {
