@@ -3,6 +3,7 @@
 The configuration options object is of the following form:
 ```js
 {
+  tabAction: 'escapeAndOut', // or 'escapeAndNextTemplate'
   spaceBehavesLikeTab: true,
   leftRightIntoCmdGoes: 'up',
   restrictMismatchedBrackets: true,
@@ -30,6 +31,10 @@ Global defaults may be set with [`MQ.config(global_config)`](Api_Methods.md#mqco
 
 
 # Configuration Options
+
+## tabAction
+
+`tabAction` configures the way MathQuill responds to Tab.  By default (`escapeAndOut`), {Shift-,}Tab will escape out of a template until it reaches the root block.  At that point MathQuill ignores the keystroke and allows the default browser behavior to occur.  The `escapeAndNextTemplate` approach similarly escapes out of templates, but when reaching the root block, the next {Shift-,}Tab will find the next template in the desired direction.  If there are no such templates, then MathQuill allows the default browser behavior to occur.
 
 ## spacesBehavesLikeTab
 
