@@ -250,6 +250,11 @@ var SupSub = P(MathCommand, function(_, super_) {
     }
     return latex('_', this.sub) + latex('^', this.sup);
   };
+  _.respace = _.siblingCreated = _.siblingDeleted = function(opts, dir) {
+    //if (this.parent.controller.API.__options.supSubsShowEmptyBase) {
+      this.jQ.toggleClass('mq-empty-base', !this[L] || this[L] instanceof BinaryOperator);
+    //}
+  };
   _.addBlock = function(block) {
     if (this.supsub === 'sub') {
       this.sup = this.upInto = this.sub.upOutOf = block;

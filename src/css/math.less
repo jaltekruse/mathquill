@@ -158,11 +158,19 @@
     vertical-align: -.5em;
 
     &.mq-sup-only {
-      vertical-align: .5em;
+      vertical-align: .5em; //TODO pull this value out as its undone below
 
       .mq-sup {
         display: inline-block;
         vertical-align: text-bottom;
+      }
+
+      &.mq-empty-base:before {
+        content: '\2002'; // EN SPACE
+        white-space: pre;
+        color: transparent; //just in case
+        vertical-align: -.5em; //TODO sync with outer v-align value (but negative)
+        .empty-template(@EmptyTemplateStyle);
       }
     }
 
@@ -184,6 +192,11 @@
     .mq-fraction {
       font-size: 70%;
     }
+  }
+
+  //ensure that the empty box isn't displayed when the cursor is "in" it
+  .mq-cursor + .mq-supsub.mq-sup-only.mq-empty-base:before {
+    background-color: transparent;
   }
 
   sup.mq-nthroot {
