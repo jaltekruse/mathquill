@@ -12,7 +12,7 @@ var MathElement = P(Node, function(_, super_) {
       // SupSub::contactWeld, and is deliberately only passed in by writeLatex,
       // see ea7307eb4fac77c149a11ffdf9a831df85247693
     var self = this;
-    self.postOrder('finalizeTree', options, cursor);
+    self.postOrder('finalizeTree', options);
     self.postOrder('contactWeld', cursor);
 
     // note: this order is important.
