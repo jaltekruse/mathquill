@@ -12,7 +12,7 @@ var MathElement = P(Node, function(_, super_) {
       // SupSub::contactWeld, and is deliberately only passed in by writeLatex,
       // see ea7307eb4fac77c149a11ffdf9a831df85247693
     var self = this;
-    self.postOrder('finalizeTree', options);
+    self.postOrder('finalizeTree', options, cursor);
     self.postOrder('contactWeld', cursor);
 
     // note: this order is important.
@@ -70,6 +70,7 @@ var MathCommand = P(MathElement, function(_, super_) {
 
   // createLeftOf(cursor) and the methods it calls
   _.createLeftOf = function(cursor) {
+    pray('missing cursor', cursor);
     var cmd = this;
     var replacedFragment = cmd.replacedFragment;
 
@@ -79,7 +80,7 @@ var MathCommand = P(MathElement, function(_, super_) {
       replacedFragment.adopt(cmd.ends[L], 0, 0);
       replacedFragment.jQ.appendTo(cmd.ends[L].jQ);
     }
-    cmd.finalizeInsert(cursor.options);
+    cmd.finalizeInsert(cursor.options, cursor);
     cmd.placeCursor(cursor);
   };
   _.createBlocks = function() {

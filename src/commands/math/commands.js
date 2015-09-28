@@ -202,6 +202,10 @@ var SupSub = P(MathCommand, function(_, super_) {
         break;
       }
     }
+<<<<<<< HEAD
+=======
+    this.respace(cursor.options);
+>>>>>>> Correctly pass options into render tree
   };
   Options.p.charsThatBreakOutOfSupSub = '';
   _.finalizeTree = function() {
@@ -251,9 +255,11 @@ var SupSub = P(MathCommand, function(_, super_) {
     return latex('_', this.sub) + latex('^', this.sup);
   };
   _.respace = _.siblingCreated = _.siblingDeleted = function(opts, dir) {
-    //if (this.parent.controller.API.__options.supSubsShowEmptyBase) {
+    pray('missing required options', opts);
+
+    if (opts.supSubsShowEmptyBase) {
       this.jQ.toggleClass('mq-empty-base', !this[L] || this[L] instanceof BinaryOperator);
-    //}
+    }
   };
   _.addBlock = function(block) {
     if (this.supsub === 'sub') {
