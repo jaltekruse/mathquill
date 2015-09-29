@@ -202,10 +202,7 @@ var SupSub = P(MathCommand, function(_, super_) {
         break;
       }
     }
-<<<<<<< HEAD
-=======
     this.respace(cursor.options);
->>>>>>> Correctly pass options into render tree
   };
   Options.p.charsThatBreakOutOfSupSub = '';
   _.finalizeTree = function() {
@@ -266,7 +263,7 @@ var SupSub = P(MathCommand, function(_, super_) {
       this.sup = this.upInto = this.sub.upOutOf = block;
       block.adopt(this, this.sub, 0).downOutOf = this.sub;
       block.jQ = $('<span class="mq-sup"/>').append(block.jQ.children())
-        .attr(mqBlockId, block.id).prependTo(this.jQ);
+        .attr(mqBlockId, block.id).prependTo(this.jQ.removeClass('mq-sub-only'));
     }
     else {
       this.sub = this.downInto = this.sup.downOutOf = block;
@@ -292,6 +289,7 @@ var SupSub = P(MathCommand, function(_, super_) {
         cmd[oppositeSupsub][updown+'OutOf'] = insLeftOfMeUnlessAtEnd;
         delete cmd[oppositeSupsub].deleteOutOf;
         if (supsub === 'sub') $(cmd.jQ.addClass('mq-sup-only')[0].lastChild).remove();
+        if (supsub === 'sup') cmd.jQ.addClass('mq-sub-only');
         this.remove();
       };
     }(this, 'sub sup'.split(' ')[i], 'sup sub'.split(' ')[i], 'down up'.split(' ')[i]));
@@ -313,7 +311,7 @@ LatexCmds.subscript =
 LatexCmds._ = P(SupSub, function(_, super_) {
   _.supsub = 'sub';
   _.htmlTemplate =
-      '<span class="mq-supsub mq-non-leaf">'
+      '<span class="mq-supsub mq-non-leaf mq-sub-only">'
     +   '<span class="mq-sub">&0</span>'
     +   '<span style="display:inline-block;width:0">&#8203;</span>'
     + '</span>'
