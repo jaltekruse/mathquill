@@ -54,8 +54,8 @@ Open Assignment <input type="file" id="open-file-input" /> <br/><br/>
 <input type="submit" id="new-problem" name="new problem" value="new problem"/> </br>
 </div>
 <script type="text/javascript" src="support/jquery-1.7.2.js"></script>
-<script type="text/javascript" src="../Blob.js/Blob.js"></script>
-<script type="text/javascript" src="../FileSaver.js/FileSaver.js"></script>
+<script type="text/javascript" src="../blob_js.js"></script>
+<script type="text/javascript" src="../filesaver_js.js"></script>
 <script type="text/javascript" src="../build/mathquill-basic.js"></script>
 <script type="text/javascript">
 MathQuill.interfaceVersion(1);
@@ -71,8 +71,18 @@ var mathQuillOpts = {
 
 // assumes the assignment-container div is empty, adds the html for giving
 // the assignment a name
-function newAssignment() {
+function newAssignment(assignmentName) {
+    if (assignmentName == undefined || assignmentName == null || assignmentName == '') {
+        assignmentName = 'Untitled Assignment';
+    }
+    var assignmentNameHTML = 
+'Assignment Name <input type="text" id="assignment-name-text" name="assignment name" value="' + assignmentName + '"/>' + 
+'<input type="submit" id="save-assignment" name="save assignment" value="save assignment"/> </br>';
+
     $('#assignment-container').append(assignmentNameHTML);
+    $('#save-assignment').click(function() {
+        saveAssignment();
+    });
 }
 
 // http://www.htmlgoodies.com/beyond/javascript/read-text-files-using-the-javascript-filereader.html
@@ -84,7 +94,7 @@ function readSingleFile(evt) {
         var r = new FileReader();
         r.onload = function(e) { 
             var contents = e.target.result;
-            openAssignment(contents);  
+            openAssignment(contents, f.name);  
         }
         r.readAsText(f);
     } else { 
@@ -92,14 +102,14 @@ function readSingleFile(evt) {
     }
 }
 
-function openAssignment(serializedDoc) {
+function openAssignment(serializedDoc, filename) {
     if (!window.confirm("Discard your current work and open the selected document?")) { 
         return; 
     }
     $('#assignment-container').empty();
-    problems = Array();
-    newAssignment();
     var assignment = JSON.parse(serializedDoc);
+    problems = Array();
+    newAssignment(filename.replace(/\.[^/.]+$/, ""));
     assignment.forEach(function(problem, index, array) {
         newProblem(false);
         var newProblemWrapper = problems[problems.length - 1];
@@ -148,9 +158,6 @@ function createShortcutKeyHandler(problemWrapper) {
         }
     }
 }
-
-var assignmentNameHTML = 'Assignment Name <input type="text" id="assignment-name-text" name="assignment name" value="Untitled Assignment"/>' + 
-'<input type="submit" id="save-assignment" name="save assignment" value="save assignment"/> </br>';
 
 var newProblemHtml = 
 '<div class="problem-container" style="float:none;overflow: hidden"> <!-- container for nav an equation list -->' +
@@ -280,9 +287,6 @@ $(function() {
     MathQuill.StaticMath($('.mathquill-static-math')[0]);
     $('#new-problem').click(function() {
         newProblem(true);
-    });
-    $('#save-assignment').click(function() {
-        saveAssignment();
     });
     $('#open-file-input').change(readSingleFile);
 });
