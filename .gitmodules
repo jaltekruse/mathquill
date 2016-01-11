@@ -1,0 +1,6 @@
+[submodule "FileSaver.js"]
+	path = FileSaver.js
+	url = https://github.com/eligrey/FileSaver.js.git
+[submodule "Blob.js"]
+	path = Blob.js
+	url = https://github.com/eligrey/Blob.js.git

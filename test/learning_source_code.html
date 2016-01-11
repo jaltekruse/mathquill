@@ -8,6 +8,25 @@
 
 <link rel="stylesheet" type="text/css" href="support/home.css">
 <link rel="stylesheet" type="text/css" href="../build/mathquill.css">
+<style>
+div.problem-container {
+    background-color:#DDEDFC;
+    margin: 15px 15px 15px 15px;
+    padding: 15px 15px 15px 15px;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
+span.solution-step {
+    margin: 5px 10px 10px 10px;
+}
+
+#assignment-container {
+    background-color:#EEFFFF;
+    margin: 15px 15px 15px 15px;
+    padding: 15px 15px 15px 15px;
+    box-shadow: 0 10px 6px -6px #777;
+}
+</style>
 
 </head>
 <body>
@@ -25,33 +44,23 @@ the "next step" botton to copy your expression or equation and edit it on the ne
 <p> For faster usage, note the keyboard shortcuts given on each button </p>
 <p> For example, try typing to following expression and solving for x:
 
-<span class="mathquill-static-math" >\frac{1}{x-4}+\frac{2}{x^2-16}=\frac{3}{x+4}</span>
+<span class="mathquill-static-math" >\frac{1}{x-4}+\frac{2}{x^2-16}=\frac{3}{x+4}</span><br>
 
-<div> <!-- container for nav an equation list -->
+Open Assignment <input type="file" id="open-file-input" /> <br/><br/>
 
-<div style="float:left"><!-- container for buttons -->
-<p> Actions </p>
-<input type="submit" id="next-step" name="next step" value="next step (ctrl-e)"/> <br>
-<input type="submit" id="undo-step" name="undo step" value="undo step (ctrl-z)"/> <br>
-<input type="submit" id="redo-step" name="redo step" value="redo step (ctrl-shift-z)"/> </br>
-</div>
-<!-- div to store the steps in the solution -->
-<div style="float:left" id="equation-list">
-<p> List of expressions </p>
-<span class="solution-step"></span><br>
-</div>
-
-</div> <!-- end of one problem container -->
+<div id="assignment-container"> <!-- container for several problems, each with step-by-step work-->
+</div> <!-- end of assignment container -->
+<br/>
+<input type="submit" id="new-problem" name="new problem" value="new problem"/> </br>
 </div>
 <script type="text/javascript" src="support/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../Blob.js/Blob.js"></script>
+<script type="text/javascript" src="../FileSaver.js/FileSaver.js"></script>
 <script type="text/javascript" src="../build/mathquill-basic.js"></script>
 <script type="text/javascript">
 MathQuill.interfaceVersion(1);
 
-// stack with the redo steps in it, use push/pop to modify
-var savedRedoSteps = Array();
-
-var currentMqSteps = Array();
+var problems = Array();
 
 var mathQuillOpts = {
     // for intuitive navigation of fractions
@@ -60,89 +69,222 @@ var mathQuillOpts = {
     autoSubscriptNumerals: true,
 };
 
-function focusLastStep() {
-    all_spans = $('.solution-step');
-    if (currentMqSteps.length != all_spans.length) alert("internal error, mathquill steps not consistent with DOM");
-    currentMqSteps[all_spans.length - 1].focus();
+// assumes the assignment-container div is empty, adds the html for giving
+// the assignment a name
+function newAssignment() {
+    $('#assignment-container').append(assignmentNameHTML);
 }
 
-function mathquillLast() { 
-    var all_spans = $('.solution-step');
-    var mq = MathQuill.MathField(all_spans[all_spans.length - 1],mathQuillOpts);
-    currentMqSteps.push(mq);
-    mq.reflow();
-}
+// http://www.htmlgoodies.com/beyond/javascript/read-text-files-using-the-javascript-filereader.html
+function readSingleFile(evt) {
+    //Retrieve the first (and only!) File from the FileList object
+    var f = evt.target.files[0]; 
 
-function lastSpan() {
-    var all_spans = $('.solution-step');
-    return all_spans[all_spans.length - 1]
-}
-
-function newStep() {
-    savedRedoSteps = [];
-    var newLatex = currentMqSteps[currentMqSteps.length - 1].latex();
-    $('#equation-list').append('<span class="solution-step">' + newLatex + '</span><br>');
-    mathquillLast();
-    focusLastStep();
-}
-
-function addEquation(newLatex) {
-    $('#equation-list').append('<span class="solution-step">' + newLatex + '</span><br>');
-    mathquillLast();
-    focusLastStep();
-}
-
-function redoStep() {
-    if (savedRedoSteps.length == 0) return;  
-    addEquation(savedRedoSteps.pop());
-}
-
-function undoLastStep() {
-    var all_spans = $('.solution-step');
-    // do not leave users without a box to type in
-    if (all_spans.length == 1) return;
-    var lastSpanEl = lastSpan();
-    lastStepMq = currentMqSteps.pop();
-    savedRedoSteps.push(lastStepMq.latex());
-    $('#equation-list').get(0).removeChild(lastSpanEl);
-    // remove the <br> tag
-    $('#equation-list br').last().remove();
-    focusLastStep();
-}
-
-$(document).keypress(0 /* ignored */,function(e) {
-    // undo/redo, ctrl-z/ctrl-shift-z
-    if ((e.which == 122 || e.which == 90) && e.ctrlKey) {
-        if (e.shiftKey) {
-            redoStep();
+    if (f) {
+        var r = new FileReader();
+        r.onload = function(e) { 
+            var contents = e.target.result;
+            openAssignment(contents);  
         }
-        else {
-            undoLastStep();
+        r.readAsText(f);
+    } else { 
+        alert("Failed to load file");
+    }
+}
+
+function openAssignment(serializedDoc) {
+    if (!window.confirm("Discard your current work and open the selected document?")) { 
+        return; 
+    }
+    $('#assignment-container').empty();
+    problems = Array();
+    newAssignment();
+    var assignment = JSON.parse(serializedDoc);
+    assignment.forEach(function(problem, index, array) {
+        newProblem(false);
+        var newProblemWrapper = problems[problems.length - 1];
+        newProblemWrapper.setProblemNumber(problem.problemNumber);
+        problem.steps.forEach(function(step, stepIndex, stepArray) {
+            setTimeout(function() {
+                newProblemWrapper.addEquation(step);
+            }, 50);
+        });
+    });
+}
+
+function serializeAssignment() {
+    var outputProblems = [];
+    problems.forEach(function(problem, index, array) {
+        outputProblems.push( {
+            problemNumber : problem.problemNumber(),
+            steps : problem.latexForAllSteps()
+        }); 
+    });
+    return outputProblems;
+}
+
+function saveAssignment() {
+    var blob = new Blob([JSON.stringify(serializeAssignment())], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, $('#assignment-name-text').val() + '.math'); 
+}
+
+function createShortcutKeyHandler(problemWrapper) {
+    return function(e) {
+        // undo/redo, ctrl-z/ctrl-shift-z
+        if ((e.which == 122 || e.which == 90) && e.ctrlKey) {
+            if (e.shiftKey) {
+                problemWrapper.redoStep();
+            }
+            else {
+                problemWrapper.undoLastStep();
+            }
+        }
+
+        // 101 is the keycode for he e key, 69 for capital e
+        // I think some browsers send capital letters, so just
+        // checking for that as well
+        if ((e.which == 101 || e.which == 69) && e.ctrlKey) {
+            problemWrapper.newStep();
         }
     }
+}
 
-    // 101 is the keycode for he e key, 69 for capital e
-    // I think some browsers send capital letters, so just
-    // checking for that as well
-    if ((e.which == 101 || e.which == 69) && e.ctrlKey) {
-        newStep();
+var assignmentNameHTML = 'Assignment Name <input type="text" id="assignment-name-text" name="assignment name" value="Untitled Assignment"/>' + 
+'<input type="submit" id="save-assignment" name="save assignment" value="save assignment"/> </br>';
+
+var newProblemHtml = 
+'<div class="problem-container" style="float:none;overflow: hidden"> <!-- container for nav an equation list -->' +
+'<div>Problem number <input type="text" class="problem-number"/></div>' +
+'<div style="float:left"><!-- container for buttons -->' +
+'<p> Actions </p>' +
+'<input type="submit" class="next-step" name="next step" value="next step (ctrl-e)"/> <br>' +
+'<input type="submit" class="undo-step" name="undo step" value="undo step (ctrl-z)"/> <br>' +
+'<input type="submit" class="redo-step" name="redo step" value="redo step (ctrl-shift-z)"/> </br>' +
+'</div>' +
+'<!-- div to store the steps in the solution -->' +
+'<div style="float:left" class="equation-list">' +
+'<p> List of expressions </p>' +
+'</div>' + 
+'</div> <!-- end of one problem container -->';
+
+function newProblem(insertEmptyStep) {
+    var newProblemDiv = $(newProblemHtml);
+    $('#assignment-container').append(newProblemDiv);
+    // object to hold background state as well as DOM references for the
+    // new problem
+    var newProblemWrapper = (function() {
+        // stack with the redo steps in it, use push/pop to modify
+        var savedRedoSteps = [];
+        // hold references to the mathquill objects for each step
+        // (it is not possible to re-mathquillify a DOM element, so
+        // they must be tracked after creation to use mathquill methods)
+        var currentMqSteps = [];
+        var problemWrapperDiv = newProblemDiv;
+        
+        return { 
+            focusLastStep : function() {
+                all_spans = problemWrapperDiv.find('.solution-step');
+                if (currentMqSteps.length != all_spans.length) alert("internal error, mathquill steps not consistent with DOM");
+                currentMqSteps[all_spans.length - 1].focus();
+            },
+            setProblemNumber : function(problemNumber) {
+                var problemNumberText = problemWrapperDiv.find('.problem-number');
+                return problemNumberText.val(problemNumber);
+            },
+            // TODO - more efficient, just set this once in the object whenever the text field is modified
+            problemNumber : function() {
+                var problemNumberText = problemWrapperDiv.find('.problem-number');
+                return problemNumberText.val();
+            },
+            latexForAllSteps : function() {
+                var allSteps = [];
+                currentMqSteps.forEach(function(mathField, index, array) {
+                    allSteps.push(mathField.latex());
+                });
+                return allSteps;
+            },
+
+            mathquillLast : function() { 
+                var all_spans = problemWrapperDiv.find('.solution-step');
+                var mq = MathQuill.MathField(all_spans[all_spans.length - 1],mathQuillOpts);
+                currentMqSteps.push(mq);
+                mq.reflow();
+            },
+
+            lastSpan : function() {
+                var all_spans = problemWrapperDiv.find('.solution-step');
+                return all_spans[all_spans.length - 1]
+            },
+
+            newStep : function() {
+                savedRedoSteps = [];
+                var newLatex = currentMqSteps[currentMqSteps.length - 1].latex();
+                var newSpan = $('<span class="solution-step">' + newLatex + '</span><br>');
+                problemWrapperDiv.find('.equation-list').append(newSpan);
+                this.mathquillLast();
+                this.focusLastStep();
+            },
+
+            addEquation : function(newLatex) {
+                var newSpan = $('<span class="solution-step">' + newLatex + '</span><br>');
+                problemWrapperDiv.find('.equation-list').append(newSpan);
+                this.mathquillLast();
+                this.focusLastStep();
+            },
+
+            redoStep : function() {
+                if (savedRedoSteps.length == 0) {
+                    // hitting the button make the text field lose focus
+                    this.focusLastStep();
+                    return;
+                }
+                this.addEquation(savedRedoSteps.pop());
+            },
+
+            undoLastStep :  function () {
+                var all_spans = problemWrapperDiv.find('.solution-step');
+                // do not leave users without a box to type in
+                if (all_spans.length == 1) return;
+                var lastSpanEl = this.lastSpan();
+                lastStepMq = currentMqSteps.pop();
+                savedRedoSteps.push(lastStepMq.latex());
+                problemWrapperDiv.find('.equation-list').get(0).removeChild(lastSpanEl);
+                // remove the <br> tag
+                problemWrapperDiv.find('.equation-list br').last().remove();
+                this.focusLastStep();
+            }
+        }
+    }());
+    problems.push(newProblemWrapper);
+    if (insertEmptyStep) {
+        setTimeout(function() {
+            newProblemWrapper.addEquation('');
+            newProblemWrapper.focusLastStep();
+        }, 50);
     }
-});
+    $(newProblemDiv).keydown(0 /* ignored */, createShortcutKeyHandler(newProblemWrapper));
+    newProblemDiv.find('.next-step').click(function() {
+        newProblemWrapper.newStep();
+    });
+    newProblemDiv.find('.undo-step').click(function() {
+        newProblemWrapper.undoLastStep();
+    });
+    newProblemDiv.find('.redo-step').click(function() {
+        newProblemWrapper.redoStep();
+    });
+}
 
-$('#next-step').click(function() {
-    newStep();
-});
-$('#undo-step').click(function() {
-    undoLastStep();
-});
-$('#redo-step').click(function() {
-    redoStep();
-});
 $(function() {
-    //$('#equation-list').append('<span class="solution-step"></span><br>');
-    mathquillLast();
-    focusLastStep();
+    newAssignment();
+    newProblem(true);
     MathQuill.StaticMath($('.mathquill-static-math')[0]);
+    $('#new-problem').click(function() {
+        newProblem(true);
+    });
+    $('#save-assignment').click(function() {
+        saveAssignment();
+    });
+    $('#open-file-input').change(readSingleFile);
 });
 
 </script>
