@@ -1,4 +1,20 @@
 <!DOCTYPE html>
+<!--    
+    This file is part of OpenNotebook-Web
+
+    OpenNotebook-Web is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenNotebook-Web is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with OpenNotebook-Web.  If not, see <http://www.gnu.org/licenses/>. 
+-->
 <html>
 <head>
 
@@ -9,6 +25,14 @@
 <link rel="stylesheet" type="text/css" href="support/home.css">
 <link rel="stylesheet" type="text/css" href="../build/mathquill.css">
 <style>
+
+div.problem-summary-container {
+    background-color:#D1EDFC;
+    margin: 15px 15px 15px 15px;
+    padding: 15px 15px 15px 15px;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
 div.problem-container {
     background-color:#DDEDFC;
     margin: 15px 15px 15px 15px;
@@ -36,7 +60,7 @@ span.solution-step {
 
 <h1><a href="http://mathquill.github.com">MathQuill</a>-based step-by-step equation editor</h1>
 
-<p>Use the box below to write and equation. When you want to modify it to solve your math problem click
+<p>Use the box below to write an equation. When you want to modify it to solve your math problem click
 the "next step" botton to copy your expression or equation and edit it on the next line to show your work. </p>
 
 <p> Undo and redo buttons can be used to edit your work.</p>
@@ -45,6 +69,8 @@ the "next step" botton to copy your expression or equation and edit it on the ne
 <p> For example, try typing to following expression and solving for x:
 
 <span class="mathquill-static-math" >\frac{1}{x-4}+\frac{2}{x^2-16}=\frac{3}{x+4}</span><br>
+
+Open Student Assignments <input type="file" id="open-student-submissions-input" /> <br/><br/>
 
 Open Assignment <input type="file" id="open-file-input" /> <br/><br/>
 
@@ -57,229 +83,10 @@ Open Assignment <input type="file" id="open-file-input" /> <br/><br/>
 <script type="text/javascript" src="../blob_js.js"></script>
 <script type="text/javascript" src="../filesaver_js.js"></script>
 <script type="text/javascript" src="../build/mathquill-basic.js"></script>
+<script type="text/javascript" src="../Stuk-jszip-82ceacc/dist/jszip.js"></script>
+<script type="text/javascript" src="assignment.js"></script>
+<script type="text/javascript" src="problem.js"></script>
 <script type="text/javascript">
-MathQuill.interfaceVersion(1);
-
-var problems = Array();
-
-var mathQuillOpts = {
-    // for intuitive navigation of fractions
-    leftRightIntoCmdGoes: 'up',
-    autoCommands: 'pi theta sqrt sum',
-    autoSubscriptNumerals: true,
-};
-
-// assumes the assignment-container div is empty, adds the html for giving
-// the assignment a name
-function newAssignment(assignmentName) {
-    if (assignmentName == undefined || assignmentName == null || assignmentName == '') {
-        assignmentName = 'Untitled Assignment';
-    }
-    var assignmentNameHTML = 
-'Assignment Name <input type="text" id="assignment-name-text" name="assignment name" value="' + assignmentName + '"/>' + 
-'<input type="submit" id="save-assignment" name="save assignment" value="save assignment"/> </br>';
-
-    $('#assignment-container').append(assignmentNameHTML);
-    $('#save-assignment').click(function() {
-        saveAssignment();
-    });
-}
-
-// http://www.htmlgoodies.com/beyond/javascript/read-text-files-using-the-javascript-filereader.html
-function readSingleFile(evt) {
-    //Retrieve the first (and only!) File from the FileList object
-    var f = evt.target.files[0]; 
-
-    if (f) {
-        var r = new FileReader();
-        r.onload = function(e) { 
-            var contents = e.target.result;
-            openAssignment(contents, f.name);  
-        }
-        r.readAsText(f);
-    } else { 
-        alert("Failed to load file");
-    }
-}
-
-function openAssignment(serializedDoc, filename) {
-    if (!window.confirm("Discard your current work and open the selected document?")) { 
-        return; 
-    }
-    $('#assignment-container').empty();
-    var assignment = JSON.parse(serializedDoc);
-    problems = Array();
-    newAssignment(filename.replace(/\.[^/.]+$/, ""));
-    assignment.forEach(function(problem, index, array) {
-        newProblem(false);
-        var newProblemWrapper = problems[problems.length - 1];
-        newProblemWrapper.setProblemNumber(problem.problemNumber);
-        problem.steps.forEach(function(step, stepIndex, stepArray) {
-            setTimeout(function() {
-                newProblemWrapper.addEquation(step);
-            }, 50);
-        });
-    });
-}
-
-function serializeAssignment() {
-    var outputProblems = [];
-    problems.forEach(function(problem, index, array) {
-        outputProblems.push( {
-            problemNumber : problem.problemNumber(),
-            steps : problem.latexForAllSteps()
-        }); 
-    });
-    return outputProblems;
-}
-
-function saveAssignment() {
-    var blob = new Blob([JSON.stringify(serializeAssignment())], {type: "text/plain;charset=utf-8"});
-    saveAs(blob, $('#assignment-name-text').val() + '.math'); 
-}
-
-function createShortcutKeyHandler(problemWrapper) {
-    return function(e) {
-        // undo/redo, ctrl-z/ctrl-shift-z
-        if ((e.which == 122 || e.which == 90) && e.ctrlKey) {
-            if (e.shiftKey) {
-                problemWrapper.redoStep();
-            }
-            else {
-                problemWrapper.undoLastStep();
-            }
-        }
-
-        // 101 is the keycode for he e key, 69 for capital e
-        // I think some browsers send capital letters, so just
-        // checking for that as well
-        if ((e.which == 101 || e.which == 69) && e.ctrlKey) {
-            problemWrapper.newStep();
-        }
-    }
-}
-
-var newProblemHtml = 
-'<div class="problem-container" style="float:none;overflow: hidden"> <!-- container for nav an equation list -->' +
-'<div>Problem number <input type="text" class="problem-number"/></div>' +
-'<div style="float:left"><!-- container for buttons -->' +
-'<p> Actions </p>' +
-'<input type="submit" class="next-step" name="next step" value="next step (ctrl-e)"/> <br>' +
-'<input type="submit" class="undo-step" name="undo step" value="undo step (ctrl-z)"/> <br>' +
-'<input type="submit" class="redo-step" name="redo step" value="redo step (ctrl-shift-z)"/> </br>' +
-'</div>' +
-'<!-- div to store the steps in the solution -->' +
-'<div style="float:left" class="equation-list">' +
-'<p> List of expressions </p>' +
-'</div>' + 
-'</div> <!-- end of one problem container -->';
-
-function newProblem(insertEmptyStep) {
-    var newProblemDiv = $(newProblemHtml);
-    $('#assignment-container').append(newProblemDiv);
-    // object to hold background state as well as DOM references for the
-    // new problem
-    var newProblemWrapper = (function() {
-        // stack with the redo steps in it, use push/pop to modify
-        var savedRedoSteps = [];
-        // hold references to the mathquill objects for each step
-        // (it is not possible to re-mathquillify a DOM element, so
-        // they must be tracked after creation to use mathquill methods)
-        var currentMqSteps = [];
-        var problemWrapperDiv = newProblemDiv;
-        
-        return { 
-            focusLastStep : function() {
-                all_spans = problemWrapperDiv.find('.solution-step');
-                if (currentMqSteps.length != all_spans.length) alert("internal error, mathquill steps not consistent with DOM");
-                currentMqSteps[all_spans.length - 1].focus();
-            },
-            setProblemNumber : function(problemNumber) {
-                var problemNumberText = problemWrapperDiv.find('.problem-number');
-                return problemNumberText.val(problemNumber);
-            },
-            // TODO - more efficient, just set this once in the object whenever the text field is modified
-            problemNumber : function() {
-                var problemNumberText = problemWrapperDiv.find('.problem-number');
-                return problemNumberText.val();
-            },
-            latexForAllSteps : function() {
-                var allSteps = [];
-                currentMqSteps.forEach(function(mathField, index, array) {
-                    allSteps.push(mathField.latex());
-                });
-                return allSteps;
-            },
-
-            mathquillLast : function() { 
-                var all_spans = problemWrapperDiv.find('.solution-step');
-                var mq = MathQuill.MathField(all_spans[all_spans.length - 1],mathQuillOpts);
-                currentMqSteps.push(mq);
-                mq.reflow();
-            },
-
-            lastSpan : function() {
-                var all_spans = problemWrapperDiv.find('.solution-step');
-                return all_spans[all_spans.length - 1]
-            },
-
-            newStep : function() {
-                savedRedoSteps = [];
-                var newLatex = currentMqSteps[currentMqSteps.length - 1].latex();
-                var newSpan = $('<span class="solution-step">' + newLatex + '</span><br>');
-                problemWrapperDiv.find('.equation-list').append(newSpan);
-                this.mathquillLast();
-                this.focusLastStep();
-            },
-
-            addEquation : function(newLatex) {
-                var newSpan = $('<span class="solution-step">' + newLatex + '</span><br>');
-                problemWrapperDiv.find('.equation-list').append(newSpan);
-                this.mathquillLast();
-                this.focusLastStep();
-            },
-
-            redoStep : function() {
-                if (savedRedoSteps.length == 0) {
-                    // hitting the button make the text field lose focus
-                    this.focusLastStep();
-                    return;
-                }
-                this.addEquation(savedRedoSteps.pop());
-            },
-
-            undoLastStep :  function () {
-                var all_spans = problemWrapperDiv.find('.solution-step');
-                // do not leave users without a box to type in
-                if (all_spans.length == 1) return;
-                var lastSpanEl = this.lastSpan();
-                lastStepMq = currentMqSteps.pop();
-                savedRedoSteps.push(lastStepMq.latex());
-                problemWrapperDiv.find('.equation-list').get(0).removeChild(lastSpanEl);
-                // remove the <br> tag
-                problemWrapperDiv.find('.equation-list br').last().remove();
-                this.focusLastStep();
-            }
-        }
-    }());
-    problems.push(newProblemWrapper);
-    if (insertEmptyStep) {
-        setTimeout(function() {
-            newProblemWrapper.addEquation('');
-            newProblemWrapper.focusLastStep();
-        }, 50);
-    }
-    $(newProblemDiv).keydown(0 /* ignored */, createShortcutKeyHandler(newProblemWrapper));
-    newProblemDiv.find('.next-step').click(function() {
-        newProblemWrapper.newStep();
-    });
-    newProblemDiv.find('.undo-step').click(function() {
-        newProblemWrapper.undoLastStep();
-    });
-    newProblemDiv.find('.redo-step').click(function() {
-        newProblemWrapper.redoStep();
-    });
-}
 
 $(function() {
     newAssignment();
@@ -289,6 +96,7 @@ $(function() {
         newProblem(true);
     });
     $('#open-file-input').change(readSingleFile);
+    $('#open-student-submissions-input').change(studentSubmissionsZip);
 });
 
 </script>

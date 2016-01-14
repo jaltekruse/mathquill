@@ -136,8 +136,44 @@ Work on 1/10/2015
         - total expected time 30 mins, expected completion 9:00
         
     - load save file
+        - done
+        - needed to put in a timeout hack to fix multiple MathFields being selected
+          when I generated then programmatically and called focus on each as they 
+          were added (reusing code from the buttons/key events)
     - teacher grading
+        - time estimate, 40 mins, expected completion 8:00
+        - make 3 student assignments, zip them manually
+        - create teacher grading page, similar to student assignment page
+            - teachers can enter problem numbers next to expressions representing final answers
+              for problems
+            - they can omit problem numbers where manual grading is needed
+                - will be more useful once students can do things other than manipulate equations
+                    - type text
+                    - draw diagrams
+                    - draw/manipulate graphs
+                    - create/fill in tables
         - https://stuk.github.io/jszip/
+
+--------------
+1/12/2015
+--------------
+- finish teacher grading
+    - read contents of zip files
+    - re-use assignment interface for answer key
+        - steps are instead used to denote several answers
+        - might be worth it to implement basic correction 'modes'
+            - all answers must be present
+            - one of many correct answers
+            - n of many answers (example, 3 of 5 possible correct answers must be provided)
+    - generate teacher summary page with just incorrect work
+        - can make step static math rather than editable fields
+        - provide a box for feedback and another for partial credit
+        - ask for default points per problem
+            - allow them to override total points for each problem while grading
+            - as well as individual student scores
+    - time estimate, basic answer check
+        - single answer for now, need to decide on student experience for muliple answers
+        - 15 mins, expected finish 6:45
      
     - possible next steps
         - allow for multiple problems to be completed on a single page
