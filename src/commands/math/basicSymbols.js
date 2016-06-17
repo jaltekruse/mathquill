@@ -56,11 +56,28 @@ optionProcessors.autoCommands = function(cmds) {
   return dict;
 };
 
+Options.p.autoFunctionize = { };
+optionProcessors.autoFunctionize = function(cmds) {
+  if (!/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
+    throw '"'+cmds+'" not a space-delimited list of only letters';
+  }
+  var list = cmds.split(' '), dict = {}, maxLength = 0;
+  for (var i = 0; i < list.length; i += 1) {
+    var cmd = list[i];
+    if (cmd.length < 2) {
+      throw 'autofunction "'+cmd+'" not minimum length of 2';
+    }
+    dict[cmd] = 1;
+  }
+  return dict;
+};
+
 var Letter = P(Variable, function(_, super_) {
   _.init = function(ch) { return super_.init.call(this, this.letter = ch); };
   _.createLeftOf = function(cursor) {
     super_.createLeftOf.apply(this, arguments);
     var autoCmds = cursor.options.autoCommands, maxLength = autoCmds._maxLength;
+    var autoFuncs = cursor.options.autoFunctionize;
     if (maxLength > 0) {
       // want longest possible autocommand, so join together longest
       // sequence of letters
@@ -76,6 +93,9 @@ var Letter = P(Variable, function(_, super_) {
           Fragment(l, this).remove();
           cursor[L] = l[L];
           return LatexCmds[str](str).createLeftOf(cursor);
+        } else if (autoFuncs.hasOwnProperty(str)) {
+          super_.createLeftOf.apply(this, arguments);
+          return CharCmds['(']('(').createLeftOf(cursor);
         }
         str = str.slice(1);
       }
