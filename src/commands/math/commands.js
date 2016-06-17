@@ -811,6 +811,7 @@ var Embed = LatexCmds.embed = P(Symbol, function(_, super_) {
   };
 });
 
+//allow addition of new commands via config
 //cmds is object: {symbol:[symboltype, latex, entity]}
 //where symboltype is "VanillaSymbol", "BinaryOperator", or "Variable"
 optionProcessors.addCommands = function(cmds) {	
