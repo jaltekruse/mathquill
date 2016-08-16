@@ -15,6 +15,10 @@ The configuration options object is of the following form:
   substituteTextarea: function() {
     return document.createElement('textarea');
   },
+  strictOperatorSelection: {
+    prefixOperators: [‘-‘, ‘\\pm ‘],
+    binaryOperators: [‘+’, ‘=‘]
+  },
   handlers: {
     edit: function(mathField) { ... },
     upOutOf: function(mathField) { ... },
@@ -89,6 +93,9 @@ Just like [`autoCommands`](#autocommands) above, this takes a string formatted a
 
 For example, [Desmos](https://www.desmos.com/calculator) substitutes `<span tabindex=0></span>` on iOS to suppress the built-in virtual keyboard in favor of a custom math keypad that calls the MathQuill API. Unfortunately there's no universal [check for a virtual keyboard](http://stackoverflow.com/q/2593139/362030) or [way to detect a touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/), and even if you could, a touchscreen ≠ virtual keyboard (Windows 8 and ChromeOS devices have both physical keyboards and touchscreens and iOS and Android devices can have Bluetooth keyboards). Desmos currently sniffs the user agent for iOS, so Bluetooth keyboards just don't work in Desmos on iOS. The tradeoffs are up to you.
 
+## strictOperatorSelection
+
+`strictOperatorSelection` allows a user specify operators that they want to bind to their operands during selection. When making a cursor selection, a selected prefix operator will include its right sibling in the selection, and a selected binary operator will include its left and right siblings in the selection. This approach to selection can enforce an idea of "mathematically meaningful selection," that is, that operators should include their operands in a selection so the selection includes a representation of their role in the mathematical context.
 
 
 # Handlers

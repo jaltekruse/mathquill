@@ -227,6 +227,73 @@ var Cursor = P(Point, function(_) {
     if (leftEnd instanceof Point) leftEnd = leftEnd[R];
     if (rightEnd instanceof Point) rightEnd = rightEnd[L];
 
+		// adjust selections for strict operators
+		var strictOperators = this.options.strictOperatorSelection;
+    if (strictOperators !== undefined) {
+      var isPrefixOp = function(ctrlSeq) {
+        return strictOperators.prefixOperators &&
+          strictOperators.prefixOperators.indexOf(ctrlSeq) > -1;
+      };
+
+      var isBinaryOp = function(ctrlSeq) {
+        return strictOperators.binaryOperators &&
+          strictOperators.binaryOperators.indexOf(ctrlSeq) > -1;
+      };
+
+      var isStrictOp = function(ctrlSeq) {
+        return isPrefixOp(ctrlSeq) || isBinaryOp(ctrlSeq);
+      };
+
+      // returns the element to use for looking for siblings
+      // usually the element itself, but if the element has no siblings and its grandparent is a class or textcolor command, returns the wrapper instead
+      var eltForSiblings = function(elt) {
+        if (elt[L] || elt[R]) return elt
+        else {
+          var gramp = elt.parent.parent;
+          if (gramp && (gramp.ctrlSeq === 'class' || gramp.ctrlSeq === 'textcolor')) return gramp;
+        }
+
+        return elt;
+      };
+
+      // returns the element to use for figuring out whether this element is an operator
+      // usually the element itself, but if the element is a class or textcolor command wrapping one thing, returns what is being wrapped
+      var eltForOp = function(elt) {
+        if (elt.ctrlSeq === 'class' || elt.ctrlSeq === 'textcolor') {
+          var innerBlock = elt.blocks[0];
+          if (innerBlock.ends[L] === innerBlock.ends[R]) return innerBlock.ends[L];
+        }
+        return elt;
+      };
+
+      // grabs a sibling in the specified direction if one exists
+      // otherwise, returns the element itself
+      var grabSib = function(elt, dir) {
+        return elt[dir] ? elt[dir] : elt;
+      };
+
+      // selecting just a strict operator
+      if (leftEnd === rightEnd && isStrictOp(leftEnd.ctrlSeq)) {
+        // if we're in a class or textcolor wrapper, set left and right ends up to that level
+        leftEnd = rightEnd = eltForSiblings(leftEnd);
+
+        // if the selected operator is binary, grab the left sib
+        if (isBinaryOp(leftEnd.ctrlSeq)) leftEnd = grabSib(leftEnd, L);
+
+        // grab the right sib
+        rightEnd = grabSib(rightEnd, R);
+      }
+
+      // if the selection's left end is a binary operator, grab its left sib
+      if (isBinaryOp(eltForOp(leftEnd).ctrlSeq)) leftEnd = grabSib(leftEnd, L);
+
+      // if the left sib of the selection's left end is a prefix operator, grab it
+      if (isPrefixOp(eltForOp(grabSib(leftEnd, L)).ctrlSeq)) leftEnd = grabSib(leftEnd, L);
+
+      // if the selection's right end is an op, grab its right sib
+      if (isStrictOp(eltForOp(rightEnd).ctrlSeq)) rightEnd = grabSib(rightEnd, R);
+    }
+
     this.hide().selection = lca.selectChildren(leftEnd, rightEnd);
     this.insDirOf(dir, this.selection.ends[dir]);
     this.selectionChanged();
