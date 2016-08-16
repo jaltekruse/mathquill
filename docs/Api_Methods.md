@@ -229,6 +229,14 @@ mathField.typedText('x=-b\\pm \\sqrt b^2 -4ac');
 
 Changes the [configuration](Config.md) of just this math field.
 
+## makeStatic() (\\MathQuillMathField only)
+
+Converts the editable inner field into a static one.
+
+## makeEditable()  (\\MathQuillMathField only)
+
+Converts the static inner field into an editable one.
+
 ## .dropEmbedded(pageX, pageY, options) **[ᴇxᴘᴇʀɪᴍᴇɴᴛᴀʟ](#note-on-experimental-features)**
 
 Insert a custom embedded element at the given coordinates, where `options` is an object like:

@@ -771,7 +771,7 @@ LatexCmds.editable = // backcompat with before cfd3620 on #233
 LatexCmds.MathQuillMathField = P(MathCommand, function(_, super_) {
   _.ctrlSeq = '\\MathQuillMathField';
   _.htmlTemplate =
-      '<span class="mq-editable-field">'
+      '<span>'
     +   '<span class="mq-root-block">&0</span>'
     + '</span>'
   ;
@@ -782,13 +782,23 @@ LatexCmds.MathQuillMathField = P(MathCommand, function(_, super_) {
       .map(function(name) { self.name = name; }).or(succeed())
       .then(super_.parser.call(self));
   };
+  _.makeStatic = function() {
+    ctrlr.editable = false;
+    root.blur();
+    ctrlr.unbindEditablesEvents();
+    this.jQ.removeClass('mq-editable-field');
+  };
+  _.makeEditable = function() {
+    ctrlr.editable = true;
+    ctrlr.editablesTextareaEvents();
+    ctrlr.cursor.insAtRightEnd(ctrlr.root);
+    this.jQ.addClass('mq-editable-field');
+  };
   _.finalizeTree = function(options) {
     var ctrlr = Controller(this.ends[L], this.jQ, options);
     ctrlr.KIND_OF_MQ = 'MathField';
-    ctrlr.editable = true;
     ctrlr.createTextarea();
-    ctrlr.editablesTextareaEvents();
-    ctrlr.cursor.insAtRightEnd(ctrlr.root);
+    this.makeEditable();
     RootBlockMixin(ctrlr.root);
   };
   _.registerInnerField = function(innerFields, MathField) {
