@@ -1,0 +1,40 @@
+{
+  "name": "cli-mathquill",
+  "version": "0.10.1-5",
+  "homepage": "https://github.com/CarnegieLearningWeb/mathquill",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CarnegieLearningWeb/mathquill.git"
+  },
+  "authors": [
+    "Original MathQuill Authors",
+    "Karl Schaefer <kschaefer@carnegielearning.com>",
+    "Andreya Piplica <apiplica@carnegielearning.com>"
+  ],
+  "description": "LaTeX-based editable math fields",
+  "main": [
+    "build/mathquill.js",
+    "build/mathquill.css",
+    "build/font/*"
+  ],
+  "dependencies": {
+    "jquery": "^1.4.3"
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "mathquill",
+    "latex",
+    "math",
+    "editor"
+  ],
+  "license": "MPL-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "src"
+  ]
+}
