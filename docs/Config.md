@@ -37,6 +37,8 @@ If `spaceBehavesLikeTab` is true the keystrokes `{Shift-,}Spacebar` will behave 
 
 The animated demo on <mathquill.com> has this behavior.
 
+ If `spaceBehavesLikeTab` is `'exceptRootBlock'` the keystrokes will behave as true for all blocks that are not the root block.  The root block will simply continue to add spaces and not allow space to escape.  This option allows the entering of mixed fractions in the root block, where true does not.
+
 ## leftRightIntoCmdGoes
 
 This allows you to change the way the left and right keys move the cursor when there are items of different height, like fractions.
