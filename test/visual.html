@@ -125,6 +125,47 @@ $(function() {
 });
 </script>
 
+<h4>Tabbing</h4>
+
+<p><label for="escapeAndOut">Escape and Out</label> <span id="escapeAndOut">x^2 + \frac{x}{3+x} - \sqrt{5}</span></p>
+<p>Tab and Escape should behave the same, escaping out of templates.  At the root, Tab will move to the next focusable.</p>
+
+<script>
+$(function() {
+    MathQuill.MathField($('#escapeAndOut')[0], {
+        spaceBehavesLikeTab: true,
+        leftRightIntoCmdGoes: 'up',
+        restrictMismatchedBrackets: true,
+        sumStartsWithNEquals: true,
+        supSubsRequireOperand: true,
+        charsThatBreakOutOfSupSub: '+-=<>',
+        autoSubscriptNumerals: true,
+        autoCommands: 'pi theta sqrt sum',
+        autoOperatorNames: 'only'
+    });
+});
+</script>
+
+<p><label for="escapeAndNextTemplate">Escape and Next Template</label> <span id="escapeAndNextTemplate">x^2 + \frac{x}{3+x} - \sqrt{5}</span></p>
+<p>Tab and Escape should behave the same, escaping out of templates.  At the root, Tab will move to the next template or focusable when at an end.</p>
+
+<script>
+$(function() {
+    MathQuill.MathField($('#escapeAndNextTemplate')[0], {
+        spaceBehavesLikeTab: true,
+        leftRightIntoCmdGoes: 'up',
+        restrictMismatchedBrackets: true,
+        sumStartsWithNEquals: true,
+        supSubsRequireOperand: true,
+        charsThatBreakOutOfSupSub: '+-=<>',
+        autoSubscriptNumerals: true,
+        autoCommands: 'pi theta sqrt sum',
+        autoOperatorNames: 'only',
+        tabAction: 'escapeAndNextTemplate'
+    });
+});
+</script>
+
 <h3>Up/Down seeking and caching</h3>
 
 <p>

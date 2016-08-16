@@ -154,12 +154,26 @@ Controller.open(function(_) {
     prayDirection(dir);
     var cursor = this.cursor;
 
-    // only prevent default of Tab if not in the root editable
-    if (cursor.parent !== this.root) e.preventDefault();
-
     // want to be a noop if in the root editable (in fact, Tab has an unrelated
     // default browser action if so)
-    if (cursor.parent === this.root) return;
+    if (cursor.parent === this.root) {
+        if ((key === 'Tab' || key === 'Shift-Tab') && cursor.options.tabAction === 'escapeAndNextTemplate') {
+            for (var n = cursor[dir]; n; n = n[dir]) {
+                if (!n.isEmpty()) {
+                    // only prevent default of Tab if not continuing in MQ field
+                    e.preventDefault();
+
+                    cursor.insAtDirEnd(-dir, n.ends[-dir]);
+                    return this.notify('move');
+                }
+            }
+        }
+
+        return;
+    }
+
+    // only prevent default of Tab if not continuing in MQ field
+    e.preventDefault();
 
     cursor.parent.moveOutOf(dir, cursor);
     return this.notify('move');
