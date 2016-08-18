@@ -6,4 +6,5 @@
 # dist
 /build
 /mathquill-*.tgz
+/mathquill-*.zip
 /mathquill.github.com
