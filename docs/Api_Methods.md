@@ -148,6 +148,13 @@ Returns the contents as LaTeX.
 
 This will render the argument as LaTeX in the MathQuill instance.
 
+## .setSelection(startPoint, endPoint)
+
+Selects the contents using points in the page's coordinate system.  This simulates a mouse start and end selection.
+
+## .clearSelection()
+
+Clears the selection.  This may be a mouse selection via `setSelection` or a cursor selection (`select`) in an Editable MathField.
 
 
 # Editable MathField methods
@@ -181,14 +188,6 @@ mathField.cmd('\\sqrt'); // writes a square root command at the cursor position
 ## .select()
 
 Selects the contents (just like [on `textarea`s](http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-48880622) and [on `input`s](http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-34677168)).
-
-## .select(startPoint, endPoint)
-
-Selects the contents using points in the page's coordinate system.  This simulates a mouse start and end selection.
-
-## .clearSelection()
-
-Clears the selection.
 
 ## .moveToLeftEnd(), .moveToRightEnd()
 
