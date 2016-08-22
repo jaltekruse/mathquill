@@ -228,7 +228,9 @@ var Cursor = P(Point, function(_) {
     if (rightEnd instanceof Point) rightEnd = rightEnd[L];
 
 		// adjust selections for strict operators
-		var strictOperators = this.options.strictOperatorSelection;
+    // options can apparently be undefined; this behavior seems broken, but not
+    // sure where to fix it; adding safeguard here
+		var strictOperators = this.options && this.options.strictOperatorSelection;
     if (strictOperators !== undefined) {
       var isPrefixOp = function(ctrlSeq) {
         return strictOperators.prefixOperators &&
