@@ -108,7 +108,7 @@ suite('CSS', function() {
     assert.equal(spans.length, 8, 'PlusMinus expression parsed incorrectly');
 
     assertUnaryOperator(2, '\\textcolor{red}{\\class{dummy}{-}}');
-    assertBinaryOperator(7, '\\textcolor{red}{\\class{dummy}{-}}2\\textcolor{green}{\\class{dummy}{+}}');
+    assertBinaryOperator(6, '\\textcolor{red}{\\class{dummy}{-}}2\\textcolor{green}{\\class{dummy}{+}}');
 
     $(mq.el()).remove();
   });
