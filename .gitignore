@@ -1,10 +1,2 @@
-/tmp
-
-# build tools
 /node_modules
-
-# dist
 /build
-/mathquill-*.tgz
-/mathquill-*.zip
-/mathquill.github.com
