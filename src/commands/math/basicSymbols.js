@@ -65,6 +65,25 @@ optionProcessors.autoCommands = function(cmds) {
   return dict;
 };
 
+/** DLMOD **/
+Options.p.autoFunctionize = { _maxLength: 0 };
+optionProcessors.autoFunctionize = function(cmds) {
+  if (!/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
+    throw '"'+cmds+'" not a space-delimited list of only letters';
+  }
+  var list = cmds.split(' '), dict = {}, maxLength = 0;
+  for (var i = 0; i < list.length; i += 1) {
+    var cmd = list[i];
+    if (cmd.length < 2) {
+      throw 'autofunction "'+cmd+'" not minimum length of 2';
+    }
+    dict[cmd] = 1;
+    maxLength = max(maxLength, cmd.length);
+  }
+  dict._maxLength = maxLength;
+  return dict;
+};
+
 var Letter = P(Variable, function(_, super_) {
   _.init = function(ch) { return super_.init.call(this, this.letter = ch); };
   _.createLeftOf = function(cursor) {
@@ -85,6 +104,26 @@ var Letter = P(Variable, function(_, super_) {
           Fragment(l, this).remove();
           cursor[L] = l[L];
           return LatexCmds[str](str).createLeftOf(cursor);
+        }
+        str = str.slice(1);
+      }
+    }
+    /** DLMOD **/
+    var autoFuncs = cursor.options.autoFunctionize, maxLength = autoFuncs._maxLength;
+    if (maxLength > 0) {
+      // want longest possible autofunc, so join together longest
+      // sequence of letters
+      var str = '', l = this, i = 0;
+      while (l instanceof Letter && i < maxLength) {
+        str = l.letter + str;
+        //break if last letter in sequence
+        if (i>0 && l.ctrlSeq !== l.letter) { break; }
+        l = l[L], i += 1;
+      }
+      // check for an autofunc, going thru substrings longest to shortest
+      while (str.length) {
+      	if (autoFuncs.hasOwnProperty(str)) {
+          return CharCmds['(']('(').createLeftOf(cursor);
         }
         str = str.slice(1);
       }

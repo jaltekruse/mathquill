@@ -91,6 +91,8 @@ var saneKeyboardEvents = (function() {
   return function saneKeyboardEvents(el, handlers) {
     var keydown = null;
     var keypress = null;
+    /** DLMOD **/
+    var usedkeydown = null;
 
     var textarea = jQuery(el);
     var target = jQuery(handlers.container || textarea);
@@ -155,6 +157,9 @@ var saneKeyboardEvents = (function() {
       keydown = e;
       keypress = null;
 
+      /**DLMOD **/
+      usedkeydown = false;
+      
       if (shouldBeSelected) checkTextareaOnce(function(e) {
         if (!(e && e.type === 'focusout') && textarea[0].select) {
           // re-select textarea in case it's an unrecognized key that clears
@@ -162,20 +167,82 @@ var saneKeyboardEvents = (function() {
           textarea[0].select();
         }
       });
+      
+      /** DLMOD **/
+      if (handlers.options.keyboardPassthrough) {
+        var which = e.which || e.keyCode;
+        var keyVal = KEY_VALUES[which];
+       
+		//handle copy/paste keystrokes, control sequences
+		if (e.ctrlKey || (e.originalEvent && e.originalEvent.metaKey)) {
+		  var chr = String.fromCharCode(which);
+		  if (chr=='C') {
+			onSoftCopy();
+			usedkeydown = true;
+		  } else if (chr=='X') {
+			onSoftCut();
+			usedkeydown = true;
+		  } else if (chr=='V') {
+			onSoftPaste();
+			usedkeydown = true;
+		  } else if (chr=='A' || keyVal) {
+			handleKey();
+			usedkeydown = true;
+		  }
+		} else if (keyVal) {
+		  handleKey();
+		  usedkeydown = true;
+		}
+      } else {
+      	handleKey();
+      }
 
-      handleKey();
+      //handleKey();
     }
 
+    /**DLMOD**/
+    function onSoftCopy() {
+      if (handlers.cursor.selection) {
+        window.MathQuillClipboard = handlers.cursor.selection.join('latex');
+      }
+    }
+    function onSoftCut() {
+      if (handlers.cursor.selection) {
+        window.MathQuillClipboard = handlers.cursor.selection.join('latex');
+        handlers.cursor.deleteSelection();
+      }
+    }
+    function onSoftPaste() {
+      if (window.MathQuillClipboard) {
+        handlers.writeLatex(window.MathQuillClipboard);
+      }
+    }
+    
     function onKeypress(e) {
-      // call the key handler for repeated keypresses.
-      // This excludes keypresses that happen directly
-      // after keydown.  In that case, there will be
-      // no previous keypress, so we skip it here
-      if (keydown && keypress) handleKey();
-
-      keypress = e;
-
-      checkTextareaFor(typedText);
+      /**DLMOD**/
+      if (handlers.options.keyboardPassthrough) {
+        var which = e.which || e.keyCode;
+ 
+        if (!usedkeydown) { //prevent second play of handled characters
+          var chr = String.fromCharCode(which);
+          //pass through keypress
+          handlers.typedText(chr);  
+          
+          //log it to prevent onkeyup trigger
+          keypress = e;
+        }	            
+      } else {
+		  /**DLMOD: this stuff is the original code **/
+		  // call the key handler for repeated keypresses.
+		  // This excludes keypresses that happen directly
+		  // after keydown.  In that case, there will be
+		  // no previous keypress, so we skip it here
+		  if (keydown && keypress) handleKey();
+	
+		  keypress = e;
+	
+		  checkTextareaFor(typedText);
+      }
     }
     function onKeyup(e) {
       // Handle case of no keypress event being sent
@@ -225,6 +292,7 @@ var saneKeyboardEvents = (function() {
       // on keydown too, FWIW).
       //
       // And by nifty, we mean dumb (but useful sometimes).
+      console.log(e);
       textarea.focus();
 
       checkTextareaFor(pastedText);
