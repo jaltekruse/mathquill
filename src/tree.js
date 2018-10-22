@@ -79,7 +79,7 @@ var Point = P(function(_) {
  */
 var Node = P(function(_) {
   _[L] = 0;
-  _[R] = 0
+  _[R] = 0;
   _.parent = 0;
 
   var id = 0;

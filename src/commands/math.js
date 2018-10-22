@@ -123,7 +123,7 @@ var MathCommand = P(MathElement, function(_, super_) {
   };
   _.seek = function(pageX, cursor) {
     function getBounds(node) {
-      var bounds = {}
+      var bounds = {};
       bounds[L] = node.jQ.offset().left;
       bounds[R] = bounds[L] + node.jQ.outerWidth();
       return bounds;
@@ -162,7 +162,7 @@ var MathCommand = P(MathElement, function(_, super_) {
         return false;
       }
     });
-  }
+  };
 
   // methods involved in creating and cross-linking with HTML DOM nodes
   /*
@@ -311,7 +311,7 @@ var Symbol = P(MathCommand, function(_, super_) {
   _.moveTowards = function(dir, cursor) {
     cursor.jQ.insDirOf(dir, this.jQ);
     cursor[-dir] = this;
-    cursor[dir] = this[dir];
+    cursor[dir]= this[dir];
   };
   _.deleteTowards = function(dir, cursor) {
     cursor[dir] = this.remove()[dir];
