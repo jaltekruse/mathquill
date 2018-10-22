@@ -396,19 +396,52 @@ LatexCmds.coproduct = bind(SummationNotation,'\\coprod ','&#8720;');
 
 LatexCmds['∫'] =
 LatexCmds['int'] =
-LatexCmds.integral = P(SummationNotation, function(_, super_) {
+LatexCmds.integral = P(Symbol, function(_, super_) {
   _.init = function() {
     var htmlTemplate =
       '<span class="mq-int mq-non-leaf">'
     +   '<big>&int;</big>'
-    +   '<span class="mq-supsub mq-non-leaf">'
-    +     '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>'
-    +     '<span class="mq-sub">&0</span>'
-    +     '<span style="display:inline-block;width:0">&#8203</span>'
-    +   '</span>'
     + '</span>'
     ;
     Symbol.prototype.init.call(this, '\\int ', htmlTemplate);
+  };
+  // FIXME: refactor rather than overriding
+  _.createLeftOf = MathCommand.p.createLeftOf;
+});
+
+// AlgebraKIT: Added definite integral as separate command
+LatexCmds.dint =
+LatexCmds.defint =
+LatexCmds.definiteIntegral = P(SummationNotation, function(_, super_) {
+  _.ctrlSeq = '\\defint';
+  _.init = function() {
+      var htmlTemplate =
+          '<span class="mq-int mq-non-leaf">'
+          +   '<big>&int;</big>'
+          +   '<span class="mq-supsub mq-non-leaf">'
+          +     '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>'
+          +     '<span class="mq-sub">&0</span>'
+          +     '<span style="display:inline-block;width:0">&#8203;</span>'
+          +   '</span>'
+          + '</span>'
+      ;
+      Symbol.prototype.init.call(this, '\\defint ', htmlTemplate);
+  };
+  _.latex = function() {
+      function simplify(latex) {
+          return latex.length === 1 ? latex : '{' + (latex || ' ') + '}';
+      }
+
+      var lower = this.ends[L].latex();
+      var upper = this.ends[R].latex();
+
+      if(lower.length === 0 && upper.length === 0) {  // Parse as indefinite integral
+        return '\\int ';
+      } else {
+        return '\\defint_' + simplify(this.ends[L].latex()) +
+            '^' + simplify(this.ends[R].latex());
+      }
+
   };
   // FIXME: refactor rather than overriding
   _.createLeftOf = MathCommand.p.createLeftOf;
