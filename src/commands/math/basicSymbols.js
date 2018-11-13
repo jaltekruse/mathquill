@@ -52,9 +52,11 @@ optionProcessors.autoCommands = function(cmds) {
   var list = cmds.split(' '), dict = {}, maxLength = 0;
   for (var i = 0; i < list.length; i += 1) {
     var cmd = list[i];
+    /**DLMOD, to allow U as autoCmd 
     if (cmd.length < 2) {
       throw 'autocommand "'+cmd+'" not minimum length of 2';
     }
+    **/
     if (LatexCmds[cmd] === OperatorName) {
       throw '"' + cmd + '" is a built-in operator name';
     }
