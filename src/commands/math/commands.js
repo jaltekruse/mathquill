@@ -982,6 +982,14 @@ LatexCmds.IntervalEnInIn = P(MathCommand, function(_, super_) {
 });
 
 
+LatexCmds.NoSolution = P(MathCommand, function(_, super_) {
+  _.ctrlSeq = '\\NoSolution';
+  _.htmlTemplate = '<span class="mq-text-mode mq-leaf" style="border:2px solid red; border-radius: 2px;">No Solution</span>';
+  _.latex = function() {
+    return 'False';
+  }
+});
+
 
 var DiacriticAbove = P(MathCommand, function(_, super_) {
   _.init = function(ctrlSeq, symbol, textTemplate) {
