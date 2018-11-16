@@ -982,12 +982,26 @@ LatexCmds.IntervalEnInIn = P(MathCommand, function(_, super_) {
 });
 
 
-LatexCmds.NoSolution = P(MathCommand, function(_, super_) {
-  _.ctrlSeq = '\\NoSolution';
-  _.htmlTemplate = '<span class="mq-text-mode mq-leaf" style="border:2px solid red; border-radius: 2px;">No Solution</span>';
+LatexCmds.NoSolutionEn = P(Symbol, function(_, super_) {
+  _.init = function(ctrlSeq, symbol, textTemplate) {
+    var htmlTemplate = '<span class="mq-leaf mq-text-mode mq-text-icon">no solution</span>';
+
+    super_.init.call(this, ctrlSeq, htmlTemplate, textTemplate);
+  };
   _.latex = function() {
     return 'False';
   }
+});
+
+LatexCmds.NoSolutionNl = P(Symbol, function(_, super_) {
+    _.init = function(ctrlSeq, symbol, textTemplate) {
+        var htmlTemplate = '<span class="mq-leaf mq-text-mode mq-text-icon">kan niet</span>';
+
+        super_.init.call(this, ctrlSeq, htmlTemplate, textTemplate);
+    };
+    _.latex = function() {
+        return 'False';
+    }
 });
 
 
