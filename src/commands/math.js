@@ -342,6 +342,58 @@ var BinaryOperator = P(Symbol, function(_, super_) {
   };
 });
 
+
+/**
+ * AlgebraKiT
+ */
+var BlockSymbol = P(Symbol, function(_, super_) {
+  _.init = function(ctrlSeq, symbolText) {
+    let htmlTemplate = '<span class="mq-leaf mq-text-mode mq-text-icon">' +
+        symbolText +
+        '</span>';
+
+    super_.init.call(this, ctrlSeq, htmlTemplate, [symbolText]);
+  }
+});
+
+var IntervalCommand = P(MathCommand, function(_, super_) {
+  _.init = function(ctrlSeq, open, close, delim) {
+    var cmd = this;
+    cmd.intervalOpen = open;
+    cmd.intervalClose = close;
+    cmd.intervalDelim = delim;
+
+    var htmlTemplate =
+        '<span class="mq-scaled">' + open + '</span>'
+      + '<span class="mq-non-leaf">&0</span>'
+      + '<span class="mq-scaled">' + delim + '</span>'
+      + '<span class="mq-non-leaf">&1</span>'
+      + '<span class="mq-scaled">' + close + '</span>';
+
+    var opName = ctrlSeq.startsWith('\\') ? ctrlSeq.substr(1) : ctrlSeq;
+    var textTemplate = [opName + open, delim, close];
+
+    super_.init.call(this, ctrlSeq, htmlTemplate, textTemplate);
+  };
+
+  _.parser = function() {
+    var cmd = this;
+    return latexMathParser.optBlock.then(function(optBlock) {
+      return latexMathParser.block.map(function(block) {
+        var elm = IntervalCommand(cmd.ctrlSeq, cmd.intervalOpen, cmd.intervalClose, cmd.intervalDelim);
+        elm.blocks = [ block, block ];
+        block.adopt(elm, 0, 0);
+        block.adopt(elm, 0, 0);
+        return elm;
+      });
+    }).or(super_.parser.call(this));
+  };
+
+  _.latex = function() {
+    return this.ctrlSeq + '{' + this.ends[L].latex() + '}{' + this.ends[R].latex() + '}';
+  };
+});
+
 /**
  * Children and parent of MathCommand's. Basically partitions all the
  * symbols and operators that descend (in the Math DOM tree) from
