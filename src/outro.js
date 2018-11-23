@@ -11,5 +11,3 @@ for (var key in MQ1) (function(key, val) {
 }(key, MQ1[key]));
 
 }());
-
-module.exports = window.MathQuill;
