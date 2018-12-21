@@ -552,9 +552,9 @@ LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
   };
 });
 
-//MSLO
-//Dutch notation for logarithm: notation like: {}^3 log{9}. 
-//we will use nonstandard latex-like notation: lognl[3]{9}
+// AlgebraKiT
+// Dutch notation for logarithm: notation like: {}^3 log{9}.
+// we will use nonstandard latex-like notation: lognl[3]{9}
 var LogNL =
 LatexCmds.lognl = P(MathCommand, function(_, super_) {
   _.ctrlSeq = '\\lognl';
@@ -766,8 +766,8 @@ var Bracket = P(P(MathCommand, DelimsMixin), function(_, super_) {
     // return node iff it's a matching 1-sided bracket of expected side (if any)
     return node instanceof Bracket && node.side && node.side !== -expectedSide
       && (!opts.restrictMismatchedBrackets
-        || OPP_BRACKS[this.sides[this.side].ch] === node.sides[node.side].ch
-        || { '(': ']', '[': ')' }[this.sides[L].ch] === node.sides[R].ch) && node;
+        || OPP_BRACKS[this.sides[this.side].ch] === node.sides[node.side].ch)
+      && node;
   };
   _.closeOpposing = function(brack) {
     brack.side = 0;
@@ -916,33 +916,44 @@ CharCmds['|'] = bind(Bracket, L, '|', '|', '|', '|');
 // LatexCmds.lVert = bind(Bracket, L, '&#8741;', '&#8741;', '\\lVert ', '\\rVert ');
 // LatexCmds.rVert = bind(Bracket, R, '&#8741;', '&#8741;', '\\lVert ', '\\rVert ');
 
-LatexCmds.left = P(MathCommand, function(_) {
-  _.parser = function() {
+LatexCmds.left = P(MathCommand, function (_) {
+  _.parser = function () {
     var regex = Parser.regex;
     var string = Parser.string;
     var succeed = Parser.succeed;
     var optWhitespace = Parser.optWhitespace;
 
     return optWhitespace.then(regex(/^(?:[([|]|\\\{|\\langle\b|\\lVert\b)/))
-      .then(function(ctrlSeq) {
-        var open = (ctrlSeq.charAt(0) === '\\' ? ctrlSeq.slice(1) : ctrlSeq);
-	if (ctrlSeq=="\\langle") { open = '&lang;'; ctrlSeq = ctrlSeq + ' '; }
-	if (ctrlSeq=="\\lVert") { open = '&#8741;'; ctrlSeq = ctrlSeq + ' '; }
-        return latexMathParser.then(function (block) {
-          return string('\\right').skip(optWhitespace)
-            .then(regex(/^(?:[\])|]|\\\}|\\rangle\b|\\rVert\b)/)).map(function(end) {
-              var close = (end.charAt(0) === '\\' ? end.slice(1) : end);
-	      if (end=="\\rangle") { close = '&rang;'; end = end + ' '; }
-	      if (end=="\\rVert") { close = '&#8741;'; end = end + ' '; }
-              var cmd = Bracket(0, open, close, ctrlSeq, end);
-              cmd.blocks = [ block ];
-              block.adopt(cmd, 0, 0);
-              return cmd;
-            })
-          ;
+        .then(function (ctrlSeq) {
+          var open = (ctrlSeq.charAt(0) === '\\' ? ctrlSeq.slice(1) : ctrlSeq);
+          if (ctrlSeq == "\\langle") {
+            open = '&lang;';
+            ctrlSeq = ctrlSeq + ' ';
+          }
+          if (ctrlSeq == "\\lVert") {
+            open = '&#8741;';
+            ctrlSeq = ctrlSeq + ' ';
+          }
+          return latexMathParser.then(function (block) {
+            return string('\\right').skip(optWhitespace)
+                .then(regex(/^(?:[\])|]|\\\}|\\rangle\b|\\rVert\b)/)).map(function (end) {
+                  var close = (end.charAt(0) === '\\' ? end.slice(1) : end);
+                  if (end == "\\rangle") {
+                    close = '&rang;';
+                    end = end + ' ';
+                  }
+                  if (end == "\\rVert") {
+                    close = '&#8741;';
+                    end = end + ' ';
+                  }
+                  var cmd = Bracket(0, open, close, ctrlSeq, end);
+                  cmd.blocks = [block];
+                  block.adopt(cmd, 0, 0);
+                  return cmd;
+                })
+                ;
+          });
         });
-      })
-    ;
   };
 });
 
