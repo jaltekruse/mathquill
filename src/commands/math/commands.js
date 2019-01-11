@@ -562,9 +562,7 @@ LatexCmds.lognl = P(MathCommand, function(_, super_) {
       '<sup class="mq-lognl mq-non-leaf">&0</sup>'
     + '<span class="mq-scaled">'
     +   '<span class="mq-scaled">log</span>'
-    +   '<span class="mq-paren mq-scaled">(</span>'
     +   '<span class="mq-non-leaf">&1</span>'
-    +   '<span class="mq-paren mq-scaled">)</span>'
     + '</span>'
   ;
   _.parser = function() {
@@ -909,7 +907,7 @@ function bindCharBracketPair(open, ctrlSeq) {
 
 bindCharBracketPair('(');
 // bindCharBracketPair('[');
-// bindCharBracketPair('{', '\\{');
+bindCharBracketPair('{', '\\{');
 // LatexCmds.langle = bind(Bracket, L, '&lang;', '&rang;', '\\langle ', '\\rangle ');
 // LatexCmds.rangle = bind(Bracket, R, '&lang;', '&rang;', '\\langle ', '\\rangle ');
 CharCmds['|'] = bind(Bracket, L, '|', '|', '|', '|');
