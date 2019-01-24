@@ -57,6 +57,11 @@ suite('typing with auto-replaces', function() {
       mq.typedText('$');
       assertLatex('\\$');
     });
+
+    test('\\text followed by command', function() {
+      mq.typedText('\\text{');
+      assertLatex('\\text{\\{}');
+    });
   });
 
   suite('auto-expanding parens', function() {
@@ -470,6 +475,26 @@ suite('typing with auto-replaces', function() {
         assertLatex('\\left(1+2\\right)+\\left(3+4\\right)+5');
         mq.keystroke('Left Left Left Left Backspace');
         assertLatex('\\left(1+2\\right)+3+4+5');
+      });
+
+      test('typing Ctrl-Backspace deletes everything to the left of the cursor', function () {
+        mq.typedText('12345');
+        assertLatex('12345');
+        mq.keystroke('Left Left');
+        mq.keystroke('Ctrl-Backspace');
+        assertLatex('45');
+        mq.keystroke('Ctrl-Backspace');
+        assertLatex('45');
+      });
+
+      test('typing Ctrl-Del deletes everything to the right of the cursor', function () {
+        mq.typedText('12345');
+        assertLatex('12345');
+        mq.keystroke('Left Left');
+        mq.keystroke('Ctrl-Del');
+        assertLatex('123');
+        mq.keystroke('Ctrl-Del');
+        assertLatex('123');
       });
 
       suite('pipes', function() {
