@@ -228,9 +228,10 @@ var Cursor = P(Point, function(_) {
     if (leftEnd instanceof Point) leftEnd = leftEnd[R];
     if (rightEnd instanceof Point) rightEnd = rightEnd[L];
 
-    this.hide().selection = lca.selectChildren(leftEnd, rightEnd);
-    this.insDirOf(dir, this.selection.ends[dir]);
-    this.selectionChanged();
+    this.willModifySelection(function () {
+      this.hide().selection = lca.selectChildren(leftEnd, rightEnd);
+      this.insDirOf(dir, this.selection.ends[dir]);
+    }.bind(this));
     return true;
   };
   _.resetToEnd = function (controller) {
@@ -242,20 +243,22 @@ var Cursor = P(Point, function(_) {
   };
   _.clearSelection = function() {
     if (this.selection) {
-      this.selection.clear();
-      delete this.selection;
-      this.selectionChanged();
+      this.willModifySelection(function () {
+        this.selection.clear();
+        delete this.selection;
+      }.bind(this));
     }
     return this;
   };
   _.deleteSelection = function() {
     if (!this.selection) return;
 
-    this[L] = this.selection.ends[L][L];
-    this[R] = this.selection.ends[R][R];
-    this.selection.remove();
-    this.selectionChanged();
-    delete this.selection;
+    this.willModifySelection(function () {
+      this[L] = this.selection.ends[L][L];
+      this[R] = this.selection.ends[R][R];
+      this.selection.remove();
+      delete this.selection;
+    }.bind(this));
   };
   _.replaceSelection = function() {
     var seln = this.selection;

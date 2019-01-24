@@ -3,18 +3,19 @@ Controller.open(function(_) {
     var ctrlr = this, root = ctrlr.root, cursor = ctrlr.cursor;
     var blurTimeout;
     ctrlr.textarea.focus(function() {
-      updateAria();
-      ctrlr.blurred = false;
-      clearTimeout(blurTimeout);
-      ctrlr.container.addClass('mq-focused');
-      if (!cursor.parent) cursor.insAtRightEnd(root);
-      if (cursor.selection) {
-        cursor.selection.jQ.removeClass('mq-blur');
-        ctrlr.selectionChanged(); //re-select textarea contents after tabbing away and back
-      } else {
-        cursor.show();
-      }
-      ctrlr.setOverflowClasses();
+      ctrlr.willModifySelection(function () {
+        updateAria();
+        ctrlr.blurred = false;
+        clearTimeout(blurTimeout);
+        ctrlr.container.addClass('mq-focused');
+        if (!cursor.parent) cursor.insAtRightEnd(root);
+        if (cursor.selection) {
+          cursor.selection.jQ.removeClass('mq-blur');
+        } else {
+          cursor.show();
+        }
+        ctrlr.setOverflowClasses();
+      });
 
     }).blur(function() {
       if (ctrlr.textareaSelectionTimeout) {

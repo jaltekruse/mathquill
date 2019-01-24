@@ -1,6 +1,8 @@
 suite('Cursor::select()', function() {
   var cursor = Cursor();
-  cursor.selectionChanged = noop;
+  cursor.willModifySelection = function (fn) {
+    fn();
+  };
 
   function assertSelection(A, B, leftEnd, rightEnd) {
     var lca = leftEnd.parent, frag = Fragment(leftEnd, rightEnd || leftEnd);

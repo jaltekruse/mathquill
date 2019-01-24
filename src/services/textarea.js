@@ -17,20 +17,31 @@ Controller.open(function(_) {
     textarea = this.textarea = $(textarea).appendTo(textareaSpan);
 
     var ctrlr = this;
-    ctrlr.cursor.selectionChanged = function() { ctrlr.selectionChanged(); };
+    ctrlr.cursor.willModifySelection = function(fn) { ctrlr.willModifySelection(fn); };
   };
-  _.selectionChanged = function() {
+
+  // wrap any code that might update the selection so that we
+  // can only update the textarea at the very end. For instance,
+  // the select all command (Meta-A) keeps looping and selecting
+  // until everything is selected. We only want to compute the final
+  // latex and update the textarea and selection at the very end.
+  //
+  // this function keeps a counter to track nested calls and only
+  // updates the textarea selection when the outer-most call finishes.
+  _.willModifySelection = function(fn) {
     var ctrlr = this;
 
-    // throttle calls to setTextareaSelection(), because setting textarea.value
-    // and/or calling textarea.select() can have anomalously bad performance:
-    // https://github.com/mathquill/mathquill/issues/43#issuecomment-1399080
-    //
-    // Note, this timeout may be cleared by the blur handler in focusBlur.js
-    if (ctrlr.textareaSelectionTimeout === undefined) {
-      ctrlr.textareaSelectionTimeout = setTimeout(function() {
-        ctrlr.setTextareaSelection();
-      });
+    if (ctrlr.modifySelectionDepth) {
+      ctrlr.modifySelectionDepth += 1
+    } else {
+      ctrlr.modifySelectionDepth = 1;
+    }
+
+    fn();
+
+    ctrlr.modifySelectionDepth -= 1;
+    if (ctrlr.modifySelectionDepth === 0) {
+      ctrlr.setTextareaSelection();
     }
   };
   _.setTextareaSelection = function() {
