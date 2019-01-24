@@ -105,6 +105,7 @@ Node.open(function(_) {
       } else {
         ctrlr.selectLeft();
       }
+      break;
 
     case 'Shift-Down':
       if (cursor[R]) {
@@ -113,6 +114,7 @@ Node.open(function(_) {
       else {
         ctrlr.selectRight();
       }
+      break;
 
     case 'Ctrl-Up': break;
     case 'Ctrl-Down': break;
