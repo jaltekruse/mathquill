@@ -1,0 +1,38 @@
+.mq-math-mode {
+
+    .mq-matrix {
+        font-size: 90%;
+        vertical-align: middle;
+        margin-left: 0.1em;
+        margin-right: 0.1em;
+
+        > .mq-paren {
+          -webkit-transform-origin: center .06em;
+          -moz-transform-origin: center .06em;
+          -ms-transform-origin: center .06em;
+          -o-transform-origin: center .06em;
+          transform-origin: center .06em;
+        }
+    
+        table {
+          font-family: inherit;
+          width: auto;
+          border-bottom: none;
+          border-spacing: 3px;
+          border-collapse: separate;
+          &.mq-rows-1 { /* better alignment when there's just one row */
+            vertical-align: middle;
+            margin-bottom: 1px;
+          }
+        }
+    
+        td {
+          font-family: inherit;
+          border: none;
+          width: auto; /* defensive resets */
+          text-align: center;
+          vertical-align: baseline;
+        }
+      }
+
+}
