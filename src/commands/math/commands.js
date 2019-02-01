@@ -671,37 +671,6 @@ LatexCmds.MixedFraction = P(MathCommand, function(_, super_) {
   };
 });
 
-/**
- * AlgebraKiT
- */
-// Dutch notations for intervals
-LatexCmds.IntervalNlExEx = bind(IntervalCommand, '\\IntervalNlExEx', '&lt', '&gt', ';');
-LatexCmds.IntervalNlExIn = bind(IntervalCommand, '\\IntervalNlExIn', '&lt', ']', ';');
-LatexCmds.IntervalNlInEx = bind(IntervalCommand, '\\IntervalNlInEx', '[', '&gt', ';');
-LatexCmds.IntervalNlInIn = bind(IntervalCommand, '\\IntervalNlInIn', '[', ']', ';');
-// Belgium notations for intervals
-LatexCmds.IntervalBeExEx = bind(IntervalCommand, '\\IntervalBeExEx', ']', '[', ';');
-LatexCmds.IntervalBeExIn = bind(IntervalCommand, '\\IntervalBeExIn', ']', ']', ';');
-LatexCmds.IntervalBeInEx = bind(IntervalCommand, '\\IntervalBeInEx', '[', '[', ';');
-LatexCmds.IntervalBeInIn = bind(IntervalCommand, '\\IntervalBeInIn', '[', ']', ';');
-// English notations for intervals
-LatexCmds.IntervalEnExEx = bind(IntervalCommand, '\\IntervalEnExEx', '(', ')', ',');
-LatexCmds.IntervalEnExIn = bind(IntervalCommand, '\\IntervalEnExIn', '(', ']', ',');
-LatexCmds.IntervalEnInEx = bind(IntervalCommand, '\\IntervalEnInEx', '[', ')', ',');
-LatexCmds.IntervalEnInIn = bind(IntervalCommand, '\\IntervalEnInIn', '[', ']', ',');
-
-
-// Custom commands for language-specific solution tags
-LatexCmds.NoSolutionNl = bind(BlockSymbol, '\\NoSolutionNl', 'kan niet');
-LatexCmds.NoSolutionEn = bind(BlockSymbol, '\\NoSolutionEn', 'no solution');
-LatexCmds.NoSolutionFr = bind(BlockSymbol, '\\NoSolutionFr', 'aucun solution');
-LatexCmds.NoSolutionDe = bind(BlockSymbol, '\\NoSolutionDe', 'kann nicht');
-
-LatexCmds.TrueSolutionNl = bind(BlockSymbol, '\\TrueSolutionNl', 'waar');
-LatexCmds.TrueSolutionEn = bind(BlockSymbol, '\\TrueSolutionEn', 'true');
-LatexCmds.TrueSolutionFr = bind(BlockSymbol, '\\TrueSolutionFr', 'vrai');
-LatexCmds.TrueSolutionDe = bind(BlockSymbol, '\\TrueSolutionDe', 'wahr');
-
 
 var DiacriticAbove = P(MathCommand, function(_, super_) {
   _.init = function(ctrlSeq, symbol, textTemplate) {

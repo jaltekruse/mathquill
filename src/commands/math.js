@@ -364,18 +364,20 @@ var IntervalCommand = P(MathCommand, function(_, super_) {
     cmd.intervalDelim = delim;
 
     var htmlTemplate =
-        '<span class="mq-scaled">' + open + '</span>'
+      '<span class="mq-non-leaf">'
+      + '<span class="mq-scaled mq-paren">' + open + '</span>'
       + '<span class="mq-non-leaf">&0</span>'
-      + '<span class="mq-scaled">' + delim + '</span>'
+      + '<span class="mq-delim">' + delim + '</span>'
       + '<span class="mq-non-leaf">&1</span>'
-      + '<span class="mq-scaled">' + close + '</span>';
+      + '<span class="mq-scaled mq-paren">' + close + '</span>'
+      + '</span>';
 
     var opName = ctrlSeq.startsWith('\\') ? ctrlSeq.substr(1) : ctrlSeq;
     var textTemplate = [opName + open, delim, close];
 
     super_.init.call(this, ctrlSeq, htmlTemplate, textTemplate);
   };
-
+  _.numBlocks = function() { return 2; };
   _.parser = function() {
     var cmd = this;
     return latexMathParser.optBlock.then(function(optBlock) {
@@ -388,10 +390,17 @@ var IntervalCommand = P(MathCommand, function(_, super_) {
       });
     }).or(super_.parser.call(this));
   };
-
   _.latex = function() {
     return this.ctrlSeq + '{' + this.ends[L].latex() + '}{' + this.ends[R].latex() + '}';
   };
+  _.reflow = function() {
+    var height = this.jQ.outerHeight()
+                 / parseFloat(this.jQ.css('fontSize'));
+    var parens = this.jQ.children('.mq-paren');
+    if (parens.length) {
+      scale(parens, min(1 + .2*(height - 1), 1.2), 1.2*height);
+    }
+  }
 });
 
 /**
