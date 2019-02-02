@@ -75,3 +75,16 @@ LatexCmds.PlaneVector = P(Matrix, function(_, super_) {
     ];
   };
 });
+
+LatexCmds.cases = P(Matrix, function(_, super_) {
+  _.environment = 'cases';
+  _.parentheses = {
+    left: '{',
+  };
+  _.createBlocks = function() {
+    this.blocks = [
+      MatrixCell(0, this),
+      MatrixCell(1, this)
+    ];
+  };
+});

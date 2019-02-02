@@ -606,41 +606,6 @@ LatexCmds.BoundaryEvaluation = P(SummationNotation, function(_, super_) {
 
 //LatexCmds.BoundaryEvaluation = bind(SummationNotation,'] ',']');
 
-var Cases =
-LatexCmds.cases = P(MathCommand, function(_, super_) {
-  _.ctrlSeq = '\\cases';
-  _.htmlTemplate =
-      '<span class="mq-cases mq-non-leaf">'
-    +   '<span class="mq-cases-item">&0</span>'
-    +   '<span class="mq-cases-item mq-cases-item-last">&1</span>'
-    +   '<span style="display:inline-block;width:0">&#8203;</span>'
-    + '</span>'
-  ;
-  _.textTemplate = ['{', ',', '}'];
-  _.latex = function() {
-    return '\\begin{cases}'+this.ends[L].latex()+'\\\\'+this.ends[R].latex()+'\\end{cases}';
-  };
-  _.parser = function() {
-    var succeed = Parser.succeed;
-    var block = latexMathParser.block;
-
-    var self = this;
-    var blocks = self.blocks = [];
-    var parent = this;
-    var left = 0;
-    return block.then(function(block){
-        blocks.push(block);
-        block.adopt(parent, left,0);
-        left = block;
-        return succeed(self);
-    }).many().result(self);
-  };
-  _.finalizeTree = function() {
-    this.upInto = this.ends[R].upOutOf = this.ends[L];
-    this.downInto = this.ends[L].downOutOf = this.ends[R];
-  };
-});
-
 //mslob: Template for mixed fractions
 var MixedFraction =
 LatexCmds.MixedFraction = P(MathCommand, function(_, super_) {
