@@ -552,36 +552,6 @@ LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
   };
 });
 
-// AlgebraKiT
-// Dutch notation for logarithm: notation like: {}^3 log{9}.
-// we will use nonstandard latex-like notation: lognl[3]{9}
-var LogNL =
-LatexCmds.lognl = P(MathCommand, function(_, super_) {
-  _.ctrlSeq = '\\lognl';
-  _.htmlTemplate =
-      '<sup class="mq-lognl mq-non-leaf">&0</sup>'
-    + '<span class="mq-scaled">'
-    +   '<span class="mq-scaled">log</span>'
-    +   '<span class="mq-non-leaf">&1</span>'
-    + '</span>'
-  ;
-  _.parser = function() {
-    return latexMathParser.optBlock.then(function(optBlock) {
-      return latexMathParser.block.map(function(block) {
-        var lognl = LogNL();
-        lognl.blocks = [ optBlock, block ];
-        optBlock.adopt(lognl, 0, 0);
-        block.adopt(lognl, optBlock, 0);
-        return lognl;
-      });
-    }).or(super_.parser.call(this));
-  };
-  _.textTemplate = ['lognl[', '](', ')'];
-  _.latex = function() {
-    return '\\lognl['+this.ends[L].latex()+']{'+this.ends[R].latex()+'}';
-  };
-});
-
 // mslob: endpoint evaluation of definite integrals [F(x)]_a^b
 // general subsub notation is handled in SummationNotation
 LatexCmds.BoundaryEvaluation = P(SummationNotation, function(_, super_) {
@@ -605,41 +575,6 @@ LatexCmds.BoundaryEvaluation = P(SummationNotation, function(_, super_) {
 });
 
 //LatexCmds.BoundaryEvaluation = bind(SummationNotation,'] ',']');
-
-var Cases =
-LatexCmds.cases = P(MathCommand, function(_, super_) {
-  _.ctrlSeq = '\\cases';
-  _.htmlTemplate =
-      '<span class="mq-cases mq-non-leaf">'
-    +   '<span class="mq-cases-item">&0</span>'
-    +   '<span class="mq-cases-item mq-cases-item-last">&1</span>'
-    +   '<span style="display:inline-block;width:0">&#8203;</span>'
-    + '</span>'
-  ;
-  _.textTemplate = ['{', ',', '}'];
-  _.latex = function() {
-    return '\\begin{cases}'+this.ends[L].latex()+'\\\\'+this.ends[R].latex()+'\\end{cases}';
-  };
-  _.parser = function() {
-    var succeed = Parser.succeed;
-    var block = latexMathParser.block;
-
-    var self = this;
-    var blocks = self.blocks = [];
-    var parent = this;
-    var left = 0;
-    return block.then(function(block){
-        blocks.push(block);
-        block.adopt(parent, left,0);
-        left = block;
-        return succeed(self);
-    }).many().result(self);
-  };
-  _.finalizeTree = function() {
-    this.upInto = this.ends[R].upOutOf = this.ends[L];
-    this.downInto = this.ends[L].downOutOf = this.ends[R];
-  };
-});
 
 //mslob: Template for mixed fractions
 var MixedFraction =
