@@ -1,6 +1,52 @@
 /**
  * AlgebraKiT
  */
+
+// Dutch notation for logarithm: notation like: {}^3 log{9}.
+// we will use nonstandard latex-like notation: lognl[3]{9}
+var LogNL =
+LatexCmds.lognl = P(MathCommand, function(_, super_) {
+  _.ctrlSeq = '\\lognl';
+  _.htmlTemplate =
+      '<span class="mq-non-leaf">'
+    +   '<span class="mq-supsub mq-non-leaf mq-sup-only">'
+    +     '<span class="mq-sup">&0</span>'
+    +   '</span>'
+    +   '<span class="mq-operator-name">log</span>'
+    +   '<span class="mq-non-leaf">'
+    +     '<span class="mq-scaled mq-paren">(</span>'
+    +     '<span class="mq-non-leaf">&1</span>'
+    +     '<span class="mq-scaled mq-paren">)</span>'
+    +   '</span>'
+    + '</span>'
+  ;
+  _.parser = function() {
+    return latexMathParser.optBlock.then(function(optBlock) {
+      return latexMathParser.block.map(function(block) {
+        var lognl = LogNL();
+        lognl.blocks = [ optBlock, block ];
+        optBlock.adopt(lognl, 0, 0);
+        block.adopt(lognl, optBlock, 0);
+        return lognl;
+      });
+    }).or(super_.parser.call(this));
+  };
+  _.textTemplate = ['lognl[', '](', ')'];
+  _.latex = function() {
+    return '\\lognl['+this.ends[L].latex()+']{'+this.ends[R].latex()+'}';
+  };
+  _.reflow = function() {
+    var argjQ = this.jQ.children('.mq-non-leaf').last();
+    var contentjQ = argjQ.children(':eq(1)');
+    var height = contentjQ.outerHeight()
+                 / parseFloat(contentjQ.css('fontSize'));
+    var parens = argjQ.children('.mq-paren');
+    if (parens.length) {
+      scale(parens, min(1 + .2*(height - 1), 1.2), 1.2*height);
+    }
+  }
+});
+
 // Dutch notations for intervals
 LatexCmds.IntervalNlExEx = bind(IntervalCommand, '\\IntervalNlExEx', '&lang;', '&rang;', ';');
 LatexCmds.IntervalNlExIn = bind(IntervalCommand, '\\IntervalNlExIn', '&lang;', ']', ';');

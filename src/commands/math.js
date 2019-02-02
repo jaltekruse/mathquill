@@ -348,7 +348,7 @@ var BinaryOperator = P(Symbol, function(_, super_) {
  */
 var BlockSymbol = P(Symbol, function(_, super_) {
   _.init = function(ctrlSeq, symbolText) {
-    var htmlTemplate = '<span class="mq-leaf mq-text-mode mq-text-icon">' +
+    var htmlTemplate = '<span class="mq-text-mode mq-text-icon">' +
         symbolText +
         '</span>';
 
