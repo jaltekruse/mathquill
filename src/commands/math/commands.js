@@ -882,6 +882,10 @@ LatexCmds.binomial = P(P(MathCommand, DelimsMixin), function(_, super_) {
     + '</span>'
   ;
   _.textTemplate = ['choose(',',',')'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
+  };
 });
 
 var Choose =
