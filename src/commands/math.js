@@ -107,9 +107,20 @@ var MathCommand = P(MathElement, function(_, super_) {
 
   // createLeftOf(cursor) and the methods it calls
   _.createLeftOf = function(cursor) {
+
     var cmd = this;
     var replacedFragment = cmd.replacedFragment;
 
+    if (cursor.options.autoParenOperators && !(cmd instanceof Bracket) && !(cmd instanceof SupSub)) {
+      if ((cursor[L].isPartOfOperator && (cursor[L][1] === 0 || cursor[L].jQ.hasClass("mq-last"))) ||
+        ((cursor[L].hasOwnProperty("sup") || cursor[L].hasOwnProperty("sub")) &&
+          cursor[L][-1].isPartOfOperator
+        )
+      ) {
+        cursor.parent.write(cursor, '(');
+      } 
+    }
+    
     cmd.createBlocks();
     super_.createLeftOf.call(cmd, cursor);
     if (replacedFragment) {
@@ -366,7 +377,7 @@ var Symbol = P(MathCommand, function(_, super_) {
   _.latex = function(){ return this.ctrlSeq; };
   _.text = function(){ return this.textTemplate; };
   _.placeCursor = noop;
-  _.isEmpty = function(){ return true; };
+  _.isEmpty = function(){ return true; };	  
 });
 var VanillaSymbol = P(Symbol, function(_, super_) {
   _.init = function(ch, html) {
