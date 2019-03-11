@@ -196,6 +196,13 @@ function getInterface(v) {
       this.__controller.cursor.clearSelection();
       return this;
     };
+    _.matrixCmd = function(cmd) {
+      var ctrlr = this.__controller.notify(), cursor = ctrlr.cursor;
+      if (cursor.parent.parent instanceof Environment) {
+        cursor.parent.parent.insert(cmd, cursor.parent);
+      }
+      return this;
+    };
 
     _.moveToDirEnd = function(dir) {
       this.__controller.notify('move').cursor.insAtDirEnd(dir, this.__controller.root);
