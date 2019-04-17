@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=624">
+
+<title>MathQuill Demo</title>
+
+<link rel="stylesheet" type="text/css" href="support/home.css">
+<link rel="stylesheet" type="text/css" href="../build/mathquill.css">
+
+<style type="text/css">
+code span {
+  font: 90% Verdana, sans-serif;
+}
+#codecogsimg {
+  vertical-align: middle;
+  border: none;
+}
+.mathquill-text-field {
+  width: 100%;
+}
+#html-source {
+  display: none;
+  font-size: 90%;
+  white-space: pre-wrap;
+}
+.mq-math-mode .mq-editable-field {
+  min-width: 1cm;
+}
+</style>
+
+</head>
+<body>
+<div id="body">
+
+
+<p>Math textbox with initial LaTeX: 
+<input type="text" id="ib1" value="\frac{d}{dx}\sqrt{x}=" /> <button onclick="doMQ('ib1')">MQ</button>
+</p>
+
+</div>
+<script type="text/javascript" src="support/jquery.min.js"></script>
+<script type="text/javascript" src="../build/mathquill.js"></script>
+<script type="text/javascript">
+function doMQ(id) {
+	var textfield = $('#'+id);
+	if (textfield.attr('type') == 'hidden') {
+		//switch back to text field
+		textfield.attr("type","text");
+		$("#mqinput-"+id).hide();
+	} else {
+		var mqfield = $("#mqinput-"+id);
+		var initval = textfield.attr("type","hidden").val();
+		if (mqfield.length == 0) {
+			var span = $("<span/>", {id: "mqinput-"+id, class: "mathquill-math-field"}).text(initval);
+			span.insertAfter(textfield);
+			MQ.MathField(span[0]);
+			span.find(".mq-textarea > *").on('focus', function() {
+				  $("#editor").show();
+				  positionEditor(this);
+			}).on('blur', function() {
+				  $("#editor").hide();
+			});
+		} else {
+			mqfield.show();
+			MQ(mqfield[0]).latex(initval);
+		}
+	}
+}
+function onMQedit(mf) {
+	var el = mf.el();
+	positionEditor(el);
+	if (el.id.match(/mqinput/)) {
+		document.getElementById(el.id.substring(8)).value = mf.latex();
+	}
+}
+function positionEditor(ref) {
+	var mqfield = $(ref).closest(".mathquill-math-field");
+	var offset = mqfield.offset();
+	var height = mqfield.height();
+	$("#editor").css("top", offset.top + height + 3).css("left", offset.left);
+}   
+
+MQ = MathQuill.getInterface(MathQuill.getInterface.MAX);
+MQ.config(
+	{
+	  spaceBehavesLikeTab: true,
+	  leftRightIntoCmdGoes: 'up',
+	  restrictMismatchedBrackets: true,
+	  sumStartsWithNEquals: true,
+	  supSubsRequireOperand: true,
+	  charsThatBreakOutOfSupSub: '+-=<>',
+	  autoSubscriptNumerals: true,
+	  autoCommands: 'pi theta sqrt sum oo',
+	  autoFunctionize: 'sin cos log',
+	  /*substituteTextarea: function() {
+	  	  var s = document.createElement('span');
+	  	  s.setAttribute("tabindex", 0);
+	  	  return s;
+	  },
+	  keyboardPassthrough: true,*/
+	  addCommands: {
+	  	  'oo': ['VanillaSymbol', '\\infty ', '&infin;']
+	  },
+	  handlers: {
+	  	  edit: onMQedit
+	  }
+  	}
+);
+                     
+</script>
+<div id="editor" style="display:none; border: 1px solid #ccf; background-color: #eef; position: absolute;">
+Hi I'm a happy editor palette
+</div>
+</body>
+</html>
