@@ -94,7 +94,32 @@ Nested content in latex rendered during initialization or pasted into mathquill 
 
 For example, [Desmos](https://www.desmos.com/calculator) substitutes `<span tabindex=0></span>` on iOS to suppress the built-in virtual keyboard in favor of a custom math keypad that calls the MathQuill API. Unfortunately there's no universal [check for a virtual keyboard](http://stackoverflow.com/q/2593139/362030) or [way to detect a touchscreen](http://www.stucox.com/blog/you-cant-detect-a-touchscreen/), and even if you could, a touchscreen ≠ virtual keyboard (Windows 8 and ChromeOS devices have both physical keyboards and touchscreens and iOS and Android devices can have Bluetooth keyboards). Desmos currently sniffs the user agent for iOS, so Bluetooth keyboards just don't work in Desmos on iOS. The tradeoffs are up to you.
 
+## addCommands
 
+(ADDED by DL)
+
+This function allows adding simple commands.  Call with an object, where each element has form:
+`'command': [symboltype, latex, entity]`
+
+where symboltype is "VanillaSymbol", "BinaryOperator", or "Variable"
+
+For example:
+
+`addCommands: {'oo': ['VanillaSymbol', '\\infty ','&infin;']}`
+
+## autoParenOperators
+
+(ADDED by DL)
+
+Set to true to automatically wrap characters after a function operator in parens
+
+## keyboardPassthrough
+
+(ADDED by DL)
+
+Set to true to handle keypresses in the keyboard events rather than in the 
+textarea.  When substituteTextarea is used, enabling this allows bluetooth 
+keyboards to still work.
 
 # Handlers
 

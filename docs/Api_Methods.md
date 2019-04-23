@@ -240,6 +240,12 @@ Insert a custom embedded element at the given coordinates, where `options` is an
 
 Allows MathQuill to parse custom embedded objects from latex, where `options` is an object like the one defined above in `.dropEmbedded()`. This will parse the following latex into the embedded object you defined: `\embed{name}[id]}`.
 
+## .matrixCmd(cmd) 
+
+(ADDED by DL)
+
+call with 'addRow' or 'addColumn' to add a row/column to the matrix at the current location
+
 ## Note on Experimental Features
 
 Methods marked as experimental may be altered drastically or removed in future versions. They may also receive less maintenance than other non-experimental features.
