@@ -244,7 +244,8 @@ Allows MathQuill to parse custom embedded objects from latex, where `options` is
 
 (ADDED by DL)
 
-call with 'addRow' or 'addColumn' to add a row/column to the matrix at the current location
+call with 'addRow' or 'addColumn' to add a row/column to the matrix at the current location,
+or 'deleteRow' or 'deleteColumn' to delete a row/column.
 
 ## Note on Experimental Features
 

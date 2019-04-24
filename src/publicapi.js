@@ -199,11 +199,21 @@ function getInterface(v) {
     _.matrixCmd = function(cmd) {
       var ctrlr = this.__controller.notify(), cursor = ctrlr.cursor;
       if (cursor.parent.parent instanceof Environment) {
-        cursor.parent.parent.insert(cmd, cursor.parent);
+        if (cmd.match(/add/)) {
+          cursor.parent.parent.insert(cmd, cursor.parent);
+        } else {
+          cursor.parent.parent.remove(cmd, cursor.parent);
+        }
       }
       return this;
     };
-
+    _.getSelection = function() {
+      if (this.__controller.cursor.selection) {
+        return this.__controller.cursor.selection.join('latex');
+      } else {
+        return null;
+      }
+    };
     _.moveToDirEnd = function(dir) {
       this.__controller.notify('move').cursor.insAtDirEnd(dir, this.__controller.root);
       return this;

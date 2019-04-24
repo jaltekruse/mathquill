@@ -1191,6 +1191,79 @@ Environments.matrix = P(Environment, function(_, super_) {
     }
     this.finalizeTree();
   };
+  _.deleteRow = function(currentCell) {
+    var rows = [], columns = [], myRow = [], myColumn = [];
+    var blocks = this.blocks, row, column;
+
+    // Create arrays for cells in the current row / column
+    this.eachChild(function (cell) {
+      if (row !== cell.row) {
+        row = cell.row;
+        rows[row] = [];
+        column = 0;
+      }
+      columns[column] = columns[column] || [];
+      columns[column].push(cell);
+      rows[row].push(cell);
+
+      if (cell === currentCell) {
+        myRow = rows[row];
+        myColumn = columns[column];
+      }
+
+      column+=1;
+    });
+
+    function remove(cells) {
+      for (var i=0; i<cells.length; i+=1) {
+        if (blocks.indexOf(cells[i]) > -1) {
+          cells[i].remove();
+          blocks.splice(blocks.indexOf(cells[i]), 1);
+        }
+      }
+    }
+    if (myColumn.length > 1) {
+      remove(myRow);
+      this.jQ.find('tr').eq(row).remove();
+    }
+    this.finalizeTree();
+  };
+  _.deleteColumn = function(currentCell) {
+    var rows = [], columns = [], myRow = [], myColumn = [];
+    var blocks = this.blocks, row, column;
+
+    // Create arrays for cells in the current row / column
+    this.eachChild(function (cell) {
+      if (row !== cell.row) {
+        row = cell.row;
+        rows[row] = [];
+        column = 0;
+      }
+      columns[column] = columns[column] || [];
+      columns[column].push(cell);
+      rows[row].push(cell);
+
+      if (cell === currentCell) {
+        myRow = rows[row];
+        myColumn = columns[column];
+      }
+
+      column+=1;
+    });
+
+    function remove(cells) {
+      for (var i=0; i<cells.length; i+=1) {
+        if (blocks.indexOf(cells[i]) > -1) {
+          cells[i].remove();
+          blocks.splice(blocks.indexOf(cells[i]), 1);
+        }
+      }
+    }
+    if (myRow.length > 1) {
+      remove(myColumn);
+    }
+    this.finalizeTree();
+  };
   _.addRow = function(afterCell) {
     var previous = [], newCells = [], next = [];
     var newRow = $('<tr></tr>'), row = afterCell.row;
@@ -1266,6 +1339,12 @@ Environments.matrix = P(Environment, function(_, super_) {
     this.cursor = this.cursor || this.parent.cursor;
     this.finalizeTree();
     this.bubble('reflow').cursor.insAtRightEnd(cellToFocus);
+  };
+  _.remove = function(method, afterCell) {
+    var cellToFocus = this[method](afterCell);
+    this.cursor = this.cursor || this.parent.cursor;
+    this.finalizeTree();
+    this.bubble('reflow');
   };
   _.backspace = function(cell, dir, cursor, finalDeleteCallback) {
     var dirwards = cell[dir];
