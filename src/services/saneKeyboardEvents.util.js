@@ -159,7 +159,7 @@ var saneKeyboardEvents = (function() {
 
       /**DLMOD **/
       usedkeydown = false;
-      
+
       if (shouldBeSelected) checkTextareaOnce(function(e) {
         if (!(e && e.type === 'focusout') && textarea[0].select) {
           // re-select textarea in case it's an unrecognized key that clears
@@ -167,12 +167,12 @@ var saneKeyboardEvents = (function() {
           textarea[0].select();
         }
       });
-      
+
       /** DLMOD **/
       if (handlers.options.keyboardPassthrough) {
         var which = e.which || e.keyCode;
         var keyVal = KEY_VALUES[which];
-       
+
 		//handle copy/paste keystrokes, control sequences
 		if (e.ctrlKey || (e.originalEvent && e.originalEvent.metaKey)) {
 		  var chr = String.fromCharCode(which);
@@ -217,20 +217,20 @@ var saneKeyboardEvents = (function() {
         handlers.writeLatex(window.MathQuillClipboard);
       }
     }
-    
+
     function onKeypress(e) {
       /**DLMOD**/
       if (handlers.options.keyboardPassthrough) {
         var which = e.which || e.keyCode;
- 
+
         if (!usedkeydown) { //prevent second play of handled characters
           var chr = String.fromCharCode(which);
           //pass through keypress
-          handlers.typedText(chr);  
-          
+          handlers.typedText(chr);
+
           //log it to prevent onkeyup trigger
           keypress = e;
-        }	            
+        }
       } else {
 		  /**DLMOD: this stuff is the original code **/
 		  // call the key handler for repeated keypresses.
@@ -238,15 +238,17 @@ var saneKeyboardEvents = (function() {
 		  // after keydown.  In that case, there will be
 		  // no previous keypress, so we skip it here
 		  if (keydown && keypress) handleKey();
-	
+
 		  keypress = e;
-	
+
 		  checkTextareaFor(typedText);
       }
     }
     function onKeyup(e) {
       // Handle case of no keypress event being sent
-      if (!!keydown && !keypress) checkTextareaFor(typedText);
+      if (!handlers.options.keyboardPassthrough) {
+        if (!!keydown && !keypress) checkTextareaFor(typedText);
+      }
     }
     function typedText() {
       // If there is a selection, the contents of the textarea couldn't
