@@ -16,9 +16,11 @@ Controller.open(function(_) {
         cursor.show();
     }).blur(function() {
       ctrlr.blurred = true;
-      root.postOrder('intentionalBlur');
-      if (cursor.selection) cursor.selection.jQ.addClass('mq-blur');
-      blur();
+      blurTimeout = setTimeout(function() {
+        root.postOrder('intentionalBlur');
+        if (cursor.selection) cursor.selection.jQ.addClass('mq-blur');
+        blur();
+      },100);
     });
     function blur() { // not directly in the textarea blur handler so as to be
       cursor.hide().parent.blur(); // synchronous with/in the same frame as
