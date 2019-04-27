@@ -117,10 +117,19 @@ var MathCommand = P(MathElement, function(_, super_) {
           cursor[L][-1].isPartOfOperator
         )
       ) {
-        cursor.parent.write(cursor, '(');
-      } 
+        // check to make sure additional letter doesn't make a longer op name
+        var str = '', l = cursor[L];
+        while (l.isPartOfOperator && l[-1] !== 0 && !l.jQ.hasClass("mq-last")) {
+          str = l.letter + str;
+          l = l[L];
+        }
+        str += cmd.letter;
+        if (AutoOpNames._maxLength == 0 || !AutoOpNames.hasOwnProperty(str)) {
+          cursor.parent.write(cursor, '(');
+        }
+      }
     }
-    
+
     cmd.createBlocks();
     super_.createLeftOf.call(cmd, cursor);
     if (replacedFragment) {
@@ -377,7 +386,7 @@ var Symbol = P(MathCommand, function(_, super_) {
   _.latex = function(){ return this.ctrlSeq; };
   _.text = function(){ return this.textTemplate; };
   _.placeCursor = noop;
-  _.isEmpty = function(){ return true; };	  
+  _.isEmpty = function(){ return true; };
 });
 var VanillaSymbol = P(Symbol, function(_, super_) {
   _.init = function(ch, html) {
