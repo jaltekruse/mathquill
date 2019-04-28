@@ -216,6 +216,10 @@ var SupSub = P(MathCommand, function(_, super_) {
       if (cursor[L] && !cursor[R] && !cursor.selection
           && cursor.options.charsThatBreakOutOfSupSub.indexOf(ch) > -1) {
         cursor.insRightOf(this.parent);
+        // if using space to escape, don't write character
+        if (ch == ' ') {
+          return;
+        }
       }
       MathBlock.p.write.apply(this, arguments);
     };
