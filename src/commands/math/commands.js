@@ -221,6 +221,17 @@ var SupSub = P(MathCommand, function(_, super_) {
           return;
         }
       }
+      if (cursor[L] && !cursor[R] && !cursor.selection
+          && this.parent[L] instanceof Variable
+      ) {
+          if ((this.parent[L].isItalic !== false
+            && cursor.options.charsThatBreakOutOfSupSubVar.indexOf(ch) > -1)
+            || (this.parent[L].isPartOfOperator
+            && cursor.options.charsThatBreakOutOfSupSubOp.indexOf(ch) > -1)
+          ) {
+            cursor.insRightOf(this.parent);
+          }
+      }
       MathBlock.p.write.apply(this, arguments);
     };
   };
