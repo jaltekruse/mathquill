@@ -173,31 +173,29 @@ var saneKeyboardEvents = (function() {
         var which = e.which || e.keyCode;
         var keyVal = KEY_VALUES[which];
 
-		//handle copy/paste keystrokes, control sequences
-		if (e.ctrlKey || (e.originalEvent && e.originalEvent.metaKey)) {
-		  var chr = String.fromCharCode(which);
-		  if (chr=='C') {
-			onSoftCopy();
-			usedkeydown = true;
-		  } else if (chr=='X') {
-			onSoftCut();
-			usedkeydown = true;
-		  } else if (chr=='V') {
-			onSoftPaste();
-			usedkeydown = true;
-		  } else if (chr=='A' || keyVal) {
-			handleKey();
-			usedkeydown = true;
-		  }
-		} else if (keyVal) {
-		  handleKey();
-		  usedkeydown = true;
-		}
+    		//handle copy/paste keystrokes, control sequences
+    		if (e.ctrlKey || (e.originalEvent && e.originalEvent.metaKey)) {
+    		  var chr = String.fromCharCode(which);
+    		  if (chr=='C') {
+      			onSoftCopy();
+      			usedkeydown = true;
+    		  } else if (chr=='X') {
+      			onSoftCut();
+      			usedkeydown = true;
+    		  } else if (chr=='V') {
+      			onSoftPaste();
+      			usedkeydown = true;
+    		  } else if (chr=='A' || keyVal) {
+      			handleKey();
+      			usedkeydown = true;
+    		  }
+    		} else if (keyVal && keyVal !== 'Spacebar') {
+    		  handleKey();
+    		  usedkeydown = true;
+    		}
       } else {
       	handleKey();
       }
-
-      //handleKey();
     }
 
     /**DLMOD**/
