@@ -62,6 +62,7 @@ SOURCES_BASIC = \
 CSS_DIR = $(SRC_DIR)/css
 CSS_MAIN = $(CSS_DIR)/main.less
 CSS_SOURCES = $(shell find $(CSS_DIR) -name '*.less')
+CSS_ADDON = $(SRC_DIR)/css/katexmathjax.css
 
 FONT_SOURCE = $(SRC_DIR)/fonts
 FONT_TARGET = $(BUILD_DIR)/fonts
@@ -107,13 +108,14 @@ BUILD_DIR_EXISTS = $(BUILD_DIR)/.exists--used_by_Makefile
 .PHONY: all basic dev js uglify css font clean
 all: font css uglify
 basic: $(UGLY_BASIC_JS) $(BASIC_CSS)
+basicfont: $(BASIC_CSS)
 # dev is like all, but without minification
 dev: font css js
 js: $(BUILD_JS)
 uglify: $(UGLY_JS)
 css: $(BUILD_CSS)
 font: $(FONT_TARGET)
-clean:
+clean:make
 	rm -rf $(BUILD_DIR)
 
 $(PJS_SRC): $(NODE_MODULES_INSTALLED)
@@ -138,6 +140,7 @@ $(BUILD_CSS): $(CSS_SOURCES) $(NODE_MODULES_INSTALLED) $(BUILD_DIR_EXISTS)
 
 $(BASIC_CSS): $(CSS_SOURCES) $(NODE_MODULES_INSTALLED) $(BUILD_DIR_EXISTS)
 	$(LESSC) --modify-var="basic=true" $(LESS_OPTS) $(CSS_MAIN) > $@
+	cat $(CSS_ADDON) >> $@
 	$(SED_IN_PLACE) s/{VERSION}/v$(VERSION)/ $@
 
 $(NODE_MODULES_INSTALLED): package.json
