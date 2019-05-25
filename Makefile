@@ -47,7 +47,12 @@ SOURCES_FULL = \
   $(BASE_SOURCES) \
   $(SRC_DIR)/commands/math.js \
   $(SRC_DIR)/commands/text.js \
-  $(SRC_DIR)/commands/math/*.js
+  $(SRC_DIR)/commands/math/basicSymbols.js \
+  $(SRC_DIR)/commands/math/commands.js \
+  $(SRC_DIR)/commands/math/advancedSymbols.js \
+  $(SRC_DIR)/commands/math/environments.js \
+  $(SRC_DIR)/commands/math/algebrakitCommands.js
+#  $(SRC_DIR)/commands/math/*.js
 # FIXME text.js currently depends on math.js (#435), restore these when fixed:
 # $(SRC_DIR)/commands/*.js \
 # $(SRC_DIR)/commands/*/*.js
@@ -56,7 +61,9 @@ SOURCES_BASIC = \
   $(BASE_SOURCES) \
   $(SRC_DIR)/commands/math.js \
   $(SRC_DIR)/commands/math/basicSymbols.js \
-  $(SRC_DIR)/commands/math/commands.js
+  $(SRC_DIR)/commands/math/commands.js \
+  $(SRC_DIR)/commands/math/environments.js \
+  $(SRC_DIR)/commands/math/algebrakitCommands.js
 
 CSS_DIR = $(SRC_DIR)/css
 CSS_MAIN = $(CSS_DIR)/main.less

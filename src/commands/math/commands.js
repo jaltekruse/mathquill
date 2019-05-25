@@ -887,7 +887,6 @@ LatexCmds.binomial = P(P(MathCommand, DelimsMixin), function(_, super_) {
     this.downInto = this.ends[L].downOutOf = this.ends[R];
   };
 });
-
 var Choose =
 LatexCmds.choose = P(Binomial, function(_) {
   _.createLeftOf = LiveFraction.prototype.createLeftOf;

@@ -66,7 +66,7 @@ LatexCmds.IntervalEnInIn = bind(IntervalCommand, '\\IntervalEnInIn', '[', ']', '
 LatexCmds.PolarVector =
 LatexCmds.PolarVectorEn = P(IntervalCommand, function(_, super_) {
   _.init = function() {
-    super_.init.call(this, '\\PolarVectorEn', '(', ')', ',');
+    super_.init.call(this, '\\PolarVectorEn',  '(', ')', ',');
   }
   _.latex = function(){
     return '\\left(' + this.ends[L].latex() + ',' + this.ends[R].latex() + '\\right)';
@@ -76,7 +76,7 @@ LatexCmds.PolarVectorEn = P(IntervalCommand, function(_, super_) {
 LatexCmds.PolarVectorNl = P(IntervalCommand, function(_, super_) {
   _.init = function() {
     super_.init.call(this, '\\PolarVectorNl', '(', ')', ';');
-  }
+  } 
   _.latex = function(){
     return '\\left(' + this.ends[L].latex() + ';' + this.ends[R].latex() + '\\right)';
   }
@@ -132,5 +132,41 @@ LatexCmds.cases = P(Matrix, function(_, super_) {
       MatrixCell(0, this),
       MatrixCell(1, this)
     ];
+  };
+});
+
+var Underset =
+  LatexCmds.underset = P(MathCommand, function(_, super_) {
+  _.ctrlSeq = '\\underset';
+  _.htmlTemplate =
+      '<span class="mq-non-leaf">'
+    +     '<span class="mq-array mq-non-leaf">'
+    +       '<span>&1</span>'
+    +       '<span>&0</span>'
+    +     '</span>'
+    + '</span>'
+  ;
+  _.textTemplate = ['underset(',',',')'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[L].upOutOf = this.ends[R];
+    this.downInto = this.ends[R].downOutOf = this.ends[L];
+  };
+});
+
+var Overset =
+  LatexCmds.overset = P(MathCommand, function(_, super_) {
+  _.ctrlSeq = '\\underset';
+  _.htmlTemplate =
+      '<span class="mq-non-leaf">'
+    +     '<span class="mq-array mq-non-leaf">'
+    +       '<span>&0</span>'
+    +       '<span>&1</span>'
+    +     '</span>'
+    + '</span>'
+  ;
+  _.textTemplate = ['overset(',',',')'];
+  _.finalizeTree = function() {
+    this.upInto = this.ends[R].upOutOf = this.ends[L];
+    this.downInto = this.ends[L].downOutOf = this.ends[R];
   };
 });

@@ -307,7 +307,7 @@ var Symbol = P(MathCommand, function(_, super_) {
     replacedFragment.remove();
   };
   _.createBlocks = noop;
-
+ 
   _.moveTowards = function(dir, cursor) {
     cursor.jQ.insDirOf(dir, this.jQ);
     cursor[-dir] = this;
@@ -329,6 +329,7 @@ var Symbol = P(MathCommand, function(_, super_) {
   _.placeCursor = noop;
   _.isEmpty = function(){ return true; };
 });
+
 var VanillaSymbol = P(Symbol, function(_, super_) {
   _.init = function(ch, html) {
     super_.init.call(this, ch, '<span>'+(html || ch)+'</span>');
