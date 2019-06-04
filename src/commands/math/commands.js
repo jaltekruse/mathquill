@@ -360,11 +360,11 @@ var SummationNotation = P(MathCommand, function (_, super_) {
     }
   };
   _.latex = function () {
-    function simplify(latex) {
-      return latex.length === 1 ? latex : '{' + (latex || ' ') + '}';
-    }
-    return this.ctrlSeq + '_' + simplify(this.ends[L].latex()) +
-      '^' + simplify(this.ends[R].latex());
+    // function simplify(latex) {
+    //   return latex.length === 1 ? latex : '{' + (latex || ' ') + '}';
+    // }
+    return this.ctrlSeq + '_{' + this.ends[L].latex() +
+      '}^{' + this.ends[R].latex() + '}';
   };
   _.parser = function () {
     var string = Parser.string;
