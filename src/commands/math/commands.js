@@ -449,8 +449,13 @@ LatexCmds.definiteIntegral = P(SummationNotation, function(_, super_) {
       if(lower.length === 0 && upper.length === 0) {  // Parse as indefinite integral
         return '\\int ';
       } else {
-        return '\\defint_' + simplify(this.ends[L].latex()) +
-            '^' + simplify(this.ends[R].latex());
+        if(MathQuill.latexSyntax=='STANDARD') {
+          return '\\int_{' + this.ends[L].latex() +
+          '}^{' + this.ends[R].latex() + '}';
+        } else {
+          return '\\defint_' + simplify(this.ends[L].latex()) +
+          '^' + simplify(this.ends[R].latex());
+        }
       }
 
   };

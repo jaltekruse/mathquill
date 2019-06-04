@@ -33,7 +33,11 @@ LatexCmds.lognl = P(MathCommand, function(_, super_) {
   };
   _.textTemplate = ['lognl[', '](', ')'];
   _.latex = function() {
-    return '\\lognl['+this.ends[L].latex()+']{'+this.ends[R].latex()+'}';
+    if(MathQuill.latexSyntax=='STANDARD') {
+      return '\\ ^{'+this.ends[L].latex()+'}\\!\\log {'+this.ends[R].latex()+'}';
+    } else {
+      return '\\lognl['+this.ends[L].latex()+']{'+this.ends[R].latex()+'}';
+    }
   };
   _.reflow = function() {
     var argjQ = this.jQ.children('.mq-non-leaf').last();
@@ -83,15 +87,42 @@ LatexCmds.PolarVectorNl = P(IntervalCommand, function(_, super_) {
 });
 
 // Custom commands for language-specific solution tags
-LatexCmds.NoSolutionNl = bind(BlockSymbol, '\\NoSolutionNl', 'kan niet');
-LatexCmds.NoSolutionEn = bind(BlockSymbol, '\\NoSolutionEn', 'no solution');
-LatexCmds.NoSolutionFr = bind(BlockSymbol, '\\NoSolutionFr', 'aucun solution');
-LatexCmds.NoSolutionDe = bind(BlockSymbol, '\\NoSolutionDe', 'kann nicht');
+var AkitTextBlock =
+LatexCmds.AkitTextBlock = P(BlockSymbol, function(_, super_) {
+  _.init = function(ctrlSeq, symbolText) {
+    super_.init.call(this, ctrlSeq,  symbolText);
+  },
+  _.latex = function() {
+    if(MathQuill.latexSyntax=='STANDARD') {
+      return '\\text{'+this.textTemplate[0]+'}'
+    } else {
+      return this.ctrlSeq;
+    }
+  }
+});
+// LatexCmds.NoSolutionEn = P(BlockSymbol, function(_, super_) {
+//   _.init = function() {
+//     super_.init.call(this, '\\TrueSolutionNl',  'waar');
+//   },
+//   _.latex = function() {
+//     if(MathQuill.latexSyntax=='STANDARD') {
+//       return '\\text{waar}'
+//     } else {
+//       return 'waar';
+//     }
+//   }
+// });
 
-LatexCmds.TrueSolutionNl = bind(BlockSymbol, '\\TrueSolutionNl', 'waar');
-LatexCmds.TrueSolutionEn = bind(BlockSymbol, '\\TrueSolutionEn', 'true');
-LatexCmds.TrueSolutionFr = bind(BlockSymbol, '\\TrueSolutionFr', 'vrai');
-LatexCmds.TrueSolutionDe = bind(BlockSymbol, '\\TrueSolutionDe', 'wahr');
+LatexCmds.NoSolutionNl = bind(AkitTextBlock, '\\NoSolutionNl', 'kan niet');
+LatexCmds.NoSolutionEn = bind(AkitTextBlock, '\\NoSolutionEn', 'no solution');
+LatexCmds.NoSolutionFr = bind(AkitTextBlock, '\\NoSolutionFr', 'aucun solution');
+LatexCmds.NoSolutionDe = bind(AkitTextBlock, '\\NoSolutionDe', 'kann nicht');
+
+LatexCmds.TrueSolutionNl = bind(AkitTextBlock, '\\TrueSolutionNl', 'waar');
+LatexCmds.TrueSolutionEn = bind(AkitTextBlock, '\\TrueSolutionEn', 'true');
+LatexCmds.TrueSolutionFr = bind(AkitTextBlock, '\\TrueSolutionFr', 'vrai');
+LatexCmds.TrueSolutionDe = bind(AkitTextBlock, '\\TrueSolutionDe', 'wahr');
+
 
 LatexCmds.SpaceVector = P(Matrix, function(_, super_) {
   _.environment = 'pmatrix';

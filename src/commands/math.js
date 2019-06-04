@@ -392,7 +392,15 @@ var IntervalCommand = P(MathCommand, function(_, super_) {
     }).or(super_.parser.call(this));
   };
   _.latex = function() {
-    return this.ctrlSeq + '{' + this.ends[L].latex() + '}{' + this.ends[R].latex() + '}';
+    if(MathQuill.latexSyntax=='STANDARD') {
+      var leftAngle = this.intervalOpen;
+      if(leftAngle=='&lang;') leftAngle = '\\langle';
+      var rightAngle = this.intervalClose;
+      if(rightAngle=='&rang;') rightAngle = '\\rangle';
+      return '\\left '+leftAngle + '{' + this.ends[L].latex() + ',' + this.ends[R].latex() + '}\\right '+rightAngle;
+    } else {
+      return this.ctrlSeq + '{' + this.ends[L].latex() + '}{' + this.ends[R].latex() + '}';
+    }
   };
   _.reflow = function() {
     var height = this.jQ.outerHeight()
