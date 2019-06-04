@@ -405,9 +405,10 @@ LatexCmds['∏'] =
 LatexCmds.coprod =
   LatexCmds.coproduct = bind(SummationNotation, '\\coprod ', '&#8720;');
 
-LatexCmds['∫'] =
-  LatexCmds['int'] =
-  LatexCmds.integral = P(Symbol, function (_, super_) {
+var SummationSymbol =
+  LatexCmds['intsym'] =
+  LatexCmds.intsym = P(Symbol, function (_, super_) {
+    _.ctrlSeq = '\\int ';
     _.init = function () {
       var htmlTemplate =
         '<span class="mq-int mq-non-leaf">'
@@ -421,39 +422,69 @@ LatexCmds['∫'] =
   });
 
 // AlgebraKIT: Added definite integral as separate command
-LatexCmds.dint =
-  LatexCmds.defint =
-  LatexCmds.definiteIntegral = P(SummationNotation, function (_, super_) {
-    _.ctrlSeq = '\\defint';
+LatexCmds['∫'] =
+  LatexCmds['int'] =
+  LatexCmds.integral = P(SummationNotation, function (_, super_) {
     _.init = function () {
+      this.limits = true;
       var htmlTemplate =
         '<span class="mq-int mq-non-leaf">'
         + '<big>&int;</big>'
         + '<span class="mq-supsub mq-non-leaf">'
         + '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>'
         + '<span class="mq-sub">&0</span>'
-        + '<span style="display:inline-block;width:0">&#8203;</span>'
+        + '<span style="display:inline-block;width:0">&#8203</span>'
         + '</span>'
         + '</span>'
         ;
-      Symbol.prototype.init.call(this, '\\defint ', htmlTemplate);
+      Symbol.prototype.init.call(this, '\\int ', htmlTemplate);
     };
-    _.latex = function () {
-      function simplify(latex) {
-        return latex.length === 1 ? latex : '{' + (latex || ' ') + '}';
-      }
 
-      var lower = this.ends[L].latex();
-      var upper = this.ends[R].latex();
-
-      if (lower.length === 0 && upper.length === 0) {  // Parse as indefinite integral
-        return '\\int ';
+    _.html = function() {
+      if (this.limits) {
+        this.htmlTemplate = '<span class="mq-int mq-non-leaf">'
+          + '<big>&int;</big>'
+          + '<span class="mq-supsub mq-non-leaf">'
+          + '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>'
+          + '<span class="mq-sub">&0</span>'
+          + '<span style="display:inline-block;width:0">&#8203</span>'
+          + '</span>'
+          + '</span>'
+          ;
       } else {
-        return '\\defint_' + simplify(this.ends[L].latex()) +
-          '^' + simplify(this.ends[R].latex());
+        this.htmlTemplate = '<span class="mq-int mq-non-leaf">'
+          + '<big>&int;</big>'
+          + '</span>'
+          ;
       }
 
+      // super_.createBlocks.call(this);
+      return super_.html.call(this);
+    }
+
+    _.parser = function () {
+      var string = Parser.string;
+      var optWhitespace = Parser.optWhitespace;
+      var succeed = Parser.succeed;
+      var block = latexMathParser.block;
+
+      var self = this;
+      var blocks = self.blocks = [MathBlock(), MathBlock()];
+      for (var i = 0; i < blocks.length; i += 1) {
+        blocks[i].adopt(self, self.ends[R], 0);
+      }
+
+      self.limits = false;
+      return optWhitespace.then(string('_').or(string('^')).then(function (supOrSub) {
+        self.limits = true;
+        var child = blocks[supOrSub === '_' ? 0 : 1];
+        return block.then(function (block) {
+          block.children().adopt(child, child.ends[R], 0);
+          return succeed(self);
+        });
+      }).atLeast(1)).or(succeed(noop)).result(self);
     };
+
     // FIXME: refactor rather than overriding
     _.createLeftOf = MathCommand.p.createLeftOf;
   });
@@ -489,6 +520,7 @@ var LiveFraction =
             leftward instanceof BinaryOperator ||
             leftward instanceof (LatexCmds.text || noop) ||
             leftward instanceof SummationNotation ||
+            leftward instanceof SummationSymbol ||
             leftward.ctrlSeq === '\\ ' ||
             /^[,;:]$/.test(leftward.ctrlSeq)
           ) //lookbehind for operator
