@@ -58,8 +58,9 @@
     <script type="text/javascript">
       teardown(function() { $('#mock').empty(); });
       var runner = mocha.run();
+      var jsdomDone = typeof(window.jsdomDone === 'function') ? window.jsdomDone : undefined;
 
-      if (post_xunit_to) {
+      if (post_xunit_to || jsdomDone) {
         // the following is based on https://github.com/saucelabs-sample-scripts/JavaScript/blob/4946c5cf0ab7325dce5562881dba7c28e30989e5/reporting_mocha.js
         var failedTests = [];
         runner.on('fail', function(test, err) {
@@ -80,6 +81,9 @@
             $.post(post_xunit_to, xunit).complete(function() {
               window.mochaResults = runner.stats;
               window.mochaResults.reports = failedTests;
+              if (jsdomDone) {
+                jsdomDone(window.mochaResults);
+              }
             });
           });
         });
