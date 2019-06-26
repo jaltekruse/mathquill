@@ -17,5 +17,8 @@
     "mocha": ">=2.4.1",
     "pjs": ">=3.1.0 <5.0.0",
     "uglify-js": "2.x"
+  },
+  "dependencies": {
+    "jsdom": "^15.1.1"
   }
 }
