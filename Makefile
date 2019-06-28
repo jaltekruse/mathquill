@@ -162,6 +162,8 @@ $(FONT_TARGET): $(FONT_SOURCE) $(BUILD_DIR_EXISTS)
 .PHONY: test server run-server
 server:
 	node script/test_server.js
+test-puppeteer:
+	node script/test_puppeteer.js
 test: dev $(BUILD_TEST) $(BASIC_JS) $(BASIC_CSS)
 	@echo
 	@echo "** now open test/{unit,visual}.html in your browser to run the {unit,visual} tests. **"
