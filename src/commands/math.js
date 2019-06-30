@@ -324,7 +324,10 @@ var Symbol = P(MathCommand, function(_, super_) {
       cursor.insRightOf(this);
   };
 
-  _.latex = function(){ return this.ctrlSeq; };
+  _.latex = function(){ 
+    // return this.ctrlSeq;
+    return this.ctrlSeq.replace(/[^\x00-\x7F]+/g, function(ch){return '\\text{'+ch+'}'});  //wrap unicode stuff in \text
+  };
   _.text = function(){ return this.textTemplate; };
   _.placeCursor = noop;
   _.isEmpty = function(){ return true; };
