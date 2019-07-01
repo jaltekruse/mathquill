@@ -87,7 +87,418 @@
               failures: runner.stats.failures,
               skips: 0
             };
-            window.testResultsString = JSON.stringify(sillResults, null, 2);
+            //window.testResultsString = JSON.stringify(sillResults, null, 2);
+            window.testResultsString = {
+  "modules": {
+    "Acceptance.Hotkeys": [
+      {
+        "time": 19.414,
+        "name": "instance hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 18.75,
+            "timestamp": 18.75,
+            "result": true,
+            "message": "CTRL+ALT+E focuses expression list"
+          },
+          {
+            "elapsedTime": 0.07600000000000051,
+            "timestamp": 18.826,
+            "result": true,
+            "message": "CTRL+ALT+X adds an expression"
+          },
+          {
+            "elapsedTime": 0.07900000000000063,
+            "timestamp": 18.905,
+            "result": true,
+            "message": "CTRL+ALT+O adds a note"
+          },
+          {
+            "elapsedTime": 0.1739999999999995,
+            "timestamp": 19.079,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      },
+      {
+        "time": 16.964,
+        "name": "global hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 16.631,
+            "timestamp": 16.631,
+            "result": true,
+            "message": "Pressing hotkey help command opens the hotkeys modal and focuses the close dialog link"
+          },
+          {
+            "elapsedTime": 0.1999999999999993,
+            "timestamp": 16.831,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      },
+      {
+        "time": 16.312,
+        "name": "escape behavior",
+        "assertions": [
+          {
+            "elapsedTime": 14.461,
+            "timestamp": 14.461,
+            "result": true,
+            "message": "Login dialog opens"
+          },
+          {
+            "elapsedTime": 0.03200000000000003,
+            "timestamp": 14.493,
+            "result": true,
+            "message": "ESC closes the modal and returns focus to the expression list"
+          },
+          {
+            "elapsedTime": 1.3089999999999993,
+            "timestamp": 15.802,
+            "result": true,
+            "message": "New graph link gains focus"
+          },
+          {
+            "elapsedTime": 0.11700000000000088,
+            "timestamp": 15.919,
+            "result": true,
+            "message": "ESC closes the modal and returns focus to the expression list"
+          },
+          {
+            "elapsedTime": 0.29799999999999827,
+            "timestamp": 16.217,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      },
+      {
+        "time": 16.206,
+        "name": "Static point hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 12.907,
+            "timestamp": 12.907,
+            "result": true,
+            "message": "Pressed CTRL+ALT+P, and ARIA alert of no movable points appears"
+          },
+          {
+            "elapsedTime": 2.712999999999999,
+            "timestamp": 15.62,
+            "result": true,
+            "message": "has not alertted anything about the point"
+          },
+          {
+            "elapsedTime": 0.5009999999999994,
+            "timestamp": 16.121,
+            "result": true,
+            "message": "alerts point information"
+          },
+          {
+            "elapsedTime": 0.0010000000000012221,
+            "timestamp": 16.122,
+            "result": true,
+            "message": "CTRL+ALT+P focuses the static point"
+          }
+        ]
+      },
+      {
+        "time": 16.979,
+        "name": "Static editable label point hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 13.613,
+            "timestamp": 13.613,
+            "result": true,
+            "message": "Pressed CTRL+ALT+P, and ARIA alert of no movable points appears"
+          },
+          {
+            "elapsedTime": 3.0150000000000006,
+            "timestamp": 16.628,
+            "result": true,
+            "message": "has not alertted anything about the point"
+          },
+          {
+            "elapsedTime": 0.28999999999999915,
+            "timestamp": 16.918,
+            "result": true,
+            "message": "CTRL+ALT+P focuses the static point's edit field"
+          }
+        ]
+      },
+      {
+        "time": 20.07,
+        "name": "movable point hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 12.884,
+            "timestamp": 12.884,
+            "result": true,
+            "message": "Pressed CTRL+ALT+P, and ARIA alert of no movable points appears"
+          },
+          {
+            "elapsedTime": 3.181000000000001,
+            "timestamp": 16.065,
+            "result": true,
+            "message": "has not alertted anything about the point"
+          },
+          {
+            "elapsedTime": 0.39199999999999946,
+            "timestamp": 16.457,
+            "result": true,
+            "message": "alerts about the movable point"
+          },
+          {
+            "elapsedTime": 0,
+            "timestamp": 16.457,
+            "result": true,
+            "message": "CTRL+ALT+P focuses the movable point"
+          },
+          {
+            "elapsedTime": 0.003999999999997783,
+            "timestamp": 16.461,
+            "result": true,
+            "message": "X speaks X coordinate on demand."
+          },
+          {
+            "elapsedTime": 0.0010000000000012221,
+            "timestamp": 16.462,
+            "result": true,
+            "message": "Y speaks Y coordinate on demand."
+          },
+          {
+            "elapsedTime": 0.0019999999999988916,
+            "timestamp": 16.464,
+            "result": true,
+            "message": "L speaks point label on demand."
+          },
+          {
+            "elapsedTime": 0.0010000000000012221,
+            "timestamp": 16.465,
+            "result": true,
+            "message": "C speaks point color on demand."
+          },
+          {
+            "elapsedTime": 0.18799999999999883,
+            "timestamp": 16.653,
+            "result": true,
+            "message": "Right Arrow increases X"
+          },
+          {
+            "elapsedTime": 0.29900000000000304,
+            "timestamp": 16.952,
+            "result": true,
+            "message": "Up Arrow increases Y"
+          },
+          {
+            "elapsedTime": 0.2049999999999983,
+            "timestamp": 17.157,
+            "result": true,
+            "message": "Left Arrow decreases X"
+          },
+          {
+            "elapsedTime": 0.17099999999999937,
+            "timestamp": 17.328,
+            "result": true,
+            "message": "Down Arrow decreases Y"
+          },
+          {
+            "elapsedTime": 0.2140000000000022,
+            "timestamp": 17.542,
+            "result": true,
+            "message": "Shift+Right Arrow increases X by larger amount"
+          },
+          {
+            "elapsedTime": 0.21099999999999852,
+            "timestamp": 17.753,
+            "result": true,
+            "message": "Shift+Up Arrow increases Y by larger amount"
+          },
+          {
+            "elapsedTime": 0.19900000000000162,
+            "timestamp": 17.952,
+            "result": true,
+            "message": "Shift+Left Arrow decreases X by larger amount"
+          },
+          {
+            "elapsedTime": 0.19599999999999795,
+            "timestamp": 18.148,
+            "result": true,
+            "message": "Shift+Down Arrow decreases Y by larger amount"
+          },
+          {
+            "elapsedTime": 0.015000000000000568,
+            "timestamp": 18.163,
+            "result": true,
+            "message": "Label view exists"
+          },
+          {
+            "elapsedTime": 0.9059999999999988,
+            "timestamp": 19.069,
+            "result": true,
+            "message": "Right Arrow increases X"
+          },
+          {
+            "elapsedTime": 0.6590000000000025,
+            "timestamp": 19.728,
+            "result": true,
+            "message": "Label still exposed through ARIA when hidden"
+          },
+          {
+            "elapsedTime": 0.10999999999999943,
+            "timestamp": 19.838,
+            "result": true,
+            "message": "Movable point is out of the tab order"
+          },
+          {
+            "elapsedTime": 0.12099999999999866,
+            "timestamp": 19.959,
+            "result": true,
+            "message": "Movable point is back in the tab order"
+          }
+        ]
+      },
+      {
+        "time": 17.952,
+        "name": "movable point hotkeys with dynamic label",
+        "assertions": [
+          {
+            "elapsedTime": 17.239,
+            "timestamp": 17.239,
+            "result": true,
+            "message": ""
+          },
+          {
+            "elapsedTime": 0.0009999999999976694,
+            "timestamp": 17.24,
+            "result": true,
+            "message": "CTRL+ALT+P focuses the movable point"
+          },
+          {
+            "elapsedTime": 0.2140000000000022,
+            "timestamp": 17.454,
+            "result": true,
+            "message": "Right Arrow increases X but ARIA label reflects only dynamic label change"
+          },
+          {
+            "elapsedTime": 0.4469999999999992,
+            "timestamp": 17.901,
+            "result": true,
+            "message": "After removing focus, movable point ARIA label includes usage instructions"
+          }
+        ]
+      },
+      {
+        "time": 17.885,
+        "name": "table hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 13.874,
+            "timestamp": 13.874,
+            "result": true,
+            "message": "CTRL+ALT+T adds a table"
+          },
+          {
+            "elapsedTime": 0.0019999999999988916,
+            "timestamp": 13.876,
+            "result": true,
+            "message": "First data cell is selected"
+          },
+          {
+            "elapsedTime": 0.02400000000000091,
+            "timestamp": 13.9,
+            "result": true,
+            "message": "CTRL+Up moves to first cell in column"
+          },
+          {
+            "elapsedTime": 1.4740000000000002,
+            "timestamp": 15.374,
+            "result": true,
+            "message": "CTRL+Down moves to last cell in column"
+          },
+          {
+            "elapsedTime": 1.302999999999999,
+            "timestamp": 16.677,
+            "result": true,
+            "message": "CTRL+Right moves to last cell in row"
+          },
+          {
+            "elapsedTime": 0.8880000000000017,
+            "timestamp": 17.565,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      },
+      {
+        "time": 19.455,
+        "name": "edit list mode hotkeys",
+        "assertions": [
+          {
+            "elapsedTime": 17.66,
+            "timestamp": 17.66,
+            "result": true,
+            "message": "CTRL+ALT+D activates edit list mode"
+          },
+          {
+            "elapsedTime": 1.2899999999999991,
+            "timestamp": 18.95,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      },
+      {
+        "time": 16.793,
+        "name": "clicking in edit list mode",
+        "assertions": [
+          {
+            "elapsedTime": 16.311,
+            "timestamp": 16.311,
+            "result": true,
+            "message": "CTRL+ALT+D activates edit list mode"
+          },
+          {
+            "elapsedTime": 0.004000000000001336,
+            "timestamp": 16.315,
+            "result": true,
+            "message": "There are 6 expressions"
+          },
+          {
+            "elapsedTime": 0.36699999999999733,
+            "timestamp": 16.682,
+            "result": false,
+            "message": "Uncaught TypeError: Cannot read property 'stack' of null",
+            "stacktrace": "TypeError: Cannot read property 'stack' of null\n    at extractStacktrace (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:512:9)\n    at window.onerror (http://local.desmos.com:5001/assets/generated/combined/submodules/sill/vendor/qunit.js:454:3)",
+            "expected": "",
+            "actual": "null"
+          }
+        ]
+      }
+    ]
+  },
+  "passes": 48,
+  "failures": 6,
+  "skips": 0
+};
           });
         });
       });
