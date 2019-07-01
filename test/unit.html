@@ -88,7 +88,6 @@
               failures: runner.stats.failures,
               skips: 0
             };
-            //window.testResultsString = JSON.stringify(sillResults, null, 2);
             window.testResults = {
   "modules": {
     "Acceptance.Hotkeys": [
@@ -500,6 +499,7 @@
   "failures": 6,
   "skips": 0
 };
+            window.testResultsString = JSON.stringify(window.testResults, null, 2);
           });
         });
       });
