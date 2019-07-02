@@ -25,6 +25,8 @@
     <!-- configure mocha and chai -->
     <script type="text/javascript">
       var post_xunit_to = Mocha.utils.parseQuery(location.search).post_xunit_to;
+      var json = location.search.indexOf('json')>=0;
+      var listTests = location.search.indexOf('listTests')>=0;
 
       mocha.setup({
         ui: 'tdd',
@@ -69,6 +71,14 @@
         suiteResults.time = Date.now() - startTime;
         suiteResults.assertions = [];
         currentSuite = suiteResults;
+        if (listTests) {
+          currentSuite.assertions.push({
+            "elapsedTime": 0,
+            "timestamp": 0,
+            "result": true,
+            "message": "okay"
+          });
+        }
       });
 
       runner.on('suite end', function() {
@@ -79,14 +89,16 @@
       });
 
       runner.on('pass', function(test) {
-        var elapsedTime = Date.now() - startTime;
-        var timestamp = elapsedTime - currentSuite.time;
-        currentSuite.assertions.push({
-          "elapsedTime": elapsedTime,
-          "timestamp": timestamp,
-          "result": true,
-          "message": test.title
-        });
+        if (!listTests) {
+          var elapsedTime = Date.now() - startTime;
+          var timestamp = elapsedTime - currentSuite.time;
+          currentSuite.assertions.push({
+            "elapsedTime": elapsedTime,
+            "timestamp": timestamp,
+            "result": true,
+            "message": test.title
+          });
+        }
       });
 
       // the following is based on https://github.com/saucelabs-sample-scripts/JavaScript/blob/4946c5cf0ab7325dce5562881dba7c28e30989e5/reporting_mocha.js
@@ -102,17 +114,19 @@
         }
 
         failedTests.push({name: test.title, result: false, message: err.message, stack: err.stack, titles: flattenTitles(test) });
-        var elapsedTime = Date.now() - startTime;
-        var timestamp = elapsedTime - currentSuite.time;
-        currentSuite.assertions.push({
-          "elapsedTime": elapsedTime,
-          "timestamp": timestamp,
-          "result": false,
-          "message": err.message,
-          "stacktrace": err.stack,
-          "expected": true,
-          "actual": false
-        });
+        if (!listTests) {
+          var elapsedTime = Date.now() - startTime;
+          var timestamp = elapsedTime - currentSuite.time;
+          currentSuite.assertions.push({
+            "elapsedTime": elapsedTime,
+            "timestamp": timestamp,
+            "result": false,
+            "message": err.message,
+            "stacktrace": err.stack,
+            "expected": true,
+            "actual": false
+          });
+        }
       });
 
       runner.on('end', function() {
@@ -121,14 +135,16 @@
             window.mochaResults = runner.stats;
             window.mochaResults.reports = failedTests;
 
-            // For Sill:
-            window.testResults = {
-              modules: { "mathquill": moduleResults },
-              passes: runner.stats.passes,
-              failures: runner.stats.failures,
-              skips: 0
-            };
-            window.testResultsString = JSON.stringify(window.testResults, null, 2);
+            var testResults;
+            if (json || listTests) {
+              testResults = {
+                modules: { "mathquill": moduleResults },
+                passes: runner.stats.passes,
+                failures: runner.stats.failures,
+                skips: 0
+              };
+              window.testResultsString = JSON.stringify(testResults, null, 2);
+            }
           });
         });
       });
