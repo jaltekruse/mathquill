@@ -25,8 +25,8 @@
     <!-- configure mocha and chai -->
     <script type="text/javascript">
       var post_xunit_to = Mocha.utils.parseQuery(location.search).post_xunit_to;
-      var json = location.search.indexOf('json')>=0;
-      var listTests = location.search.indexOf('listTests')>=0;
+      var json = Mocha.utils.parseQuery(location.search).json;
+      var listTests = Mocha.utils.parseQuery(location.search).listTests;
 
       mocha.setup({
         ui: 'tdd',
