@@ -70,7 +70,6 @@ LatexCmds.nsupersete = LatexCmds.nsuperseteq =
 LatexCmds.notsupersete = LatexCmds.notsuperseteq =
   bind(BinaryOperator,'\\not\\supseteq ','&#8841;');
 
-
 //the canonical sets of numbers
 LatexCmds.N = LatexCmds.naturals = LatexCmds.Naturals =
   bind(VanillaSymbol,'\\mathbb{N}','&#8469;');
@@ -99,6 +98,35 @@ LatexCmds.complexplane = LatexCmds.Complexplane = LatexCmds.ComplexPlane =
 LatexCmds.H = LatexCmds.Hamiltonian = LatexCmds.quaternions = LatexCmds.Quaternions =
   bind(VanillaSymbol,'\\mathbb{H}','&#8461;');
 
+LatexCmds.mathbb = P(VanillaSymbol, function(_, super_) {
+    _.init = function(ch) {
+      super_.init.call(this, ch);
+    };
+    _.parser = function () {
+      var self = this;
+      var succeed = Parser.succeed;
+      var fail = Parser.fail;
+      
+      return latexMathParser.block.then(function (block) {
+        var letter = null;
+        if(block && (block.ends[-1]=== block.ends[1]) && block.ends[-1].letter){
+          letter= block.ends[-1].letter;
+          switch(letter){
+            case 'N': return succeed(LatexCmds.N('\\mathbb{N}'));
+            case 'Z': return succeed(LatexCmds.Z('\\mathbb{Z}'));
+            case 'Q': return succeed(LatexCmds.Q('\\mathbb{Q}'));
+            case 'R': return succeed(LatexCmds.R('\\mathbb{R}'));
+            case 'C': return succeed(LatexCmds.C('\\mathbb{C}'));
+            case 'H': return succeed(LatexCmds.H('\\mathbb{H}'));
+            case 'P': return succeed(LatexCmds.P('\\mathbb{P}'));
+          }
+        }
+        return fail(self);
+      });
+    }
+  });
+  
+  
 //spacing
 LatexCmds.quad = LatexCmds.emsp = bind(VanillaSymbol,'\\quad ','    ');
 LatexCmds.qquad = bind(VanillaSymbol,'\\qquad ','        ');
@@ -201,8 +229,8 @@ LatexCmds.square = bind(VanillaSymbol, '\\square ', '&#11036;');
 
 //variable-sized
 LatexCmds.oint = bind(VanillaSymbol, '\\oint ', '&#8750;');
-LatexCmds.bigcap = bind(VanillaSymbol, '\\bigcap ', '&#8745;');
-LatexCmds.bigcup = bind(VanillaSymbol, '\\bigcup ', '&#8746;');
+//LatexCmds.bigcap = bind(VanillaSymbol, '\\bigcap ', '&#8745;');  //algebrakit: use SummationNotation
+//LatexCmds.bigcup = bind(VanillaSymbol, '\\bigcup ', '&#8746;');  //algebrakit: use SummationNotation
 LatexCmds.bigsqcup = bind(VanillaSymbol, '\\bigsqcup ', '&#8852;');
 LatexCmds.bigvee = bind(VanillaSymbol, '\\bigvee ', '&#8744;');
 LatexCmds.bigwedge = bind(VanillaSymbol, '\\bigwedge ', '&#8743;');

@@ -326,7 +326,7 @@ var Symbol = P(MathCommand, function(_, super_) {
 
   _.latex = function(){ 
     // return this.ctrlSeq;
-    return this.ctrlSeq.replace(/[^\x00-\x7F]+/g, function(ch){return '\\text{'+ch+'}'});  //wrap unicode stuff in \text
+    return this.ctrlSeq.replace(/[^\x00-\x7F]+/g, function(ch){return '\\text{'+ch+'}'});  //mslob: wrap unicode stuff in \text
   };
   _.text = function(){ return this.textTemplate; };
   _.placeCursor = noop;

@@ -405,6 +405,10 @@ LatexCmds['∏'] =
 LatexCmds.coprod =
   LatexCmds.coproduct = bind(SummationNotation, '\\coprod ', '&#8720;');
 
+LatexCmds.bigcup = bind(SummationNotation, '\\bigcup ', '&#8746;');
+
+ LatexCmds.bigcap = bind(SummationNotation, '\\bigcap ', '&#8745;');
+
 var SummationSymbol =
   LatexCmds['intsym'] =
   LatexCmds.intsym = P(Symbol, function (_, super_) {
