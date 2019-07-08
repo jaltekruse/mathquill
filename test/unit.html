@@ -26,6 +26,7 @@
     <script type="text/javascript">
       var json = location.search.indexOf('json') >= 0;
       var listTests = location.search.indexOf('listtests') >= 0;
+      console.log("Location search is", location.search);
 
       mocha.setup({
         ui: 'tdd',
