@@ -113,16 +113,67 @@
       });
 
       runner.on('end', function() {
-        if (json || listTests) {
-          window.testResults = {
-            modules: { "mathquill": moduleResults },
-            passes: runner.stats.passes,
-            failures: runner.stats.failures,
-            skips: 0
-          };
+        window.testResults = {
+          modules: { "mathquill": moduleResults },
+          passes: runner.stats.passes,
+          failures: runner.stats.failures,
+          skips: 0
+        };
+        if (json) {
           window.testResultsString = JSON.stringify(window.testResults, null, 2);
+        } else {
+          window.testResultsString = outputXML(window.testResults);
         }
       });
+
+      // must escape a few symbols in xml attributes:
+      //http://stackoverflow.com/questions/866706/which-characters-are-invalid-unless-encoded-in-an-xml-attribute
+      var xmlEscape = function(string){
+        string = string || '';
+        string = string.replace(/&/g, '&amp;');
+        string = string.replace(/"/g, '&quot;');
+        string = string.replace(/</g, '&lt;');
+        return string;
+      };
+
+      function outputXML (results) {
+        var xml = [];
+        xml.push('<?xml version="1.0"?>');
+        xml.push('<testsuites>');
+
+        for (var moduleName in results.modules) {
+          var module = results.modules[moduleName];
+          for (var i = 0; i < module.length; i++) {
+            var test = module[i];
+            xml.push('<testsuite name="'+ moduleName + '.' + test.name + '" time="' + test.time + '">');
+
+            for (var j=0; j<test.assertions.length; j++) {
+              var assertion = test.assertions[j];
+              var assertionMessage = assertion.message || 'no-assertion-message';
+              var assertionTime = assertion.elapsedTime;
+
+              xml.push('<testcase name="' + assertionMessage + '" time="' + assertionTime + '">');
+
+              if (assertion.result === false) {
+                xml.push('<failure message="'+ assertionMessage +'">');
+                xml.push('Expected: ' + assertion.expected + "\n");
+                xml.push('Actual: ' + assertion.actual + "\n");
+                xml.push('Stacktrace: ' + assertion.stacktrace);
+                xml.push('</failure>');
+              } else if (assertion.result === undefined) {
+                xml.push('<skipped />');
+              }
+
+              xml.push('</testcase>');
+            }
+
+            xml.push('</testsuite>');
+          }
+        }
+
+        xml.push('</testsuites>');
+        return xml.join('\n');
+      }
     </script>
   </body>
 </html>
