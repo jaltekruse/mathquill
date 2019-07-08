@@ -24,7 +24,7 @@
 
     <!-- configure mocha and chai -->
     <script type="text/javascript">
-      var json = location.search.indexOf('json') >= 0;
+      var json = true; //location.search.indexOf('json') >= 0;
       var listTests = location.search.indexOf('listTests') >= 0;
 
       mocha.setup({
@@ -123,7 +123,6 @@
           };
           window.testResultsString = JSON.stringify(testResults, null, 2);
         }
-      console.log("Test results", window.testResultsString);
       });
     </script>
   </body>
