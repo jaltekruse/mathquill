@@ -24,13 +24,12 @@
 
     <!-- configure mocha and chai -->
     <script type="text/javascript">
-      var post_xunit_to = Mocha.utils.parseQuery(location.search).post_xunit_to;
       var json = location.search.indexOf('json') >= 0;
       var listTests = location.search.indexOf('listTests') >= 0;
 
       mocha.setup({
         ui: 'tdd',
-        reporter: post_xunit_to ? 'xunit' : 'html'
+        reporter: 'html'
       });
 
       var xunit = '';
@@ -101,19 +100,7 @@
         }
       });
 
-      // the following is based on https://github.com/saucelabs-sample-scripts/JavaScript/blob/4946c5cf0ab7325dce5562881dba7c28e30989e5/reporting_mocha.js
-      var failedTests = [];
       runner.on('fail', function(test, err) {
-        function flattenTitles(test) {
-          var titles = [];
-          while (test.parent.title) {
-            titles.push(test.parent.title);
-            test = test.parent;
-          }
-          return titles.reverse();
-        }
-
-        failedTests.push({name: test.title, result: false, message: err.message, stack: err.stack, titles: flattenTitles(test) });
         if (!listTests) {
           var elapsedTime = Date.now() - startTime;
           var timestamp = elapsedTime - currentSuite.time;
@@ -130,22 +117,15 @@
       });
 
       runner.on('end', function() {
-        setTimeout(function() {
-          $.post(post_xunit_to, xunit).complete(function() {
-            window.mochaResults = runner.stats;
-            window.mochaResults.reports = failedTests;
-
-            if (json || listTests) {
-              var testResults = {
-                modules: { "mathquill": moduleResults },
-                passes: runner.stats.passes,
-                failures: runner.stats.failures,
-                skips: 0
-              };
-              window.testResultsString = JSON.stringify(testResults, null, 2);
-            }
-          });
-        });
+        if (json || listTests) {
+          var testResults = {
+            modules: { "mathquill": moduleResults },
+            passes: runner.stats.passes,
+            failures: runner.stats.failures,
+            skips: 0
+          };
+          window.testResultsString = JSON.stringify(testResults, null, 2);
+        }
       });
     </script>
   </body>
