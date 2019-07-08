@@ -25,16 +25,12 @@
     <!-- configure mocha and chai -->
     <script type="text/javascript">
       var json = location.search.indexOf('json') >= 0;
-      var listTests = location.search.indexOf('listtests') >= 0;
-      console.log("Location search is", location.search);
+      var listTests = location.search.indexOf('listTests') >= 0;
 
       mocha.setup({
         ui: 'tdd',
         reporter: 'html'
       });
-
-      var xunit = '';
-      Mocha.process.stdout.write = function(line) { xunit += line; };
     </script>
 
     <!-- include the library with the tests inlined -->
