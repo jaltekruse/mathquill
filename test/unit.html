@@ -68,10 +68,10 @@
         currentSuite = suiteResults;
         if (listTests) {
           currentSuite.assertions.push({
-            "elapsedTime": 0,
-            "timestamp": 0,
-            "result": true,
-            "message": "okay"
+            elapsedTime: 0,
+            timestamp: 0,
+            result: true,
+            message: "okay"
           });
         }
       });
@@ -88,10 +88,10 @@
           var elapsedTime = Date.now() - startTime;
           var timestamp = elapsedTime - currentSuite.time;
           currentSuite.assertions.push({
-            "elapsedTime": elapsedTime,
-            "timestamp": timestamp,
-            "result": true,
-            "message": test.title
+            elapsedTime: elapsedTime,
+            timestamp: timestamp,
+            result: true,
+            message: test.title
           });
         }
       });
@@ -101,26 +101,26 @@
           var elapsedTime = Date.now() - startTime;
           var timestamp = elapsedTime - currentSuite.time;
           currentSuite.assertions.push({
-            "elapsedTime": elapsedTime,
-            "timestamp": timestamp,
-            "result": false,
-            "message": err.message,
-            "stacktrace": err.stack,
-            "expected": true,
-            "actual": false
+            elapsedTime: elapsedTime,
+            timestamp: timestamp,
+            result: false,
+            message: err.message,
+            stacktrace: err.stack,
+            expected: true,
+            actual: false
           });
         }
       });
 
       runner.on('end', function() {
         if (json || listTests) {
-          var testResults = {
+          window.testResults = {
             modules: { "mathquill": moduleResults },
             passes: runner.stats.passes,
             failures: runner.stats.failures,
             skips: 0
           };
-          window.testResultsString = JSON.stringify(testResults, null, 2);
+          window.testResultsString = JSON.stringify(window.testResults, null, 2);
         }
       });
     </script>
