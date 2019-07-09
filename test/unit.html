@@ -25,9 +25,10 @@
     <!-- configure mocha and chai -->
     <script type="text/javascript">
       mocha.setup({
-        ui: 'tdd',
+        bail: false,
+        fullStackTrace: true,
         reporter: 'html',
-        fullStackTrace: true
+        ui: 'tdd'
       });
     </script>
 
