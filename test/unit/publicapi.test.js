@@ -33,7 +33,7 @@ suite('Public API', function() {
       var mathFieldSpan = $('<span/>')[0];
       var mathField = MQ.MathField(mathFieldSpan);
 
-      assert.ok(MQ(mathFieldSpan) !== mathField);
+      assert.ok(MQ(mathFieldSpan) === mathField);
 
       assert.equal(MQ(mathFieldSpan).id, mathField.id);
       assert.equal(MQ(mathFieldSpan).id, MQ(mathFieldSpan).id);
