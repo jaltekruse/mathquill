@@ -19,7 +19,8 @@ var Controller = P(function(_) {
     this.ariaPostLabel = '';
 
     root.controller = this;
-
+    // For unit tests:
+    this.LatexCmds = LatexCmds;
     this.cursor = root.cursor = Cursor(root, options, this);
     // TODO: stop depending on root.cursor, and rm it
   };
