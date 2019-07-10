@@ -306,6 +306,10 @@ var MathCommand = P(MathElement, function(_, super_) {
  */
 var Symbol = P(MathCommand, function(_, super_) {
   _.init = function(ctrlSeq, html, text, mathspeak) {
+    if (/^\\.*[A-Za-z]$/.test(ctrlSeq)) {
+      console.warn('Creating a symbol and got ctrlSeq of', ctrlSeq, 'which is missing a trailing space.');
+      ctrlSeq = ctrlSeq + ' ';
+    }
     if (!text) text = ctrlSeq && ctrlSeq.length > 1 ? ctrlSeq.slice(1) : ctrlSeq;
 
     this.mathspeakName = mathspeak || text;
