@@ -7,7 +7,7 @@ suite('latex cmds', function() {
 
   function assertValidCtrlSeq(ctrlSeq) {
     assert.ok(
-      !/^\\.*[A-Za-z]$/.test(ctrlSeq),
+      /^\\.*\s$/.test(ctrlSeq),
       ctrlSeq + ' is a valid control sequence'
     );
   }
