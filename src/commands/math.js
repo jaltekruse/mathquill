@@ -308,7 +308,7 @@ var Symbol = P(MathCommand, function(_, super_) {
   _.init = function(ctrlSeq, html, text, mathspeak) {
     this.isSymbol = true;
     if (/^\\.*[A-Za-z]$/.test(ctrlSeq)) {
-      console.error('Creating a symbol and got ctrlSeq of', ctrlSeq, 'which is missing a trailing space.');
+      // ctrlSeq needs a trailing space but doesn't have one.
       ctrlSeq = ctrlSeq + ' ';
     }
     if (!text) text = ctrlSeq && ctrlSeq.length > 1 ? ctrlSeq.slice(1) : ctrlSeq;
