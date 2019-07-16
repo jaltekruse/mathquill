@@ -7,7 +7,7 @@ suite('latex cmds', function() {
 
   function assertValidCtrlSeq(ctrlSeq) {
     assert.ok(
-      /^\\.*\s$/.test(ctrlSeq),
+      /^\\.*[^A-Za-z]$/.test(ctrlSeq),
       ctrlSeq + ' is a valid control sequence'
     );
   }
@@ -15,7 +15,13 @@ suite('latex cmds', function() {
   test('validating LatexCmds control sequences', function() {
     for (var key in LatexCmds) {
       if (LatexCmds.hasOwnProperty(key)) {
-        var cmd = LatexCmds[key];
+        var cmd = LatexCmds[key]();
+        if (
+          !cmd.isSymbol ||
+          !cmd.ctrlSeq ||
+          cmd.ctrlSeq.indexOf('\\') !== 0
+        )
+          continue;
         assertValidCtrlSeq(cmd.ctrlSeq);
       }
     }
