@@ -7,12 +7,19 @@ suite('latex cmds', function() {
 
   function assertValidCtrlSeq(ctrlSeq) {
     assert.ok(
-      /^\\.*[^A-Za-z]$/.test(ctrlSeq),
+      /^\\[a-zA-Z]*.*[^A-Za-z]$/.test(ctrlSeq),
       ctrlSeq + ' is a valid control sequence'
     );
   }
 
-  test('validating LatexCmds control sequences', function() {
+  function assertInvalidCtrlSeq(ctrlSeq) {
+    assert.ok(
+      !/^\\[a-zA-Z]*.*[^A-Za-z]$/.test(ctrlSeq),
+      ctrlSeq + ' is an invalid control sequence'
+    );
+  }
+
+  test('validating LatexCmds control sequences for math symbols', function() {
     for (var key in LatexCmds) {
       if (LatexCmds.hasOwnProperty(key)) {
         var cmd = LatexCmds[key]();
@@ -27,4 +34,15 @@ suite('latex cmds', function() {
     }
   });
 
+  test('testing specific valid and invalid control sequences', function() {
+    assertValidCtrlSeq('\\test ');
+    assertValidCtrlSeq('\\thing{N}');
+    assertValidCtrlSeq('\\$');
+    assertValidCtrlSeq('\\ ');
+    assertValidCtrlSeq('\\not\\ni ');
+    assertInvalidCtrlSeq('\\test');
+    assertInvalidCtrlSeq('test');
+    assertInvalidCtrlSeq('test ');
+    assertInvalidCtrlSeq('\\thing{N');
+  });
 });
