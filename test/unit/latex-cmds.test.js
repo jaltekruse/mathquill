@@ -1,9 +1,8 @@
 suite('latex cmds', function() {
-  var LatexCmds, processedCmds;
+  var LatexCmds;
   setup(function() {
     var mathField = MQ.MathField($('<span></span>').appendTo('#mock')[0]);
     LatexCmds = mathField.__controller.LatexCmds;
-    processedCmds = [];
   });
 
   function assertValidCtrlSeq(ctrlSeq) {
@@ -17,12 +16,7 @@ suite('latex cmds', function() {
     for (var key in LatexCmds) {
       if (LatexCmds.hasOwnProperty(key)) {
         var cmd = LatexCmds[key];
-        // LatexCmds includes aliases of items whose ctrlSeq properties might be the same.
-        // We don't want to waste time processing something twice.
-        if (!processedCmds.includes(cmd.ctrlSeq)) {
-          processedCmds.push(cmd.ctrlSeq);
-          assertValidCtrlSeq(cmd.ctrlSeq);
-        }
+        assertValidCtrlSeq(cmd.ctrlSeq);
       }
     }
   });
