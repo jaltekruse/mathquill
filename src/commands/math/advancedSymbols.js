@@ -268,7 +268,7 @@ LatexCmds.bull = LatexCmds.bullet = bind(VanillaSymbol,'\\bullet ','&bull;');
 LatexCmds.setminus = LatexCmds.smallsetminus =
   bind(VanillaSymbol,'\\setminus ','&#8726;');
 
-LatexCmds.not = bind(Symbol,'\\not ','<span class="not">/</span>');
+// LatexCmds.not = bind(Symbol,'\\not ','<span class="not">/</span>');
 LatexCmds['¬'] = LatexCmds.neg = bind(VanillaSymbol,'\\neg ','&not;');
 
 LatexCmds['…'] = LatexCmds.dots = LatexCmds.ellip = LatexCmds.hellip =
