@@ -253,6 +253,7 @@ LatexCmds.rbrack = bind(VanillaSymbol, ']');
 LatexCmds.slash = bind(VanillaSymbol, '/');
 LatexCmds.vert = bind(VanillaSymbol,'|');
 LatexCmds.perp = LatexCmds.perpendicular = bind(VanillaSymbol,'\\perp ','&perp;');
+LatexCmds.nperp = LatexCmds.notperpendicular = bind(VanillaSymbol, '\\not\\perp', '&perp;\u0338');
 LatexCmds.nabla = LatexCmds.del = bind(VanillaSymbol,'\\nabla ','&nabla;');
 LatexCmds.hbar = bind(VanillaSymbol,'\\hbar ','&#8463;');
 
@@ -267,7 +268,7 @@ LatexCmds.bull = LatexCmds.bullet = bind(VanillaSymbol,'\\bullet ','&bull;');
 LatexCmds.setminus = LatexCmds.smallsetminus =
   bind(VanillaSymbol,'\\setminus ','&#8726;');
 
-LatexCmds.not = //bind(Symbol,'\\not ','<span class="not">/</span>');
+LatexCmds.not = bind(Symbol,'\\not ','<span class="not">/</span>');
 LatexCmds['¬'] = LatexCmds.neg = bind(VanillaSymbol,'\\neg ','&not;');
 
 LatexCmds['…'] = LatexCmds.dots = LatexCmds.ellip = LatexCmds.hellip =
