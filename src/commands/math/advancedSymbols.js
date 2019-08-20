@@ -107,7 +107,7 @@ LatexCmds.mathbb = P(VanillaSymbol, function(_, super_) {
       var self = this;
       var succeed = Parser.succeed;
       var fail = Parser.fail;
-      
+
       return latexMathParser.block.then(function (block) {
         var letter = null;
         if(block && (block.ends[-1]=== block.ends[1]) && block.ends[-1].letter){
@@ -126,8 +126,8 @@ LatexCmds.mathbb = P(VanillaSymbol, function(_, super_) {
       });
     }
   });
-  
-  
+
+
 //spacing
 LatexCmds.quad = LatexCmds.emsp = bind(VanillaSymbol,'\\quad ','    ');
 LatexCmds.qquad = bind(VanillaSymbol,'\\qquad ','        ');
@@ -254,6 +254,7 @@ LatexCmds.rbrack = bind(VanillaSymbol, ']');
 LatexCmds.slash = bind(VanillaSymbol, '/');
 LatexCmds.vert = bind(VanillaSymbol,'|');
 LatexCmds.perp = LatexCmds.perpendicular = bind(VanillaSymbol,'\\perp ','&perp;');
+LatexCmds.nperp = LatexCmds.notperpendicular = bind(VanillaSymbol, '\\not\\perp', '&perp;\u0338');
 LatexCmds.nabla = LatexCmds.del = bind(VanillaSymbol,'\\nabla ','&nabla;');
 LatexCmds.hbar = bind(VanillaSymbol,'\\hbar ','&#8463;');
 
@@ -329,7 +330,7 @@ LatexCmds.alef = LatexCmds.alefsym = LatexCmds.aleph = LatexCmds.alephsym =
 LatexCmds.xist = //LOL
 LatexCmds.xists = LatexCmds.exist = LatexCmds.exists =
   bind(VanillaSymbol,'\\exists ','&exist;');
-  
+
 LatexCmds.nexists = LatexCmds.nexist =
       bind(VanillaSymbol, '\\nexists ', '&#8708;');
 

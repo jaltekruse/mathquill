@@ -80,7 +80,7 @@ LatexCmds.PolarVectorEn = P(IntervalCommand, function(_, super_) {
 LatexCmds.PolarVectorNl = P(IntervalCommand, function(_, super_) {
   _.init = function() {
     super_.init.call(this, '\\PolarVectorNl', '(', ')', ';');
-  } 
+  }
   _.latex = function(){
     return '\\left(' + this.ends[L].latex() + ';' + this.ends[R].latex() + '\\right)';
   }
@@ -202,26 +202,27 @@ var Overset =
   };
 });
 
-LatexCmds.not = P(VanillaSymbol, function(_, super_) {
+LatexCmds.not = P(VanillaSymbol, function (_, super_) {
   // If one of these appears immediately after not, the
   // parser returns a different symbol.
   _.suffixes = {
-    '\\in':       'notin',
-    '\\ni':       'notni',
-    '\\subset':   'notsubset',
+    '\\in': 'notin',
+    '\\ni': 'notni',
+    '\\subset': 'notsubset',
     '\\subseteq': 'notsubseteq',
-    '\\supset':   'notsupset',
-    '\\supseteq': 'notsupseteq'
+    '\\supset': 'notsupset',
+    '\\supseteq': 'notsupseteq',
+    '\\perp': 'nperp',
   };
-  _.init = function() {
+  _.init = function () {
     return super_.init.call(this, '\\neg ', '&not;');
   };
-  _.parser = function() {
+  _.parser = function () {
     var succeed = Parser.succeed;
     var optWhitespace = Parser.optWhitespace;
 
     // Sort the suffixes, longest first
-    var suffixes = Object.keys(_.suffixes).sort(function(a, b) {
+    var suffixes = Object.keys(_.suffixes).sort(function (a, b) {
       return b.length - a.length;
     });
 
