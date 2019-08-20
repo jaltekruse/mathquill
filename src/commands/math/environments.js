@@ -334,6 +334,15 @@ Environments.matrix = P(Environment, function(_, super_) {
   };
 });
 
+Environments.cases = P(Matrix, function(_, super_) {
+  _.environment = 'cases';
+  _.parentheses = {
+    left: '\{',
+    right: ''
+  };
+});
+
+
 // LatexCmds.pmatrix =  // Debug purposes
 Environments.pmatrix = P(Matrix, function(_, super_) {
   _.environment = 'pmatrix';
