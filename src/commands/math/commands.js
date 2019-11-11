@@ -92,6 +92,24 @@ LatexCmds.dot = P(MathCommand, function (_, super_) {
     );
   };
 });
+LatexCmds.ddot = P(MathCommand, function (_, super_) {
+  _.init = function () {
+    super_.init.call(this, '\\ddot', '<span class="mq-non-leaf"><span class="mq-dot-recurring-inner">'
+      + '<span class="mq-dot-recurring">&#x308;</span>'
+      + '<span class="mq-empty-box">&0</span>'
+      + '</span></span>'
+    );
+  };
+});
+LatexCmds.dddot = P(MathCommand, function (_, super_) {
+  _.init = function () {
+    super_.init.call(this, '\\dddot', '<span class="mq-non-leaf"><span class="mq-dot-recurring-inner">'
+      + '<span class="mq-dot-recurring">&#x20db;</span>'
+      + '<span class="mq-empty-box">&0</span>'
+      + '</span></span>'
+    );
+  };
+});
 
 // `\textcolor{color}{math}` will apply a color to the given math content, where
 // `color` is any valid CSS Color Value (see [SitePoint docs][] (recommended),
