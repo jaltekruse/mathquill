@@ -264,7 +264,9 @@ var SupSub = P(MathCommand, function (_, super_) {
   _.latex = function () {
     function latex(prefix, block) {
       var l = block && block.latex();
-      return block ? prefix + (l.length === 1 ? l : '{' + (l || ' ') + '}') : '';
+      // 20190312 Force brackets when using subscript and superscript, even for blocks of length 1
+      // return block ? prefix + (l.length === 1 ? l : '{' + (l || ' ') + '}') : '';
+      return block ? prefix + '{' + (l || '') + '}' : '';
     }
     return latex('_', this.sub) + latex('^', this.sup);
   };
