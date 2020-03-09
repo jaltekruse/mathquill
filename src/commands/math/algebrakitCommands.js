@@ -77,6 +77,22 @@ LatexCmds.PolarVectorEn = P(IntervalCommand, function(_, super_) {
   }
 });
 
+//LatexCmds.diff = LatexCmds.diff = bind(VanillaSymbol,'\\diff ','d');
+LatexCmds.diff = P(VanillaSymbol, function(_, super_) {
+  _.init = function() {
+    super_.init.call(this, '\\diff', 'd');
+  };
+  _.latex = function() {
+    if(MathQuill.latexSyntax=='STANDARD') {
+      return 'd';
+    } else {
+      return '\\diff';
+    }
+  }
+});
+
+
+
 LatexCmds.PolarVectorNl = P(IntervalCommand, function(_, super_) {
   _.init = function() {
     super_.init.call(this, '\\PolarVectorNl', '(', ')', ';');
