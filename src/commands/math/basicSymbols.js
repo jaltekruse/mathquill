@@ -70,7 +70,8 @@ var Letter = P(Variable, function(_, super_) {
   _.createLeftOf = function(cursor) {
     super_.createLeftOf.apply(this, arguments);
     var autoCmds = cursor.options.autoCommands, maxLength = autoCmds._maxLength;
-    if (maxLength > 0) {
+    if (maxLength > 0 && !/[a-z]/i.test(this.letter)) { //algebrakit, mslob: trigger autocommand only after non-letter
+
       // want longest possible autocommand, so join together longest
       // sequence of letters
       var str = '', l = this, i = 0;
@@ -78,6 +79,7 @@ var Letter = P(Variable, function(_, super_) {
       while (l instanceof Letter && l.ctrlSeq === l.letter && i < maxLength) {
         str = l.letter + str, l = l[L], i += 1;
       }
+      str = str.substr(0, str.length-1); //mslob: remove the non-letter
       // check for an autocommand, going thru substrings longest to shortest
       while (str.length) {
         if (autoCmds.hasOwnProperty(str)) {
@@ -118,43 +120,75 @@ var Letter = P(Variable, function(_, super_) {
       el.ctrlSeq = el.letter;
     });
 
-    // check for operator names: at each position from left to right, check
-    // substrings from longest to shortest
-    outer: for (var i = 0, first = l[R] || this.parent.ends[L]; i < str.length; i += 1, first = first[R]) {
-      for (var len = min(autoOps._maxLength, str.length - i); len > 0; len -= 1) {
-        var word = str.slice(i, i + len);
-        if (autoOps.hasOwnProperty(word)) {
-          for (var j = 0, letter = first; j < len; j += 1, letter = letter[R]) {
-            letter.italicize(false);
-            var last = letter;
-          }
+    // algebrakit, mslob. Do not search commands in substrings, to allow entry of text like 'afstand' (which contains 'tan')
+    var word = str;
+    var first = l[R] || this.parent.ends[L];
+    var len = str.length;
+    if (autoOps.hasOwnProperty(word)) {
+      for (var j = 0, letter = first; j < len; j += 1, letter = letter[R]) {
+        letter.italicize(false);
+        var last = letter;
+      }
 
-          var isBuiltIn = BuiltInOpNames.hasOwnProperty(word);
-          first.ctrlSeq = (isBuiltIn ? '\\' : '\\operatorname{') + first.ctrlSeq;
-          last.ctrlSeq += (isBuiltIn ? ' ' : '}');
-          if (TwoWordOpNames.hasOwnProperty(word)) last[L][L][L].jQ.addClass('mq-last');
-          if (!shouldOmitPadding(first[L])) first.jQ.addClass('mq-first');
-          if (!shouldOmitPadding(last[R])) {
-            if (last[R] instanceof SupSub) {
-              var supsub = last[R]; // XXX monkey-patching, but what's the right thing here?
-              // Have operatorname-specific code in SupSub? A CSS-like language to style the
-              // math tree, but which ignores cursor and selection (which CSS can't)?
-              var respace = supsub.siblingCreated = supsub.siblingDeleted = function() {
-                supsub.jQ.toggleClass('mq-after-operator-name', !(supsub[R] instanceof Bracket));
-              };
-              respace();
-            }
-            else {
-              last.jQ.toggleClass('mq-last', !(last[R] instanceof Bracket));
-            }
-          }
-
-          i += len - 1;
-          first = last;
-          continue outer;
+      var isBuiltIn = BuiltInOpNames.hasOwnProperty(word);
+      first.ctrlSeq = (isBuiltIn ? '\\' : '\\operatorname{') + first.ctrlSeq;
+      last.ctrlSeq += (isBuiltIn ? ' ' : '}');
+      if (TwoWordOpNames.hasOwnProperty(word)) last[L][L][L].jQ.addClass('mq-last');
+      if (!shouldOmitPadding(first[L])) first.jQ.addClass('mq-first');
+      if (!shouldOmitPadding(last[R])) {
+        if (last[R] instanceof SupSub) {
+          var supsub = last[R]; // XXX monkey-patching, but what's the right thing here?
+          // Have operatorname-specific code in SupSub? A CSS-like language to style the
+          // math tree, but which ignores cursor and selection (which CSS can't)?
+          var respace = supsub.siblingCreated = supsub.siblingDeleted = function() {
+            supsub.jQ.toggleClass('mq-after-operator-name', !(supsub[R] instanceof Bracket));
+          };
+          respace();
+        }
+        else {
+          last.jQ.toggleClass('mq-last', !(last[R] instanceof Bracket));
         }
       }
     }
+
+    // // check for operator names: at each position from left to right, check
+    // // substrings from longest to shortest
+    // outer: for (var i = 0, first = l[R] || this.parent.ends[L]; i < str.length; i += 1, first = first[R]) {
+    //   for (var len = min(autoOps._maxLength, str.length - i); len > 0; len -= 1) {
+    //     var word = str.slice(i, i + len);
+
+    //     if (autoOps.hasOwnProperty(word)) {
+    //       for (var j = 0, letter = first; j < len; j += 1, letter = letter[R]) {
+    //         letter.italicize(false);
+    //         var last = letter;
+    //       }
+
+    //       var isBuiltIn = BuiltInOpNames.hasOwnProperty(word);
+    //       first.ctrlSeq = (isBuiltIn ? '\\' : '\\operatorname{') + first.ctrlSeq;
+    //       last.ctrlSeq += (isBuiltIn ? ' ' : '}');
+    //       if (TwoWordOpNames.hasOwnProperty(word)) last[L][L][L].jQ.addClass('mq-last');
+    //       if (!shouldOmitPadding(first[L])) first.jQ.addClass('mq-first');
+    //       if (!shouldOmitPadding(last[R])) {
+    //         if (last[R] instanceof SupSub) {
+    //           var supsub = last[R]; // XXX monkey-patching, but what's the right thing here?
+    //           // Have operatorname-specific code in SupSub? A CSS-like language to style the
+    //           // math tree, but which ignores cursor and selection (which CSS can't)?
+    //           var respace = supsub.siblingCreated = supsub.siblingDeleted = function() {
+    //             supsub.jQ.toggleClass('mq-after-operator-name', !(supsub[R] instanceof Bracket));
+    //           };
+    //           respace();
+    //         }
+    //         else {
+    //           last.jQ.toggleClass('mq-last', !(last[R] instanceof Bracket));
+    //         }
+    //       }
+
+    //       i += len - 1;
+    //       first = last;
+    //       continue outer;
+    //     }
+    //   }
+    // }
   };
   function shouldOmitPadding(node) {
     // omit padding if no node, or if node already has padding (to avoid double-padding)
