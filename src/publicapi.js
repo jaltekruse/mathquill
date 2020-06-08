@@ -152,7 +152,11 @@ function getInterface(v) {
       this.__controller.editablesTextareaEvents();
       return this;
     };
-    _.focus = function() { this.__controller.textarea.focus(); return this; };
+    _.focus = function(args) { 
+        if(args) this.__controller.textarea[0].focus(args);  //e.g. {preventScroll: true}
+        else this.__controller.textarea.focus();
+        return this; 
+      };
     _.blur = function() { this.__controller.textarea.blur(); return this; };
     _.write = function(latex) {
       this.__controller.writeLatex(latex);
